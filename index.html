@@ -8,6 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDK (Tự động đồng bộ dữ liệu đám mây) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #151030 35%, #1d1841 70%, #0b132b 100%);
@@ -46,15 +50,17 @@
             gap: 2rem;
         }
 
-        /* BAR CHUYỂN ĐỔI QUYỀN */
+        /* BAR QUẢN TRỊ VÀ TRẠNG THÁI ĐỒNG BỘ */
         .admin-bar {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
-            border-radius: 50px;
-            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .role-badge {
@@ -73,12 +79,15 @@
             border-color: rgba(251, 191, 36, 0.3);
         }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 24px;
+        .sync-status {
+            font-size: 0.8rem;
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
+
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
@@ -123,7 +132,7 @@
             font-size: 0.95rem;
         }
 
-        /* CARDS & NỘI DUNG */
+        /* CARDS */
         .card-box {
             background: var(--card-gradient-2);
             backdrop-filter: blur(16px);
@@ -154,16 +163,11 @@
         }
 
         .edit-title-btn {
-            background: none;
-            border: none;
-            color: var(--cyan-accent);
-            cursor: pointer;
-            font-size: 1rem;
-            margin-left: 0.5rem;
-            display: none;
+            background: none; border: none; color: var(--cyan-accent); cursor: pointer;
+            font-size: 1rem; margin-left: 0.5rem; display: none;
         }
 
-        /* ẨN NÚT CHỈNH SỬA KHI CHƯA BẬT QUYỀN TỔ TRƯỞNG */
+        /* PHÂN QUYỀN HIỂN THỊ NÚT SỬA */
         .admin-btn, .admin-col { display: none !important; }
         .admin-active .edit-title-btn,
         .admin-active .admin-btn { display: inline-flex !important; }
@@ -179,19 +183,13 @@
         .topic-title { font-size: 1.35rem; font-weight: 700; color: #ffffff; line-height: 1.5; }
 
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.25rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;
         }
 
         .info-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 1.2rem;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; align-items: center; gap: 1rem;
+            background: rgba(255, 255, 255, 0.03); padding: 1.2rem;
+            border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .info-icon {
@@ -204,7 +202,7 @@
         .info-content label { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
         .info-content span { font-size: 1rem; font-weight: 600; color: #ffffff; }
 
-        /* NÚT TẢI VỀ & THAO TÁC (TẤT CẢ GIÁO VIÊN ĐỀU BẤM ĐƯỢC) */
+        /* BUTTONS */
         .btn {
             padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
             display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; text-decoration: none;
@@ -234,7 +232,7 @@
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
 
-        /* LƯỚI TÀI NGUYÊN & HÌNH ẢNH */
+        /* GRIDS */
         .resource-grid, .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
         }
@@ -244,7 +242,7 @@
         }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
 
-        /* POPUP SỬA */
+        /* MODAL */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
@@ -264,18 +262,25 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- THANH PHÂN QUYỀN TRUY CẬP -->
+    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI TỰ ĐỘNG ĐỒNG BỘ -->
     <div class="admin-bar">
         <div>
             <i class="fa-solid fa-user-shield me-2"></i>
-            <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Tất cả Giáo viên)</span>
+            <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Quyền Tổ trưởng:</span>
-            <label class="switch">
-                <input type="checkbox" id="adminToggle" onchange="toggleAdminMode()">
-                <span class="slider"></span>
-            </label>
+
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="sync-status" id="syncStatus">
+                <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối cơ sở dữ liệu...
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.8rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Tổ trưởng:</span>
+                <label class="switch">
+                    <input type="checkbox" id="adminToggle" onchange="toggleAdminMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -371,7 +376,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 5. TÀI NGUYÊN SỐ (AI CŨNG CÓ THỂ BẤM TẢI VỀ / XEM LINK) -->
+    <!-- 5. TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -383,7 +388,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 6. VĂN BẢN LƯU TRỮ (AI CŨNG CÓ THỂ BẤM TẢI VỀ FILE VĂN BẢN) -->
+    <!-- 6. VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -549,48 +554,77 @@
 </div>
 
 <script>
-    // DỮ LIỆU TỰ ĐỘNG LƯU TRÊN MÁY TÍNH/ĐIỆN THOẠI
-    let headerData = JSON.parse(localStorage.getItem('headerData')) || {
-        school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027'
+    // 1. CẤU HÌNH CƠ SỞ DỮ LIỆU ĐÁM MÂY (FIREBASE REALTIME DATABASE)
+    const firebaseConfig = {
+        databaseURL: "https://quan-ly-to-chuyen-mon-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
-    let sectionTitles = JSON.parse(localStorage.getItem('sectionTitles')) || {
-        title_meeting: 'Nội dung họp trọng điểm',
-        title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
-        title_gallery: 'Hình Ảnh Hoạt Động',
-        title_resources: 'Tài Nguyên Số',
-        title_docs: 'Văn Bản Lưu Trữ',
-        title_tasks: 'Nhiệm vụ & Phân công'
+    // Khởi tạo Firebase
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    // DỮ LIỆU MẶC ĐỊNH LÀM KHỦNG
+    let appData = {
+        headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
+        sectionTitles: {
+            title_meeting: 'Nội dung họp trọng điểm',
+            title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
+            title_gallery: 'Hình Ảnh Hoạt Động',
+            title_resources: 'Tài Nguyên Số',
+            title_docs: 'Văn Bản Lưu Trữ',
+            title_tasks: 'Nhiệm vụ & Phân công'
+        },
+        meetingData: {
+            topic: '"Kế hoạch nâng cao chất lượng Bồi dưỡng Học sinh giỏi & Đổi mới phương pháp kiểm tra đánh giá theo Chương trình GDPT 2018"',
+            leader: 'Thầy Trương Trung Can (Tổ trưởng)',
+            members: 'Toàn thể Giáo viên Tổ Sinh - CN',
+            time: '14:00 - Thứ Năm | Phòng họp Tổ Sinh - CN'
+        },
+        membersData: [
+            { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
+        ],
+        imagesData: [
+            { caption: 'Sinh hoạt chuyên đề Tổ Sinh tuần 8', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
+        ],
+        resourcesData: [
+            { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#' }
+        ],
+        docsData: [
+            { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#' }
+        ],
+        tasksData: [
+            { title: 'Lịch báo giảng tuần 12', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
+        ]
     };
 
-    let meetingData = JSON.parse(localStorage.getItem('meetingData')) || {
-        topic: '"Kế hoạch nâng cao chất lượng Bồi dưỡng Học sinh giỏi & Đổi mới phương pháp kiểm tra đánh giá theo Chương trình GDPT 2018"',
-        leader: 'Thầy Trương Trung Can (Tổ trưởng)',
-        members: 'Toàn thể Giáo viên Tổ Sinh - CN',
-        time: '14:00 - Thứ Năm | Phòng họp Tổ Sinh - CN'
-    };
+    // TỰ ĐỘNG LẮNG NGHE DỮ LIỆU MỚI TỪ ĐÁM MÂY (REAL-TIME SYNC)
+    db.ref('to_sinh_cn_data').on('value', (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+            appData = val;
+            renderAll();
+            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã tự động cập nhật từ đám mây`;
+        } else {
+            // Lần đầu tiên: đẩy dữ liệu mặc định lên
+            saveDataToCloud();
+        }
+    });
 
-    let membersData = JSON.parse(localStorage.getItem('membersData')) || [
-        { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
-    ];
+    // HÀM ĐẨY DỮ LIỆU MỚI LÊN ĐÁM MÂY KHI TỔ TRƯỞNG CHỈNH SỬA
+    function saveDataToCloud() {
+        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang đồng bộ lên đám mây...`;
+        db.ref('to_sinh_cn_data').set(appData, (error) => {
+            if (error) {
+                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--danger-color);"></i> Lỗi đồng bộ`;
+            } else {
+                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã đồng bộ thành công!`;
+            }
+        });
+    }
 
-    let imagesData = JSON.parse(localStorage.getItem('imagesData')) || [
-        { caption: 'Sinh hoạt chuyên đề Tổ Sinh tuần 8', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
-    ];
-
-    let resourcesData = JSON.parse(localStorage.getItem('resourcesData')) || [
-        { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#' }
-    ];
-
-    let docsData = JSON.parse(localStorage.getItem('docsData')) || [
-        { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#' }
-    ];
-
-    let tasksData = JSON.parse(localStorage.getItem('tasksData')) || [
-        { title: 'Lịch báo giảng tuần 12', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
-    ];
-
-    // CHUYỂN ĐỔI CHẾ ĐỘ QUẢN TRỊ KHI BẬT CÔNG TẮC
+    // TOGGLE ADMIN MODE
     function toggleAdminMode() {
         const isAdmin = document.getElementById('adminToggle').checked;
         const container = document.getElementById('appContainer');
@@ -601,34 +635,45 @@
             roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
         } else {
             container.classList.remove('admin-active');
-            roleBadge.innerText = 'Chế độ Xem / Tải File (Tất cả Giáo viên)';
+            roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
         }
     }
 
-    // RENDER THÔNG TIN HEADER & TIÊU ĐỀ
+    // RENDER TOÀN BỘ GIAO DIỆN
+    function renderAll() {
+        renderHeader();
+        renderSectionTitles();
+        renderMeetingInfo();
+        renderMembers();
+        renderImages();
+        renderResources();
+        renderDocs();
+        renderTasks();
+    }
+
     function renderHeader() {
-        document.getElementById('displaySchool').innerText = headerData.school;
-        document.getElementById('displayDept').innerText = headerData.dept;
-        document.getElementById('displayYear').innerHTML = `<i class="fa-solid fa-calendar-days me-1"></i> ${headerData.year}`;
+        document.getElementById('displaySchool').innerText = appData.headerData.school;
+        document.getElementById('displayDept').innerText = appData.headerData.dept;
+        document.getElementById('displayYear').innerHTML = `<i class="fa-solid fa-calendar-days me-1"></i> ${appData.headerData.year}`;
     }
 
     function renderSectionTitles() {
-        for (let key in sectionTitles) {
-            if (document.getElementById(key)) document.getElementById(key).innerText = sectionTitles[key];
+        for (let key in appData.sectionTitles) {
+            if (document.getElementById(key)) document.getElementById(key).innerText = appData.sectionTitles[key];
         }
     }
 
     function renderMeetingInfo() {
-        document.getElementById('displayTopic').innerText = meetingData.topic;
-        document.getElementById('displayLeader').innerText = meetingData.leader;
-        document.getElementById('displayMembers').innerText = meetingData.members;
-        document.getElementById('displayTime').innerText = meetingData.time;
+        document.getElementById('displayTopic').innerText = appData.meetingData.topic;
+        document.getElementById('displayLeader').innerText = appData.meetingData.leader;
+        document.getElementById('displayMembers').innerText = appData.meetingData.members;
+        document.getElementById('displayTime').innerText = appData.meetingData.time;
     }
 
     function renderMembers() {
         const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
-        membersData.forEach((mem, i) => {
+        (appData.membersData || []).forEach((mem, i) => {
             tbody.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--accent-gold);">${mem.name}</strong></td>
@@ -647,7 +692,7 @@
     function renderImages() {
         const grid = document.getElementById('galleryGrid');
         grid.innerHTML = '';
-        imagesData.forEach((img, i) => {
+        (appData.imagesData || []).forEach((img, i) => {
             grid.innerHTML += `
                 <div class="gallery-card">
                     <img src="${img.url}" class="gallery-img" alt="Hoạt động">
@@ -660,11 +705,10 @@
         });
     }
 
-    // TÀI NGUYÊN SỐ: TẤT CẢ MỌI NGƯỜI ĐỀU TRUY CẬP VÀ BẤM TẢI VỀ ĐƯỢC
     function renderResources() {
         const grid = document.getElementById('resourceGrid');
         grid.innerHTML = '';
-        resourcesData.forEach((res, i) => {
+        (appData.resourcesData || []).forEach((res, i) => {
             grid.innerHTML += `
                 <div class="resource-card">
                     <div>
@@ -685,11 +729,10 @@
         });
     }
 
-    // VĂN BẢN LƯU TRỮ: TẤT CẢ MỌI NGƯỜI ĐỀU TRUY CẬP VÀ BẤM TẢI VỀ FILE ĐƯỢC
     function renderDocs() {
         const tbody = document.getElementById('docTableBody');
         tbody.innerHTML = '';
-        docsData.forEach((doc, i) => {
+        (appData.docsData || []).forEach((doc, i) => {
             tbody.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
@@ -712,7 +755,7 @@
     function renderTasks() {
         const tbody = document.getElementById('taskTableBody');
         tbody.innerHTML = '';
-        tasksData.forEach((task, i) => {
+        (appData.tasksData || []).forEach((task, i) => {
             const badgeClass = task.status === 'Hoàn thành' ? 'badge-success' : 'badge-warning';
             tbody.innerHTML += `
                 <tr>
@@ -729,55 +772,52 @@
         });
     }
 
-    // THAO TÁC CỦA TỔ TRƯỞNG
+    // THAO TÁC SỬA VÀ TỰ ĐỘNG ĐỒNG BỘ NÓNG LÊN ĐÁM MÂY
     function editSectionTitle(titleKey) {
-        const newTitle = prompt('Nhập tên mới cho mục này:', sectionTitles[titleKey]);
+        const newTitle = prompt('Nhập tên mới cho mục này:', appData.sectionTitles[titleKey]);
         if (newTitle) {
-            sectionTitles[titleKey] = newTitle;
-            localStorage.setItem('sectionTitles', JSON.stringify(sectionTitles));
-            renderSectionTitles();
+            appData.sectionTitles[titleKey] = newTitle;
+            saveDataToCloud();
         }
     }
 
     function openHeaderModal() {
-        document.getElementById('inputSchool').value = headerData.school;
-        document.getElementById('inputDept').value = headerData.dept;
-        document.getElementById('inputYear').value = headerData.year;
+        document.getElementById('inputSchool').value = appData.headerData.school;
+        document.getElementById('inputDept').value = appData.headerData.dept;
+        document.getElementById('inputYear').value = appData.headerData.year;
         document.getElementById('headerModal').style.display = 'flex';
     }
     function saveHeaderInfo() {
-        headerData.school = document.getElementById('inputSchool').value;
-        headerData.dept = document.getElementById('inputDept').value;
-        headerData.year = document.getElementById('inputYear').value;
-        localStorage.setItem('headerData', JSON.stringify(headerData));
-        renderHeader();
+        appData.headerData.school = document.getElementById('inputSchool').value;
+        appData.headerData.dept = document.getElementById('inputDept').value;
+        appData.headerData.year = document.getElementById('inputYear').value;
+        saveDataToCloud();
         closeModal('headerModal');
     }
 
     function openMeetingModal() {
-        document.getElementById('inputTopic').value = meetingData.topic;
-        document.getElementById('inputLeader').value = meetingData.leader;
-        document.getElementById('inputMembers').value = meetingData.members;
-        document.getElementById('inputTime').value = meetingData.time;
+        document.getElementById('inputTopic').value = appData.meetingData.topic;
+        document.getElementById('inputLeader').value = appData.meetingData.leader;
+        document.getElementById('inputMembers').value = appData.meetingData.members;
+        document.getElementById('inputTime').value = appData.meetingData.time;
         document.getElementById('meetingModal').style.display = 'flex';
     }
     function saveMeetingInfo() {
-        meetingData.topic = document.getElementById('inputTopic').value;
-        meetingData.leader = document.getElementById('inputLeader').value;
-        meetingData.members = document.getElementById('inputMembers').value;
-        meetingData.time = document.getElementById('inputTime').value;
-        localStorage.setItem('meetingData', JSON.stringify(meetingData));
-        renderMeetingInfo();
+        appData.meetingData.topic = document.getElementById('inputTopic').value;
+        appData.meetingData.leader = document.getElementById('inputLeader').value;
+        appData.meetingData.members = document.getElementById('inputMembers').value;
+        appData.meetingData.time = document.getElementById('inputTime').value;
+        saveDataToCloud();
         closeModal('meetingModal');
     }
 
     function openMemberModal(i = null) {
         document.getElementById('editMemIndex').value = i !== null ? i : '';
         if (i !== null) {
-            document.getElementById('inputMemName').value = membersData[i].name;
-            document.getElementById('inputMemRole').value = membersData[i].role;
-            document.getElementById('inputMemDuty').value = membersData[i].duty;
-            document.getElementById('inputMemPhone').value = membersData[i].phone;
+            document.getElementById('inputMemName').value = appData.membersData[i].name;
+            document.getElementById('inputMemRole').value = appData.membersData[i].role;
+            document.getElementById('inputMemDuty').value = appData.membersData[i].duty;
+            document.getElementById('inputMemPhone').value = appData.membersData[i].phone;
         } else {
             document.getElementById('inputMemName').value = '';
             document.getElementById('inputMemRole').value = '';
@@ -794,20 +834,19 @@
         const phone = document.getElementById('inputMemPhone').value;
         if (!name) return alert('Điền tên thành viên!');
 
+        if (!appData.membersData) appData.membersData = [];
         if (idx !== '') {
-            membersData[idx] = { name, role, duty, phone };
+            appData.membersData[idx] = { name, role, duty, phone };
         } else {
-            membersData.push({ name, role, duty, phone });
+            appData.membersData.push({ name, role, duty, phone });
         }
-        localStorage.setItem('membersData', JSON.stringify(membersData));
-        renderMembers();
+        saveDataToCloud();
         closeModal('memberModal');
     }
     function deleteMember(i) {
         if (confirm('Xóa thành viên?')) {
-            membersData.splice(i, 1);
-            localStorage.setItem('membersData', JSON.stringify(membersData));
-            renderMembers();
+            appData.membersData.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
@@ -817,36 +856,34 @@
         const fileInput = document.getElementById('inputImgFile');
         const urlInput = document.getElementById('inputImgUrl').value;
 
+        if (!appData.imagesData) appData.imagesData = [];
         if (fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                imagesData.push({ caption, url: e.target.result });
-                localStorage.setItem('imagesData', JSON.stringify(imagesData));
-                renderImages();
+                appData.imagesData.push({ caption, url: e.target.result });
+                saveDataToCloud();
                 closeModal('imageModal');
             };
             reader.readAsDataURL(fileInput.files[0]);
         } else if (urlInput) {
-            imagesData.push({ caption, url: urlInput });
-            localStorage.setItem('imagesData', JSON.stringify(imagesData));
-            renderImages();
+            appData.imagesData.push({ caption, url: urlInput });
+            saveDataToCloud();
             closeModal('imageModal');
         }
     }
     function deleteImage(i) {
         if (confirm('Xóa hình ảnh này?')) {
-            imagesData.splice(i, 1);
-            localStorage.setItem('imagesData', JSON.stringify(imagesData));
-            renderImages();
+            appData.imagesData.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
     function openResourceModal(i = null) {
         document.getElementById('editResIndex').value = i !== null ? i : '';
         if (i !== null) {
-            document.getElementById('inputResTitle').value = resourcesData[i].title;
-            document.getElementById('inputResType').value = resourcesData[i].type;
-            document.getElementById('inputResLink').value = resourcesData[i].link;
+            document.getElementById('inputResTitle').value = appData.resourcesData[i].title;
+            document.getElementById('inputResType').value = appData.resourcesData[i].type;
+            document.getElementById('inputResLink').value = appData.resourcesData[i].link;
         } else {
             document.getElementById('inputResTitle').value = '';
             document.getElementById('inputResLink').value = '';
@@ -860,30 +897,29 @@
         const link = document.getElementById('inputResLink').value || '#';
         if (!title) return alert('Nhập tên tài nguyên!');
 
+        if (!appData.resourcesData) appData.resourcesData = [];
         if (idx !== '') {
-            resourcesData[idx] = { title, type, link };
+            appData.resourcesData[idx] = { title, type, link };
         } else {
-            resourcesData.push({ title, type, link });
+            appData.resourcesData.push({ title, type, link });
         }
-        localStorage.setItem('resourcesData', JSON.stringify(resourcesData));
-        renderResources();
+        saveDataToCloud();
         closeModal('resourceModal');
     }
     function deleteResource(i) {
         if (confirm('Xóa tài nguyên?')) {
-            resourcesData.splice(i, 1);
-            localStorage.setItem('resourcesData', JSON.stringify(resourcesData));
-            renderResources();
+            appData.resourcesData.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
     function openDocModal(i = null) {
         document.getElementById('editDocIndex').value = i !== null ? i : '';
         if (i !== null) {
-            document.getElementById('inputDocCode').value = docsData[i].code;
-            document.getElementById('inputDocSummary').value = docsData[i].summary;
-            document.getElementById('inputDocDate').value = docsData[i].date;
-            document.getElementById('inputDocLink').value = docsData[i].link;
+            document.getElementById('inputDocCode').value = appData.docsData[i].code;
+            document.getElementById('inputDocSummary').value = appData.docsData[i].summary;
+            document.getElementById('inputDocDate').value = appData.docsData[i].date;
+            document.getElementById('inputDocLink').value = appData.docsData[i].link;
         } else {
             document.getElementById('inputDocCode').value = '';
             document.getElementById('inputDocSummary').value = '';
@@ -900,30 +936,29 @@
         const link = document.getElementById('inputDocLink').value || '#';
         if (!code) return alert('Nhập số/ký hiệu!');
 
+        if (!appData.docsData) appData.docsData = [];
         if (idx !== '') {
-            docsData[idx] = { code, summary, date, link };
+            appData.docsData[idx] = { code, summary, date, link };
         } else {
-            docsData.push({ code, summary, date, link });
+            appData.docsData.push({ code, summary, date, link });
         }
-        localStorage.setItem('docsData', JSON.stringify(docsData));
-        renderDocs();
+        saveDataToCloud();
         closeModal('docModal');
     }
     function deleteDoc(i) {
         if (confirm('Xóa văn bản?')) {
-            docsData.splice(i, 1);
-            localStorage.setItem('docsData', JSON.stringify(docsData));
-            renderDocs();
+            appData.docsData.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
     function openTaskModal(i = null) {
         document.getElementById('editTaskIndex').value = i !== null ? i : '';
         if (i !== null) {
-            document.getElementById('inputTaskTitle').value = tasksData[i].title;
-            document.getElementById('inputTaskAssignee').value = tasksData[i].assignee;
-            document.getElementById('inputTaskDeadline').value = tasksData[i].deadline;
-            document.getElementById('inputTaskStatus').value = tasksData[i].status;
+            document.getElementById('inputTaskTitle').value = appData.tasksData[i].title;
+            document.getElementById('inputTaskAssignee').value = appData.tasksData[i].assignee;
+            document.getElementById('inputTaskDeadline').value = appData.tasksData[i].deadline;
+            document.getElementById('inputTaskStatus').value = appData.tasksData[i].status;
         } else {
             document.getElementById('inputTaskTitle').value = '';
             document.getElementById('inputTaskAssignee').value = '';
@@ -939,20 +974,19 @@
         const status = document.getElementById('inputTaskStatus').value;
         if (!title) return alert('Nhập tên công việc!');
 
+        if (!appData.tasksData) appData.tasksData = [];
         if (idx !== '') {
-            tasksData[idx] = { title, assignee, deadline, status };
+            appData.tasksData[idx] = { title, assignee, deadline, status };
         } else {
-            tasksData.push({ title, assignee, deadline, status });
+            appData.tasksData.push({ title, assignee, deadline, status });
         }
-        localStorage.setItem('tasksData', JSON.stringify(tasksData));
-        renderTasks();
+        saveDataToCloud();
         closeModal('taskModal');
     }
     function deleteTask(i) {
         if (confirm('Xóa công việc này?')) {
-            tasksData.splice(i, 1);
-            localStorage.setItem('tasksData', JSON.stringify(tasksData));
-            renderTasks();
+            appData.tasksData.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
@@ -971,7 +1005,7 @@
             icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; return;
         }
 
-        const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${meetingData.topic}. Cuộc họp do ${meetingData.leader} chủ trì, vào lúc ${meetingData.time}. Kính mời thành phần tham dự: ${meetingData.members} đến dự họp đầy đủ.`;
+        const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${appData.meetingData.topic}. Cuộc họp do ${appData.meetingData.leader} chủ trì, vào lúc ${appData.meetingData.time}. Kính mời thành phần tham dự: ${appData.meetingData.members} đến dự họp đầy đủ.`;
         const utterance = new SpeechSynthesisUtterance(speechContent);
         utterance.lang = 'vi-VN'; utterance.rate = 0.95;
 
@@ -979,16 +1013,6 @@
         utterance.onend = function () { isSpeaking = false; icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; };
         synth.speak(utterance);
     }
-
-    // KHỞI CHẠY LẦN ĐẦU
-    renderHeader();
-    renderSectionTitles();
-    renderMeetingInfo();
-    renderMembers();
-    renderImages();
-    renderResources();
-    renderDocs();
-    renderTasks();
 </script>
 
 </body>
