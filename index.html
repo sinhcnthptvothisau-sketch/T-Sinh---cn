@@ -295,6 +295,7 @@
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem;
         }
+        .resource-type { font-size: 0.75rem; font-weight: 700; color: var(--cyan-accent); text-transform: uppercase; }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
 
         /* MODAL */
@@ -305,6 +306,7 @@
         .modal-content {
             background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
             border-radius: 20px; width: 90%; max-width: 500px; display: flex; flex-direction: column; gap: 1rem;
+            max-height: 90vh; overflow-y: auto;
         }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.85rem; color: var(--text-muted); }
@@ -312,6 +314,7 @@
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
             padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
+        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
     </style>
 </head>
 <body>
@@ -448,7 +451,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 5. TÀI NGUYÊN SỐ -->
+    <!-- 5. TÀI NGUYÊN SỐ (Tải File Trực Tiếp Hoặc Link) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -460,7 +463,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 6. VĂN BẢN LƯU TRỮ -->
+    <!-- 6. VĂN BẢN LƯU TRỮ (Tải File Trực Tiếp Hoặc Link) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -559,7 +562,8 @@
         <h3 style="color: var(--accent-gold);">Thêm Hình Ảnh Hoạt Động</h3>
         <div class="form-group"><label>Tên / Tên hoạt động</label><input type="text" id="inputImgCaption" class="form-control"></div>
         <div class="form-group"><label>Chọn ảnh từ máy/điện thoại</label><input type="file" id="inputImgFile" class="form-control" accept="image/*"></div>
-        <div class="form-group"><label>Hoặc Dán Đường Dẫn Link Ảnh (URL)</label><input type="text" id="inputImgUrl" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Dán Đường Dẫn Link Ảnh (URL)</label><input type="text" id="inputImgUrl" class="form-control" placeholder="https://..."></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('imageModal')">Hủy</button>
             <button class="btn btn-gold" onclick="addImage()">Tải Ảnh Lên</button>
@@ -567,6 +571,7 @@
     </div>
 </div>
 
+<!-- MODAL TÀI NGUYÊN (CHO PHÉP TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="resourceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Tài Nguyên Số</h3>
@@ -578,7 +583,11 @@
             <option value="Đề thi / Ôn tập">Đề thi / Ôn tập</option>
             <option value="Sơ đồ tư duy">Sơ đồ tư duy</option>
         </select></div>
-        <div class="form-group"><label>Đường dẫn / Link tải file đính kèm</label><input type="text" id="inputResLink" class="form-control" placeholder="https://..."></div>
+        
+        <div class="form-group"><label>LỰA CHỌN 1: Tải File Trực Tiếp Từ Máy (Word, PDF, PPT...)</label><input type="file" id="inputResFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>LỰA CHỌN 2: Dán Link Đính Kèm (Google Drive, Canva...)</label><input type="text" id="inputResLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('resourceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveResource()">Lưu Tài Nguyên</button>
@@ -586,6 +595,7 @@
     </div>
 </div>
 
+<!-- MODAL VĂN BẢN (CHO PHÉP TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="docModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
@@ -593,7 +603,11 @@
         <div class="form-group"><label>Số / Ký hiệu văn bản</label><input type="text" id="inputDocCode" class="form-control"></div>
         <div class="form-group"><label>Trích yếu văn bản</label><textarea id="inputDocSummary" class="form-control" rows="2"></textarea></div>
         <div class="form-group"><label>Ngày ban hành</label><input type="date" id="inputDocDate" class="form-control"></div>
-        <div class="form-group"><label>Đường dẫn / Link xem hoặc tải văn bản</label><input type="text" id="inputDocLink" class="form-control" placeholder="https://..."></div>
+        
+        <div class="form-group"><label>LỰA CHỌN 1: Tải File Văn Bản Từ Máy (PDF, Word...)</label><input type="file" id="inputDocFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>LỰA CHỌN 2: Dán Link Văn Bản Đính Kèm</label><input type="text" id="inputDocLink" class="form-control" placeholder="https://..."></div>
+        
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('docModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveDoc()">Lưu Văn Bản</button>
@@ -630,8 +644,8 @@
     }
     const db = firebase.database();
 
-    // MẬT KHẨU TỔ TRƯỞNG
-    const ADMIN_PASSWORD = "151184";
+    // MẬT KHẨU TỔ TRƯỞNG (MẶC ĐỊNH: 123456)
+    const ADMIN_PASSWORD = "123456";
 
     // DỮ LIỆU MẶC ĐỊNH
     let appData = {
@@ -657,10 +671,10 @@
             { caption: 'Sinh hoạt chuyên đề Tổ Sinh tuần 8', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
         ],
         resourcesData: [
-            { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#' }
+            { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#', fileName: '' }
         ],
         docsData: [
-            { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#' }
+            { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#', fileName: '' }
         ],
         tasksData: [
             { title: 'Lịch báo giảng tuần 12', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
@@ -696,7 +710,6 @@
         localStorage.setItem('selectedTheme', themeName);
     }
 
-    // ĐỒNG BỘ GIAO DIỆN LƯU SẴN
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) {
         document.body.setAttribute('data-theme', savedTheme);
@@ -748,12 +761,11 @@
             return;
         }
 
-        // Lọc ưu tiên giọng Tiếng Việt
         let viVoices = voices.filter(v => v.lang.includes('vi') || v.lang.includes('VI'));
         let otherVoices = voices.filter(v => !v.lang.includes('vi') && !v.lang.includes('VI'));
 
         if (viVoices.length > 0) {
-            viVoices.forEach((voice, index) => {
+            viVoices.forEach((voice) => {
                 const option = document.createElement('option');
                 option.textContent = `🇻🇳 ${voice.name} (${voice.lang})`;
                 option.setAttribute('data-name', voice.name);
@@ -788,7 +800,6 @@
         const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${appData.meetingData.topic}. Cuộc họp do ${appData.meetingData.leader} chủ trì, vào lúc ${appData.meetingData.time}. Kính mời thành phần tham dự: ${appData.meetingData.members} đến dự họp đầy đủ.`;
         const utterance = new SpeechSynthesisUtterance(speechContent);
         
-        // Chọn giọng đọc theo dropdown
         const selectedOption = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
         if (selectedOption) {
             const selectedVoice = voices.find(v => v.name === selectedOption);
@@ -872,6 +883,8 @@
         const grid = document.getElementById('resourceGrid');
         grid.innerHTML = '';
         (appData.resourcesData || []).forEach((res, i) => {
+            const downloadAttr = res.fileName ? `download="${res.fileName}"` : '';
+            const isDirectFile = res.fileName ? '<i class="fa-solid fa-file-arrow-down"></i> Tải Về File' : '<i class="fa-solid fa-arrow-up-right-from-square"></i> Truy Cập Link';
             grid.innerHTML += `
                 <div class="resource-card">
                     <div>
@@ -879,8 +892,8 @@
                         <div style="font-weight:700; color:#fff; font-size:0.95rem; margin-top:0.3rem;">${res.title}</div>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-                        <a href="${res.link}" target="_blank" download class="btn btn-download btn-sm">
-                            <i class="fa-solid fa-download"></i> Truy Cập / Tải Về
+                        <a href="${res.link}" target="_blank" ${downloadAttr} class="btn btn-download btn-sm">
+                            ${isDirectFile}
                         </a>
                         <div class="admin-btn">
                             <button class="btn btn-edit btn-sm" onclick="openResourceModal(${i})"><i class="fa-solid fa-pen"></i></button>
@@ -896,14 +909,16 @@
         const tbody = document.getElementById('docTableBody');
         tbody.innerHTML = '';
         (appData.docsData || []).forEach((doc, i) => {
+            const downloadAttr = doc.fileName ? `download="${doc.fileName}"` : '';
+            const isDirectFile = doc.fileName ? '<i class="fa-solid fa-file-arrow-down"></i> Tải Về File' : '<i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Link';
             tbody.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
                     <td>${doc.summary}</td>
                     <td>${doc.date}</td>
                     <td>
-                        <a href="${doc.link}" target="_blank" download class="btn btn-download btn-sm">
-                            <i class="fa-solid fa-file-arrow-down"></i> Tải Về File
+                        <a href="${doc.link}" target="_blank" ${downloadAttr} class="btn btn-download btn-sm">
+                            ${isDirectFile}
                         </a>
                     </td>
                     <td class="admin-col">
@@ -1041,12 +1056,14 @@
         }
     }
 
+    // LƯU TÀI NGUYÊN SỐ (HỖ TRỢ FILE HOẶC LINK)
     function openResourceModal(i = null) {
         document.getElementById('editResIndex').value = i !== null ? i : '';
+        document.getElementById('inputResFile').value = '';
         if (i !== null) {
             document.getElementById('inputResTitle').value = appData.resourcesData[i].title;
             document.getElementById('inputResType').value = appData.resourcesData[i].type;
-            document.getElementById('inputResLink').value = appData.resourcesData[i].link;
+            document.getElementById('inputResLink').value = appData.resourcesData[i].fileName ? '' : appData.resourcesData[i].link;
         } else {
             document.getElementById('inputResTitle').value = '';
             document.getElementById('inputResLink').value = '';
@@ -1057,17 +1074,31 @@
         const idx = document.getElementById('editResIndex').value;
         const title = document.getElementById('inputResTitle').value;
         const type = document.getElementById('inputResType').value;
-        const link = document.getElementById('inputResLink').value || '#';
+        const fileInput = document.getElementById('inputResFile');
+        const linkInput = document.getElementById('inputResLink').value;
         if (!title) return alert('Nhập tên tài nguyên!');
 
         if (!appData.resourcesData) appData.resourcesData = [];
-        if (idx !== '') {
-            appData.resourcesData[idx] = { title, type, link };
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const resObj = { title, type, link: e.target.result, fileName: file.name };
+                if (idx !== '') appData.resourcesData[idx] = resObj;
+                else appData.resourcesData.push(resObj);
+                saveDataToCloud();
+                closeModal('resourceModal');
+            };
+            reader.readAsDataURL(file);
         } else {
-            appData.resourcesData.push({ title, type, link });
+            const link = linkInput || '#';
+            const resObj = { title, type, link, fileName: '' };
+            if (idx !== '') appData.resourcesData[idx] = resObj;
+            else appData.resourcesData.push(resObj);
+            saveDataToCloud();
+            closeModal('resourceModal');
         }
-        saveDataToCloud();
-        closeModal('resourceModal');
     }
     function deleteResource(i) {
         if (confirm('Xóa tài nguyên?')) {
@@ -1076,13 +1107,15 @@
         }
     }
 
+    // LƯU VĂN BẢN (HỖ TRỢ FILE HOẶC LINK)
     function openDocModal(i = null) {
         document.getElementById('editDocIndex').value = i !== null ? i : '';
+        document.getElementById('inputDocFile').value = '';
         if (i !== null) {
             document.getElementById('inputDocCode').value = appData.docsData[i].code;
             document.getElementById('inputDocSummary').value = appData.docsData[i].summary;
             document.getElementById('inputDocDate').value = appData.docsData[i].date;
-            document.getElementById('inputDocLink').value = appData.docsData[i].link;
+            document.getElementById('inputDocLink').value = appData.docsData[i].fileName ? '' : appData.docsData[i].link;
         } else {
             document.getElementById('inputDocCode').value = '';
             document.getElementById('inputDocSummary').value = '';
@@ -1096,17 +1129,31 @@
         const code = document.getElementById('inputDocCode').value;
         const summary = document.getElementById('inputDocSummary').value;
         const date = document.getElementById('inputDocDate').value;
-        const link = document.getElementById('inputDocLink').value || '#';
+        const fileInput = document.getElementById('inputDocFile');
+        const linkInput = document.getElementById('inputDocLink').value;
         if (!code) return alert('Nhập số/ký hiệu!');
 
         if (!appData.docsData) appData.docsData = [];
-        if (idx !== '') {
-            appData.docsData[idx] = { code, summary, date, link };
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const docObj = { code, summary, date, link: e.target.result, fileName: file.name };
+                if (idx !== '') appData.docsData[idx] = docObj;
+                else appData.docsData.push(docObj);
+                saveDataToCloud();
+                closeModal('docModal');
+            };
+            reader.readAsDataURL(file);
         } else {
-            appData.docsData.push({ code, summary, date, link });
+            const link = linkInput || '#';
+            const docObj = { code, summary, date, link, fileName: '' };
+            if (idx !== '') appData.docsData[idx] = docObj;
+            else appData.docsData.push(docObj);
+            saveDataToCloud();
+            closeModal('docModal');
         }
-        saveDataToCloud();
-        closeModal('docModal');
     }
     function deleteDoc(i) {
         if (confirm('Xóa văn bản?')) {
