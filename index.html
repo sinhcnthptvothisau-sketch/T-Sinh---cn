@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDK (Tự động đồng bộ dữ liệu đám mây) -->
+    <!-- Firebase SDK (Đồng bộ đám mây) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -50,7 +50,7 @@
             gap: 2rem;
         }
 
-        /* BAR QUẢN TRỊ VÀ TRẠNG THÁI ĐỒNG BỘ */
+        /* BAR PHÂN QUYỀN VÀ TRẠNG THÁI TỰ ĐỘNG ĐỒNG BỘ */
         .admin-bar {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
@@ -556,7 +556,7 @@
 <script>
     // 1. CẤU HÌNH CƠ SỞ DỮ LIỆU ĐÁM MÂY (FIREBASE REALTIME DATABASE)
     const firebaseConfig = {
-        databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
     // Khởi tạo Firebase
@@ -565,7 +565,10 @@
     }
     const db = firebase.database();
 
-    // DỮ LIỆU MẶC ĐỊNH LÀM KHỦNG
+    // MAT KHAU XAC THUC QUYEN TO TRUONG (MẶC ĐỊNH LÀ: 123456)
+    const ADMIN_PASSWORD = "123456";
+
+    // DỮ LIỆU MẶC ĐỊNH
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         sectionTitles: {
@@ -607,7 +610,6 @@
             renderAll();
             document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã tự động cập nhật từ đám mây`;
         } else {
-            // Lần đầu tiên: đẩy dữ liệu mặc định lên
             saveDataToCloud();
         }
     });
@@ -624,15 +626,24 @@
         });
     }
 
-    // TOGGLE ADMIN MODE
+    // TOGGLE ADMIN MODE CO MAT KHAU BẢO MẬT
     function toggleAdminMode() {
-        const isAdmin = document.getElementById('adminToggle').checked;
+        const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
         const roleBadge = document.getElementById('roleBadge');
         
-        if (isAdmin) {
-            container.classList.add('admin-active');
-            roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
+        if (toggleInput.checked) {
+            const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa quyền chỉnh sửa:');
+            if (pass === ADMIN_PASSWORD) {
+                container.classList.add('admin-active');
+                roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
+                alert('Đã xác thực thành công!');
+            } else {
+                alert('Mật khẩu không chính xác!');
+                toggleInput.checked = false;
+                container.classList.remove('admin-active');
+                roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
+            }
         } else {
             container.classList.remove('admin-active');
             roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
@@ -772,7 +783,7 @@
         });
     }
 
-    // THAO TÁC SỬA VÀ TỰ ĐỘNG ĐỒNG BỘ NÓNG LÊN ĐÁM MÂY
+    // THAO TÁC SỬA VÀ ĐỒNG BỘ ĐÁM MÂY
     function editSectionTitle(titleKey) {
         const newTitle = prompt('Nhập tên mới cho mục này:', appData.sectionTitles[titleKey]);
         if (newTitle) {
