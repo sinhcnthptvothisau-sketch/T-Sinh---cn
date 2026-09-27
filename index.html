@@ -14,6 +14,7 @@
 
     <style>
         :root {
+            /* Theme Mặc định: Tím Dạ Tước */
             --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #151030 35%, #1d1841 70%, #0b132b 100%);
             --card-gradient-1: linear-gradient(135deg, rgba(67, 56, 202, 0.4) 0%, rgba(124, 58, 237, 0.3) 100%);
             --card-gradient-2: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(49, 46, 129, 0.5) 100%);
@@ -29,6 +30,22 @@
             --success-color: #10b981;
         }
 
+        /* Theme 2: Xanh Biển Sâu (Ocean) */
+        [data-theme="ocean"] {
+            --bg-gradient: linear-gradient(135deg, #021526 0%, #032541 35%, #083358 70%, #0d1b2a 100%);
+            --card-gradient-1: linear-gradient(135deg, rgba(2, 62, 138, 0.5) 0%, rgba(0, 119, 182, 0.4) 100%);
+            --card-gradient-2: linear-gradient(135deg, rgba(10, 37, 64, 0.7) 0%, rgba(20, 60, 95, 0.6) 100%);
+            --border-glow: rgba(56, 189, 248, 0.3);
+        }
+
+        /* Theme 3: Đen Huyền Bí (Cyber Black) */
+        [data-theme="black"] {
+            --bg-gradient: linear-gradient(135deg, #050505 0%, #0d0d0d 35%, #141414 70%, #000000 100%);
+            --card-gradient-1: linear-gradient(135deg, rgba(38, 38, 38, 0.6) 0%, rgba(23, 23, 23, 0.5) 100%);
+            --card-gradient-2: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(30, 30, 30, 0.7) 100%);
+            --border-glow: rgba(255, 255, 255, 0.15);
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
@@ -39,6 +56,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            transition: background 0.5s ease;
         }
 
         .container {
@@ -86,6 +104,18 @@
             align-items: center;
             gap: 0.4rem;
         }
+
+        .theme-select {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border-glow);
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .theme-select option { background: #0f172a; color: white; }
 
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -202,6 +232,31 @@
         .info-content label { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
         .info-content span { font-size: 1rem; font-weight: 600; color: #ffffff; }
 
+        /* AI SPEECH BAR */
+        .speech-control-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-glow);
+        }
+
+        .voice-select {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            outline: none;
+            max-width: 280px;
+            font-size: 0.85rem;
+        }
+        .voice-select option { background: #0f172a; color: white; }
+
         /* BUTTONS */
         .btn {
             padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
@@ -262,14 +317,24 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI TỰ ĐỘNG ĐỒNG BỘ -->
+    <!-- BAR PHÂN QUYỀN, THỦ THUẬT GIAO DIỆN VÀ ĐỒNG BỘ -->
     <div class="admin-bar">
         <div>
             <i class="fa-solid fa-user-shield me-2"></i>
             <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <!-- CHỌN GIAO DIỆN (THEME) -->
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fa-solid fa-palette" style="color: var(--accent-gold);"></i>
+                <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
+                    <option value="default">Giao diện: Tím Dạ Tước</option>
+                    <option value="ocean">Giao diện: Xanh Biển Sâu</option>
+                    <option value="black">Giao diện: Đen Huyền Bí</option>
+                </select>
+            </div>
+
             <div class="sync-status" id="syncStatus">
                 <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối cơ sở dữ liệu...
             </div>
@@ -332,7 +397,14 @@
             </div>
         </div>
 
-        <div style="text-align: center;">
+        <!-- BỘ PHÁT & CHỌN GIỌNG NÓI MC AI -->
+        <div class="speech-control-box">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-microphone-lines" style="color: var(--cyan-accent);"></i>
+                <select id="voiceSelect" class="voice-select">
+                    <option value="">Đang tải giọng đọc AI...</option>
+                </select>
+            </div>
             <button id="btnSpeech" class="btn btn-gold" onclick="toggleMcSpeech()">
                 <i class="fa-solid fa-volume-high" id="mcIcon"></i> <span id="mcText">Phát thông báo MC AI</span>
             </button>
@@ -439,7 +511,7 @@
     </section>
 </div>
 
-<!-- MODAL CẬP NHẬT HEADER -->
+<!-- MODALS CẬP NHẬT DỮ LIỆU -->
 <div class="modal" id="headerModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Cập Nhật Tên Trường & Tổ</h3>
@@ -453,7 +525,6 @@
     </div>
 </div>
 
-<!-- MODAL CẬP NHẬT CUỘC HỌP -->
 <div class="modal" id="meetingModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Cập Nhật Nội Dung Cuộc Họp</h3>
@@ -468,7 +539,6 @@
     </div>
 </div>
 
-<!-- MODAL THÊM / SỬA THÀNH VIÊN -->
 <div class="modal" id="memberModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thành Viên Tổ</h3>
@@ -484,7 +554,6 @@
     </div>
 </div>
 
-<!-- MODAL THÊM HÌNH ẢNH -->
 <div class="modal" id="imageModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thêm Hình Ảnh Hoạt Động</h3>
@@ -498,7 +567,6 @@
     </div>
 </div>
 
-<!-- MODAL THÊM / SỬA TÀI NGUYÊN -->
 <div class="modal" id="resourceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Tài Nguyên Số</h3>
@@ -518,7 +586,6 @@
     </div>
 </div>
 
-<!-- MODAL THÊM / SỬA VĂN BẢN -->
 <div class="modal" id="docModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
@@ -534,7 +601,6 @@
     </div>
 </div>
 
-<!-- MODAL THÊM / SỬA NHIỆM VỤ -->
 <div class="modal" id="taskModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Nhiệm Vụ Công Việc</h3>
@@ -559,14 +625,13 @@
         databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
-    // Khởi tạo Firebase
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
 
-    // MAT KHAU XAC THUC QUYEN TO TRUONG (MẶC ĐỊNH LÀ: 123456)
-    const ADMIN_PASSWORD = "151184";
+    // MẬT KHẨU TỔ TRƯỞNG
+    const ADMIN_PASSWORD = "123456";
 
     // DỮ LIỆU MẶC ĐỊNH
     let appData = {
@@ -602,7 +667,7 @@
         ]
     };
 
-    // TỰ ĐỘNG LẮNG NGHE DỮ LIỆU MỚI TỪ ĐÁM MÂY (REAL-TIME SYNC)
+    // TỰ ĐỘNG LẮNG NGHE DỮ LIỆU ĐÁM MÂY
     db.ref('to_sinh_cn_data').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
@@ -614,9 +679,8 @@
         }
     });
 
-    // HÀM ĐẨY DỮ LIỆU MỚI LÊN ĐÁM MÂY KHI TỔ TRƯỞNG CHỈNH SỬA
     function saveDataToCloud() {
-        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang đồng bộ lên đám mây...`;
+        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang đồng bộ...`;
         db.ref('to_sinh_cn_data').set(appData, (error) => {
             if (error) {
                 document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--danger-color);"></i> Lỗi đồng bộ`;
@@ -626,20 +690,33 @@
         });
     }
 
-    // TOGGLE ADMIN MODE CO MAT KHAU BẢO MẬT
+    // ĐỔI GIAO DIỆN (THEME)
+    function changeTheme(themeName) {
+        document.body.setAttribute('data-theme', themeName);
+        localStorage.setItem('selectedTheme', themeName);
+    }
+
+    // ĐỒNG BỘ GIAO DIỆN LƯU SẴN
+    const savedTheme = localStorage.getItem('selectedTheme');
+    if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeSelect').value = savedTheme;
+    }
+
+    // TOGGLE ADMIN MODE BẮT BUỘC YÊU CẦU MẬT KHẨU
     function toggleAdminMode() {
         const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
         const roleBadge = document.getElementById('roleBadge');
         
         if (toggleInput.checked) {
-            const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa quyền chỉnh sửa:');
+            const pass = prompt('Vui lòng nhập mật khẩu Tổ trưởng để mở khóa quyền chỉnh sửa:');
             if (pass === ADMIN_PASSWORD) {
                 container.classList.add('admin-active');
                 roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
-                alert('Đã xác thực thành công!');
+                alert('Xác thực thành công! Bạn có quyền chỉnh sửa.');
             } else {
-                alert('Mật khẩu không chính xác!');
+                if (pass !== null) alert('Mật khẩu không chính xác!');
                 toggleInput.checked = false;
                 container.classList.remove('admin-active');
                 roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
@@ -650,7 +727,82 @@
         }
     }
 
-    // RENDER TOÀN BỘ GIAO DIỆN
+    window.onload = function() {
+        const toggleInput = document.getElementById('adminToggle');
+        if (toggleInput) toggleInput.checked = false;
+        document.getElementById('appContainer').classList.remove('admin-active');
+        populateVoiceList();
+    };
+
+    // QUẢN LÝ DANH SÁCH GIỌNG ĐỌC AI
+    let synth = window.speechSynthesis;
+    let voices = [];
+
+    function populateVoiceList() {
+        voices = synth.getVoices();
+        const voiceSelect = document.getElementById('voiceSelect');
+        voiceSelect.innerHTML = '';
+
+        if (voices.length === 0) {
+            voiceSelect.innerHTML = '<option value="">Giọng đọc mặc định thiết bị</option>';
+            return;
+        }
+
+        // Lọc ưu tiên giọng Tiếng Việt
+        let viVoices = voices.filter(v => v.lang.includes('vi') || v.lang.includes('VI'));
+        let otherVoices = voices.filter(v => !v.lang.includes('vi') && !v.lang.includes('VI'));
+
+        if (viVoices.length > 0) {
+            viVoices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.textContent = `🇻🇳 ${voice.name} (${voice.lang})`;
+                option.setAttribute('data-name', voice.name);
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        otherVoices.forEach((voice) => {
+            const option = document.createElement('option');
+            option.textContent = `🌐 ${voice.name} (${voice.lang})`;
+            option.setAttribute('data-name', voice.name);
+            voiceSelect.appendChild(option);
+        });
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+
+    let isSpeaking = false;
+    function toggleMcSpeech() {
+        const btn = document.getElementById('btnSpeech');
+        const icon = document.getElementById('mcIcon');
+        const text = document.getElementById('mcText');
+        const voiceSelect = document.getElementById('voiceSelect');
+
+        if (isSpeaking) {
+            synth.cancel(); isSpeaking = false;
+            icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; return;
+        }
+
+        const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${appData.meetingData.topic}. Cuộc họp do ${appData.meetingData.leader} chủ trì, vào lúc ${appData.meetingData.time}. Kính mời thành phần tham dự: ${appData.meetingData.members} đến dự họp đầy đủ.`;
+        const utterance = new SpeechSynthesisUtterance(speechContent);
+        
+        // Chọn giọng đọc theo dropdown
+        const selectedOption = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
+        if (selectedOption) {
+            const selectedVoice = voices.find(v => v.name === selectedOption);
+            if (selectedVoice) utterance.voice = selectedVoice;
+        }
+
+        utterance.rate = 0.95;
+
+        utterance.onstart = function () { isSpeaking = true; icon.className = 'fa-solid fa-circle-stop'; text.innerText = 'Dừng phát thông báo'; };
+        utterance.onend = function () { isSpeaking = false; icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; };
+        synth.speak(utterance);
+    }
+
+    // RENDER GIAO DIỆN
     function renderAll() {
         renderHeader();
         renderSectionTitles();
@@ -1002,28 +1154,6 @@
     }
 
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    // ĐỌC THÔNG BÁO AI
-    let isSpeaking = false;
-    let synth = window.speechSynthesis;
-    function toggleMcSpeech() {
-        const btn = document.getElementById('btnSpeech');
-        const icon = document.getElementById('mcIcon');
-        const text = document.getElementById('mcText');
-
-        if (isSpeaking) {
-            synth.cancel(); isSpeaking = false;
-            icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; return;
-        }
-
-        const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${appData.meetingData.topic}. Cuộc họp do ${appData.meetingData.leader} chủ trì, vào lúc ${appData.meetingData.time}. Kính mời thành phần tham dự: ${appData.meetingData.members} đến dự họp đầy đủ.`;
-        const utterance = new SpeechSynthesisUtterance(speechContent);
-        utterance.lang = 'vi-VN'; utterance.rate = 0.95;
-
-        utterance.onstart = function () { isSpeaking = true; icon.className = 'fa-solid fa-circle-stop'; text.innerText = 'Dừng phát thông báo'; };
-        utterance.onend = function () { isSpeaking = false; icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; };
-        synth.speak(utterance);
-    }
 </script>
 
 </body>
