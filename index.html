@@ -136,14 +136,14 @@
             backdrop-filter: blur(16px);
             border: 1px solid var(--border-glow);
             border-radius: 24px;
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             position: relative;
         }
 
         .department-name {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
             color: var(--accent-gold-bright);
             text-transform: uppercase;
@@ -202,60 +202,6 @@
         .admin-active .edit-title-btn,
         .admin-active .admin-btn { display: inline-flex !important; }
         .admin-active .admin-col { display: table-cell !important; }
-
-        .topic-box {
-            background: rgba(15, 23, 42, 0.6);
-            border-left: 5px solid var(--accent-gold);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .topic-title { font-size: 1.35rem; font-weight: 700; color: #ffffff; line-height: 1.5; }
-
-        .info-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;
-        }
-
-        .info-item {
-            display: flex; align-items: center; gap: 1rem;
-            background: rgba(255, 255, 255, 0.03); padding: 1.2rem;
-            border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .info-icon {
-            width: 48px; height: 48px; border-radius: 12px;
-            background: rgba(124, 58, 237, 0.2); color: var(--cyan-accent);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem; flex-shrink: 0; border: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        .info-content label { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
-        .info-content span { font-size: 1rem; font-weight: 600; color: #ffffff; }
-
-        /* AI SPEECH BAR */
-        .speech-control-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            border-radius: 50px;
-            border: 1px solid var(--border-glow);
-        }
-
-        .voice-select {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
-            outline: none;
-            max-width: 280px;
-            font-size: 0.85rem;
-        }
-        .voice-select option { background: #0f172a; color: white; }
 
         /* BUTTONS */
         .btn {
@@ -320,7 +266,7 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- BAR PHÂN QUYỀN, THỦ THUẬT GIAO DIỆN VÀ ĐỒNG BỘ -->
+    <!-- BAR PHÂN QUYỀN, BỘ CHỌN GIAO DIỆN VÀ TỰ ĐỘNG ĐỒNG BỘ -->
     <div class="admin-bar">
         <div>
             <i class="fa-solid fa-user-shield me-2"></i>
@@ -362,59 +308,7 @@
         <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
     </header>
 
-    <!-- 2. MAIN MEETING CARD -->
-    <main class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-bullhorn"></i> <span id="title_meeting">Nội dung họp trọng điểm</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_meeting')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <button class="btn btn-outline admin-btn" onclick="openMeetingModal()"><i class="fa-solid fa-pen-to-square"></i> Cập Nhật Nội Dung Họp</button>
-        </div>
-
-        <div class="topic-box">
-            <div class="topic-title" id="displayTopic">"Kế hoạch nâng cao chất lượng Bồi dưỡng Học sinh giỏi & Đổi mới phương pháp kiểm tra đánh giá theo Chương trình GDPT 2018"</div>
-        </div>
-
-        <div class="info-grid">
-            <div class="info-item">
-                <div class="info-icon"><i class="fa-solid fa-user-tie"></i></div>
-                <div class="info-content">
-                    <label>Tổ trưởng / Chủ trì</label>
-                    <span id="displayLeader">Thầy Trương Trung Can (Tổ trưởng)</span>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="info-content">
-                    <label>Thành phần tham dự</label>
-                    <span id="displayMembers">Toàn thể Giáo viên Tổ Sinh - CN</span>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fa-solid fa-clock"></i></div>
-                <div class="info-content">
-                    <label>Thời gian & Địa điểm</label>
-                    <span id="displayTime">14:00 - Thứ Năm | Phòng họp Tổ Sinh - CN</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- BỘ PHÁT & CHỌN GIỌNG NÓI MC AI -->
-        <div class="speech-control-box">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-microphone-lines" style="color: var(--cyan-accent);"></i>
-                <select id="voiceSelect" class="voice-select">
-                    <option value="">Đang tải giọng đọc AI...</option>
-                </select>
-            </div>
-            <button id="btnSpeech" class="btn btn-gold" onclick="toggleMcSpeech()">
-                <i class="fa-solid fa-volume-high" id="mcIcon"></i> <span id="mcText">Phát thông báo MC AI</span>
-            </button>
-        </div>
-    </main>
-
-    <!-- 3. HỒ SƠ TỔ CHUYÊN MÔN -->
+    <!-- 2. HỒ SƠ TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -439,7 +333,7 @@
         </div>
     </section>
 
-    <!-- 4. HÌNH ẢNH HOẠT ĐỘNG -->
+    <!-- 3. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -451,7 +345,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 5. TÀI NGUYÊN SỐ (Tải File Trực Tiếp Hoặc Link) -->
+    <!-- 4. TÀI NGUYÊN SỐ (Tải File Trực Tiếp / Link) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -463,7 +357,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 6. VĂN BẢN LƯU TRỮ (Tải File Trực Tiếp Hoặc Link) -->
+    <!-- 5. VĂN BẢN LƯU TRỮ (Tải File Trực Tiếp / Link) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -488,7 +382,7 @@
         </div>
     </section>
 
-    <!-- 7. TASKS CARD -->
+    <!-- 6. TASKS CARD -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -528,20 +422,6 @@
     </div>
 </div>
 
-<div class="modal" id="meetingModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);">Cập Nhật Nội Dung Cuộc Họp</h3>
-        <div class="form-group"><label>Nội dung trọng điểm</label><textarea id="inputTopic" class="form-control" rows="3"></textarea></div>
-        <div class="form-group"><label>Tổ trưởng / Chủ trì</label><input type="text" id="inputLeader" class="form-control"></div>
-        <div class="form-group"><label>Thành phần tham dự</label><input type="text" id="inputMembers" class="form-control"></div>
-        <div class="form-group"><label>Thời gian & Địa điểm</label><input type="text" id="inputTime" class="form-control"></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveMeetingInfo()">Lưu Cập Nhật</button>
-        </div>
-    </div>
-</div>
-
 <div class="modal" id="memberModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thành Viên Tổ</h3>
@@ -571,7 +451,7 @@
     </div>
 </div>
 
-<!-- MODAL TÀI NGUYÊN (CHO PHÉP TẢI FILE TỪ MÁY HOẶC LINK) -->
+<!-- MODAL TÀI NGUYÊN (TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="resourceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Tài Nguyên Số</h3>
@@ -584,7 +464,7 @@
             <option value="Sơ đồ tư duy">Sơ đồ tư duy</option>
         </select></div>
         
-        <div class="form-group"><label>LỰA CHỌN 1: Tải File Trực Tiếp Từ Máy (Word, PDF, PPT...)</label><input type="file" id="inputResFile" class="form-control"></div>
+        <div class="form-group"><label>LỰA CHỌN 1: Tải File Trực Tiếp Từ Máy (Word, PDF, PPT, Excel...)</label><input type="file" id="inputResFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
         <div class="form-group"><label>LỰA CHỌN 2: Dán Link Đính Kèm (Google Drive, Canva...)</label><input type="text" id="inputResLink" class="form-control" placeholder="https://drive.google.com/..."></div>
         
@@ -595,7 +475,7 @@
     </div>
 </div>
 
-<!-- MODAL VĂN BẢN (CHO PHÉP TẢI FILE TỪ MÁY HOẶC LINK) -->
+<!-- MODAL VĂN BẢN (TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="docModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
@@ -634,7 +514,7 @@
 </div>
 
 <script>
-    // 1. CẤU HÌNH CƠ SỞ DỮ LIỆU ĐÁM MÂY (FIREBASE REALTIME DATABASE)
+    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE
     const firebaseConfig = {
         databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
@@ -651,24 +531,17 @@
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         sectionTitles: {
-            title_meeting: 'Nội dung họp trọng điểm',
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
             title_tasks: 'Nhiệm vụ & Phân công'
         },
-        meetingData: {
-            topic: '"Kế hoạch nâng cao chất lượng Bồi dưỡng Học sinh giỏi & Đổi mới phương pháp kiểm tra đánh giá theo Chương trình GDPT 2018"',
-            leader: 'Thầy Trương Trung Can (Tổ trưởng)',
-            members: 'Toàn thể Giáo viên Tổ Sinh - CN',
-            time: '14:00 - Thứ Năm | Phòng họp Tổ Sinh - CN'
-        },
         membersData: [
             { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
         ],
         imagesData: [
-            { caption: 'Sinh hoạt chuyên đề Tổ Sinh tuần 8', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
+            { caption: 'Sinh hoạt chuyên đề Tổ Sinh', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
         ],
         resourcesData: [
             { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#', fileName: '' }
@@ -677,7 +550,7 @@
             { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#', fileName: '' }
         ],
         tasksData: [
-            { title: 'Lịch báo giảng tuần 12', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
+            { title: 'Lịch báo giảng tuần mới', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
         ]
     };
 
@@ -744,80 +617,26 @@
         const toggleInput = document.getElementById('adminToggle');
         if (toggleInput) toggleInput.checked = false;
         document.getElementById('appContainer').classList.remove('admin-active');
-        populateVoiceList();
     };
 
-    // QUẢN LÝ DANH SÁCH GIỌNG ĐỌC AI
-    let synth = window.speechSynthesis;
-    let voices = [];
-
-    function populateVoiceList() {
-        voices = synth.getVoices();
-        const voiceSelect = document.getElementById('voiceSelect');
-        voiceSelect.innerHTML = '';
-
-        if (voices.length === 0) {
-            voiceSelect.innerHTML = '<option value="">Giọng đọc mặc định thiết bị</option>';
+    // HÀM XỬ LÝ TẢI FILE TRỰC TIẾP DẠNG BLOB / DATA URL
+    function downloadDirectFile(dataUrl, fileName) {
+        if (!dataUrl || dataUrl === '#') {
+            alert('File chưa sẵn sàng hoặc không tồn tại!');
             return;
         }
-
-        let viVoices = voices.filter(v => v.lang.includes('vi') || v.lang.includes('VI'));
-        let otherVoices = voices.filter(v => !v.lang.includes('vi') && !v.lang.includes('VI'));
-
-        if (viVoices.length > 0) {
-            viVoices.forEach((voice) => {
-                const option = document.createElement('option');
-                option.textContent = `🇻🇳 ${voice.name} (${voice.lang})`;
-                option.setAttribute('data-name', voice.name);
-                voiceSelect.appendChild(option);
-            });
-        }
-
-        otherVoices.forEach((voice) => {
-            const option = document.createElement('option');
-            option.textContent = `🌐 ${voice.name} (${voice.lang})`;
-            option.setAttribute('data-name', voice.name);
-            voiceSelect.appendChild(option);
-        });
-    }
-
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = populateVoiceList;
-    }
-
-    let isSpeaking = false;
-    function toggleMcSpeech() {
-        const btn = document.getElementById('btnSpeech');
-        const icon = document.getElementById('mcIcon');
-        const text = document.getElementById('mcText');
-        const voiceSelect = document.getElementById('voiceSelect');
-
-        if (isSpeaking) {
-            synth.cancel(); isSpeaking = false;
-            icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; return;
-        }
-
-        const speechContent = `Xin trân trọng thông báo lịch họp chuyên môn. Nội dung họp: ${appData.meetingData.topic}. Cuộc họp do ${appData.meetingData.leader} chủ trì, vào lúc ${appData.meetingData.time}. Kính mời thành phần tham dự: ${appData.meetingData.members} đến dự họp đầy đủ.`;
-        const utterance = new SpeechSynthesisUtterance(speechContent);
-        
-        const selectedOption = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
-        if (selectedOption) {
-            const selectedVoice = voices.find(v => v.name === selectedOption);
-            if (selectedVoice) utterance.voice = selectedVoice;
-        }
-
-        utterance.rate = 0.95;
-
-        utterance.onstart = function () { isSpeaking = true; icon.className = 'fa-solid fa-circle-stop'; text.innerText = 'Dừng phát thông báo'; };
-        utterance.onend = function () { isSpeaking = false; icon.className = 'fa-solid fa-volume-high'; text.innerText = 'Phát thông báo MC AI'; };
-        synth.speak(utterance);
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fileName || 'tai_lieu_to_chuyen_mon';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 
     // RENDER GIAO DIỆN
     function renderAll() {
         renderHeader();
         renderSectionTitles();
-        renderMeetingInfo();
         renderMembers();
         renderImages();
         renderResources();
@@ -835,13 +654,6 @@
         for (let key in appData.sectionTitles) {
             if (document.getElementById(key)) document.getElementById(key).innerText = appData.sectionTitles[key];
         }
-    }
-
-    function renderMeetingInfo() {
-        document.getElementById('displayTopic').innerText = appData.meetingData.topic;
-        document.getElementById('displayLeader').innerText = appData.meetingData.leader;
-        document.getElementById('displayMembers').innerText = appData.meetingData.members;
-        document.getElementById('displayTime').innerText = appData.meetingData.time;
     }
 
     function renderMembers() {
@@ -883,8 +695,11 @@
         const grid = document.getElementById('resourceGrid');
         grid.innerHTML = '';
         (appData.resourcesData || []).forEach((res, i) => {
-            const downloadAttr = res.fileName ? `download="${res.fileName}"` : '';
-            const isDirectFile = res.fileName ? '<i class="fa-solid fa-file-arrow-down"></i> Tải Về File' : '<i class="fa-solid fa-arrow-up-right-from-square"></i> Truy Cập Link';
+            const isFile = res.fileName && res.fileName.length > 0;
+            const btnHtml = isFile 
+                ? `<button onclick="downloadDirectFile('${res.link}', '${res.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Về File</button>`
+                : `<a href="${res.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Truy Cập Link</a>`;
+
             grid.innerHTML += `
                 <div class="resource-card">
                     <div>
@@ -892,9 +707,7 @@
                         <div style="font-weight:700; color:#fff; font-size:0.95rem; margin-top:0.3rem;">${res.title}</div>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-                        <a href="${res.link}" target="_blank" ${downloadAttr} class="btn btn-download btn-sm">
-                            ${isDirectFile}
-                        </a>
+                        ${btnHtml}
                         <div class="admin-btn">
                             <button class="btn btn-edit btn-sm" onclick="openResourceModal(${i})"><i class="fa-solid fa-pen"></i></button>
                             <button class="btn btn-danger btn-sm" onclick="deleteResource(${i})"><i class="fa-solid fa-trash"></i></button>
@@ -909,18 +722,17 @@
         const tbody = document.getElementById('docTableBody');
         tbody.innerHTML = '';
         (appData.docsData || []).forEach((doc, i) => {
-            const downloadAttr = doc.fileName ? `download="${doc.fileName}"` : '';
-            const isDirectFile = doc.fileName ? '<i class="fa-solid fa-file-arrow-down"></i> Tải Về File' : '<i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Link';
+            const isFile = doc.fileName && doc.fileName.length > 0;
+            const btnHtml = isFile 
+                ? `<button onclick="downloadDirectFile('${doc.link}', '${doc.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Về File</button>`
+                : `<a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Link</a>`;
+
             tbody.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
                     <td>${doc.summary}</td>
                     <td>${doc.date}</td>
-                    <td>
-                        <a href="${doc.link}" target="_blank" ${downloadAttr} class="btn btn-download btn-sm">
-                            ${isDirectFile}
-                        </a>
-                    </td>
+                    <td>${btnHtml}</td>
                     <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openDocModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteDoc(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
@@ -971,22 +783,6 @@
         appData.headerData.year = document.getElementById('inputYear').value;
         saveDataToCloud();
         closeModal('headerModal');
-    }
-
-    function openMeetingModal() {
-        document.getElementById('inputTopic').value = appData.meetingData.topic;
-        document.getElementById('inputLeader').value = appData.meetingData.leader;
-        document.getElementById('inputMembers').value = appData.meetingData.members;
-        document.getElementById('inputTime').value = appData.meetingData.time;
-        document.getElementById('meetingModal').style.display = 'flex';
-    }
-    function saveMeetingInfo() {
-        appData.meetingData.topic = document.getElementById('inputTopic').value;
-        appData.meetingData.leader = document.getElementById('inputLeader').value;
-        appData.meetingData.members = document.getElementById('inputMembers').value;
-        appData.meetingData.time = document.getElementById('inputTime').value;
-        saveDataToCloud();
-        closeModal('meetingModal');
     }
 
     function openMemberModal(i = null) {
@@ -1056,7 +852,7 @@
         }
     }
 
-    // LƯU TÀI NGUYÊN SỐ (HỖ TRỢ FILE HOẶC LINK)
+    // LƯU TÀI NGUYÊN SỐ (TẢI FILE TỪ MÁY HOẶC LINK)
     function openResourceModal(i = null) {
         document.getElementById('editResIndex').value = i !== null ? i : '';
         document.getElementById('inputResFile').value = '';
@@ -1107,7 +903,7 @@
         }
     }
 
-    // LƯU VĂN BẢN (HỖ TRỢ FILE HOẶC LINK)
+    // LƯU VĂN BẢN (TẢI FILE TỪ MÁY HOẶC LINK)
     function openDocModal(i = null) {
         document.getElementById('editDocIndex').value = i !== null ? i : '';
         document.getElementById('inputDocFile').value = '';
