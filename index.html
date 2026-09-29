@@ -192,6 +192,18 @@
             gap: 0.75rem;
         }
 
+        .sub-section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyan-accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3);
+        }
+
         .edit-title-btn {
             background: none; border: none; color: var(--cyan-accent); cursor: pointer;
             font-size: 1rem; margin-left: 0.5rem; display: none;
@@ -382,28 +394,61 @@
         </div>
     </section>
 
-    <!-- 6. TASKS CARD -->
+    <!-- 6. NHIỆM VỤ VÀ PHÂN CÔNG (CHIA THÀNH MỤC NHỎ) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm vụ & Phân công</span>
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <button class="btn btn-gold admin-btn" onclick="openTaskModal()"><i class="fa-solid fa-plus"></i> Thêm Nhiệm Vụ Mới</button>
         </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Hạng mục công việc</th>
-                        <th>Người phụ trách</th>
-                        <th>Thời hạn</th>
-                        <th>Trạng thái</th>
-                        <th class="admin-col">Thao tác Quản trị</th>
-                    </tr>
-                </thead>
-                <tbody id="taskTableBody"></tbody>
-            </table>
+
+        <!-- MỤC NHỎ 1: DẠY LỚP VÀ CHỦ NHIỆM -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
+                </div>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Lớp / Môn phân công</th>
+                            <th>Giáo viên phụ trách</th>
+                            <th>Nhiệm vụ cụ thể</th>
+                            <th>Trạng thái</th>
+                            <th class="admin-col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teachingTaskTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MỤC NHỎ 2: ĐĂNG KÝ PHONG TRÀO THI ĐỦA -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-trophy"></i> Đăng Ký Phong Trào Thi Đua
+                </div>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('thi_dua')"><i class="fa-solid fa-plus"></i> Thêm Đăng Ký Thi Đua</button>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Danh hiệu / Phong trào</th>
+                            <th>Cá nhân / Tập thể đăng ký</th>
+                            <th>Chỉ tiêu phấn đấu</th>
+                            <th>Trạng thái</th>
+                            <th class="admin-col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="competitionTaskTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </section>
 </div>
@@ -451,7 +496,6 @@
     </div>
 </div>
 
-<!-- MODAL TÀI NGUYÊN (TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="resourceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Tài Nguyên Số</h3>
@@ -475,7 +519,6 @@
     </div>
 </div>
 
-<!-- MODAL VĂN BẢN (TẢI FILE TỪ MÁY HOẶC LINK) -->
 <div class="modal" id="docModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
@@ -495,20 +538,25 @@
     </div>
 </div>
 
+<!-- MODAL NHIỆM VỤ VÀ PHÂN CÔNG -->
 <div class="modal" id="taskModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);">Nhiệm Vụ Công Việc</h3>
+        <h3 style="color: var(--accent-gold);" id="taskModalTitle">Nhiệm Vụ Công Việc</h3>
+        <input type="hidden" id="editTaskCategory">
         <input type="hidden" id="editTaskIndex">
-        <div class="form-group"><label>Tên công việc</label><input type="text" id="inputTaskTitle" class="form-control"></div>
-        <div class="form-group"><label>Người phụ trách</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
-        <div class="form-group"><label>Thời hạn</label><input type="text" id="inputTaskDeadline" class="form-control"></div>
+        
+        <div class="form-group"><label id="labelTaskTitle">Tên hạng mục / Lớp / Môn</label><input type="text" id="inputTaskTitle" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskAssignee">Người phụ trách / Cá nhân</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Chỉ tiêu</label><input type="text" id="inputTaskDetail" class="form-control"></div>
         <div class="form-group"><label>Trạng thái</label><select id="inputTaskStatus" class="form-control">
             <option value="Đang thực hiện">Đang thực hiện</option>
             <option value="Hoàn thành">Hoàn thành</option>
+            <option value="Đạt chỉ tiêu">Đạt chỉ tiêu</option>
         </select></div>
+        
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('taskModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveTask()">Lưu Nhiệm Vụ</button>
+            <button class="btn btn-gold" onclick="saveTask()">Lưu Phân Công</button>
         </div>
     </div>
 </div>
@@ -535,7 +583,7 @@
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
-            title_tasks: 'Nhiệm vụ & Phân công'
+            title_tasks: 'Nhiệm Vụ & Phân Công'
         },
         membersData: [
             { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
@@ -549,8 +597,12 @@
         docsData: [
             { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#', fileName: '' }
         ],
-        tasksData: [
-            { title: 'Lịch báo giảng tuần mới', assignee: 'Toàn bộ Giáo viên trong Tổ', deadline: 'Trước 17h00 Thứ Sáu', status: 'Đang thực hiện' }
+        // PHÂN CHIA NHIỆM VỤ THÀNH 2 MỤC NHỎ
+        teachingTasks: [
+            { title: 'Sinh học 12 & Chủ nhiệm 12A1', assignee: 'Thầy Trương Trung Can', detail: 'Giảng dạy 4 tiết/tuần, Quản lý lớp 12A1', status: 'Đang thực hiện' }
+        ],
+        competitionTasks: [
+            { title: 'Lao động tiên tiến / Chiến sĩ thi đua cơ sở', assignee: 'Toàn thể Giáo viên trong Tổ', detail: 'Đạt 100% tiết dạy tốt, HSG cấp Tỉnh', status: 'Đang thực hiện' }
         ]
     };
 
@@ -619,7 +671,6 @@
         document.getElementById('appContainer').classList.remove('admin-active');
     };
 
-    // HÀM XỬ LÝ TẢI FILE TRỰC TIẾP DẠNG BLOB / DATA URL
     function downloadDirectFile(dataUrl, fileName) {
         if (!dataUrl || dataUrl === '#') {
             alert('File chưa sẵn sàng hoặc không tồn tại!');
@@ -742,20 +793,41 @@
         });
     }
 
+    // RENDER NHIỆM VỤ THEO 2 MỤC NHỎ
     function renderTasks() {
-        const tbody = document.getElementById('taskTableBody');
-        tbody.innerHTML = '';
-        (appData.tasksData || []).forEach((task, i) => {
+        // 1. Dạy lớp và Chủ nhiệm
+        const tbodyTeach = document.getElementById('teachingTaskTableBody');
+        tbodyTeach.innerHTML = '';
+        (appData.teachingTasks || []).forEach((task, i) => {
             const badgeClass = task.status === 'Hoàn thành' ? 'badge-success' : 'badge-warning';
-            tbody.innerHTML += `
+            tbodyTeach.innerHTML += `
                 <tr>
-                    <td style="font-weight:600;">${task.title}</td>
+                    <td style="font-weight:600; color:var(--accent-gold);">${task.title}</td>
                     <td>${task.assignee}</td>
-                    <td>${task.deadline}</td>
+                    <td>${task.detail}</td>
                     <td><span class="badge ${badgeClass}">${task.status}</span></td>
                     <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openTaskModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTask(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn btn-edit btn-sm" onclick="openTaskModal('day_lop', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTask('day_lop', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // 2. Đăng ký phong trào thi đua
+        const tbodyComp = document.getElementById('competitionTaskTableBody');
+        tbodyComp.innerHTML = '';
+        (appData.competitionTasks || []).forEach((task, i) => {
+            const badgeClass = (task.status === 'Hoàn thành' || task.status === 'Đạt chỉ tiêu') ? 'badge-success' : 'badge-warning';
+            tbodyComp.innerHTML += `
+                <tr>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
+                    <td>${task.assignee}</td>
+                    <td>${task.detail}</td>
+                    <td><span class="badge ${badgeClass}">${task.status}</span></td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openTaskModal('thi_dua', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTask('thi_dua', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
                 </tr>
             `;
@@ -852,7 +924,6 @@
         }
     }
 
-    // LƯU TÀI NGUYÊN SỐ (TẢI FILE TỪ MÁY HOẶC LINK)
     function openResourceModal(i = null) {
         document.getElementById('editResIndex').value = i !== null ? i : '';
         document.getElementById('inputResFile').value = '';
@@ -903,7 +974,6 @@
         }
     }
 
-    // LƯU VĂN BẢN (TẢI FILE TỪ MÁY HOẶC LINK)
     function openDocModal(i = null) {
         document.getElementById('editDocIndex').value = i !== null ? i : '';
         document.getElementById('inputDocFile').value = '';
@@ -958,40 +1028,77 @@
         }
     }
 
-    function openTaskModal(i = null) {
+    // MỞ VÀ LƯU MODAL NHIỆM VỤ THEO MỤC NHỎ
+    function openTaskModal(category, i = null) {
+        document.getElementById('editTaskCategory').value = category;
         document.getElementById('editTaskIndex').value = i !== null ? i : '';
-        if (i !== null) {
-            document.getElementById('inputTaskTitle').value = appData.tasksData[i].title;
-            document.getElementById('inputTaskAssignee').value = appData.tasksData[i].assignee;
-            document.getElementById('inputTaskDeadline').value = appData.tasksData[i].deadline;
-            document.getElementById('inputTaskStatus').value = appData.tasksData[i].status;
+
+        if (category === 'day_lop') {
+            document.getElementById('taskModalTitle').innerText = 'Phân Công Dạy Lớp & Chủ Nhiệm';
+            document.getElementById('labelTaskTitle').innerText = 'Lớp / Môn phân công';
+            document.getElementById('labelTaskAssignee').innerText = 'Giáo viên phụ trách';
+            document.getElementById('labelTaskDetail').innerText = 'Nhiệm vụ cụ thể';
+            
+            if (i !== null && appData.teachingTasks) {
+                document.getElementById('inputTaskTitle').value = appData.teachingTasks[i].title;
+                document.getElementById('inputTaskAssignee').value = appData.teachingTasks[i].assignee;
+                document.getElementById('inputTaskDetail').value = appData.teachingTasks[i].detail;
+                document.getElementById('inputTaskStatus').value = appData.teachingTasks[i].status;
+            } else {
+                document.getElementById('inputTaskTitle').value = '';
+                document.getElementById('inputTaskAssignee').value = '';
+                document.getElementById('inputTaskDetail').value = '';
+            }
         } else {
-            document.getElementById('inputTaskTitle').value = '';
-            document.getElementById('inputTaskAssignee').value = '';
-            document.getElementById('inputTaskDeadline').value = '';
+            document.getElementById('taskModalTitle').innerText = 'Đăng Ký Phong Trào Thi Đua';
+            document.getElementById('labelTaskTitle').innerText = 'Danh hiệu / Phong trào thi đua';
+            document.getElementById('labelTaskAssignee').innerText = 'Cá nhân / Tập thể đăng ký';
+            document.getElementById('labelTaskDetail').innerText = 'Chỉ tiêu phấn đấu';
+
+            if (i !== null && appData.competitionTasks) {
+                document.getElementById('inputTaskTitle').value = appData.competitionTasks[i].title;
+                document.getElementById('inputTaskAssignee').value = appData.competitionTasks[i].assignee;
+                document.getElementById('inputTaskDetail').value = appData.competitionTasks[i].detail;
+                document.getElementById('inputTaskStatus').value = appData.competitionTasks[i].status;
+            } else {
+                document.getElementById('inputTaskTitle').value = '';
+                document.getElementById('inputTaskAssignee').value = '';
+                document.getElementById('inputTaskDetail').value = '';
+            }
         }
         document.getElementById('taskModal').style.display = 'flex';
     }
+
     function saveTask() {
+        const category = document.getElementById('editTaskCategory').value;
         const idx = document.getElementById('editTaskIndex').value;
         const title = document.getElementById('inputTaskTitle').value;
         const assignee = document.getElementById('inputTaskAssignee').value;
-        const deadline = document.getElementById('inputTaskDeadline').value;
+        const detail = document.getElementById('inputTaskDetail').value;
         const status = document.getElementById('inputTaskStatus').value;
-        if (!title) return alert('Nhập tên công việc!');
 
-        if (!appData.tasksData) appData.tasksData = [];
-        if (idx !== '') {
-            appData.tasksData[idx] = { title, assignee, deadline, status };
+        if (!title) return alert('Nhập thông tin tên!');
+
+        const taskObj = { title, assignee, detail, status };
+
+        if (category === 'day_lop') {
+            if (!appData.teachingTasks) appData.teachingTasks = [];
+            if (idx !== '') appData.teachingTasks[idx] = taskObj;
+            else appData.teachingTasks.push(taskObj);
         } else {
-            appData.tasksData.push({ title, assignee, deadline, status });
+            if (!appData.competitionTasks) appData.competitionTasks = [];
+            if (idx !== '') appData.competitionTasks[idx] = taskObj;
+            else appData.competitionTasks.push(taskObj);
         }
+
         saveDataToCloud();
         closeModal('taskModal');
     }
-    function deleteTask(i) {
-        if (confirm('Xóa công việc này?')) {
-            appData.tasksData.splice(i, 1);
+
+    function deleteTask(category, i) {
+        if (confirm('Xóa mục này?')) {
+            if (category === 'day_lop') appData.teachingTasks.splice(i, 1);
+            else appData.competitionTasks.splice(i, 1);
             saveDataToCloud();
         }
     }
