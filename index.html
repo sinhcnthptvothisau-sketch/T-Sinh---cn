@@ -378,22 +378,22 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 2: BỒI DƯỠNG HỌC SINH GIỎI (MỚI BỔ SUNG KHÓA TRÂN) -->
+        <!-- MỤC NHỎ 2: BỒI DƯỠNG HỌC SINH GIỎI (CỘT: GIÁO VIÊN BỒI DƯỠNG -> MÔN -> NỘI DUNG/KẾ HOẠCH -> DANH SÁCH ĐỘI TUYỂN) -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
                 </div>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('hsg')"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
             </div>
             <div class="table-responsive">
                 <table class="custom-table">
                     <thead>
                         <tr>
                             <th>Giáo viên bồi dưỡng</th>
-                            <th>Môn / Đội tuyển</th>
+                            <th>Môn</th>
                             <th>Nội dung / Kế hoạch</th>
-                            <th>Trạng thái</th>
+                            <th>Danh sách đội tuyển</th>
                             <th class="admin-col">Thao tác</th>
                         </tr>
                     </thead>
@@ -562,7 +562,28 @@
     </div>
 </div>
 
-<!-- MODAL NHIỆM VỤ VÀ PHÂN CÔNG -->
+<!-- MODAL BỒI DƯỠNG HSG -->
+<div class="modal" id="hsgModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);">Bồi Dưỡng Học Sinh Giỏi</h3>
+        <input type="hidden" id="editHsgIndex">
+        
+        <div class="form-group"><label>Giáo viên bồi dưỡng</label><input type="text" id="inputHsgTeacher" class="form-control"></div>
+        <div class="form-group"><label>Môn học / Đội tuyển</label><input type="text" id="inputHsgSubject" class="form-control" placeholder="Ví dụ: Sinh học 12"></div>
+        <div class="form-group"><label>Nội dung / Kế hoạch bồi dưỡng</label><textarea id="inputHsgPlan" class="form-control" rows="2" placeholder="Ví dụ: Bồi dưỡng chuyên đề Di truyền học..."></textarea></div>
+        
+        <div class="form-group"><label>DANH SÁCH ĐỘI TUYỂN (Lựa chọn 1: Tải File Danh Sách từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Danh sách học sinh</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Nhập tên các em HS hoặc dán link Google Sheet..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveHsg()">Lưu Phân Công</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PHÂN CÔNG CHUNG (DẠY LỚP / THI ĐỦA) -->
 <div class="modal" id="taskModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);" id="taskModalTitle">Nhiệm Vụ Công Việc</h3>
@@ -570,8 +591,8 @@
         <input type="hidden" id="editTaskIndex">
         
         <div class="form-group"><label id="labelTaskAssignee">Giáo viên phụ trách / Cá nhân</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskTitle">Lớp phân công / Phong trào / Môn</label><input type="text" id="inputTaskTitle" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Tên sản phẩm / Kế hoạch</label><input type="text" id="inputTaskDetail" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskTitle">Lớp phân công / Phong trào</label><input type="text" id="inputTaskTitle" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Tên sản phẩm</label><input type="text" id="inputTaskDetail" class="form-control"></div>
         <div class="form-group"><label>Trạng thái</label><select id="inputTaskStatus" class="form-control">
             <option value="Đang thực hiện">Đang thực hiện</option>
             <option value="Hoàn thành">Hoàn thành</option>
@@ -625,7 +646,7 @@
             { assignee: 'Thầy Trương Trung Can', title: 'Sinh học 12 & Chủ nhiệm 12A1', detail: 'Giảng dạy 4 tiết/tuần, Quản lý lớp 12A1', status: 'Đang thực hiện' }
         ],
         hsgTasks: [
-            { assignee: 'Thầy Trương Trung Can', title: 'Đội tuyển HSG Sinh học 12', detail: 'Ôn luyện Chuyên đề Di truyền & Biến dị', status: 'Đang thực hiện' }
+            { teacher: 'Thầy Trương Trung Can', subject: 'Sinh học 12', plan: 'Ôn luyện Chuyên đề Di truyền & Biến dị', listLink: '#', fileName: '' }
         ],
         competitionTasks: [
             { assignee: 'Thầy Trương Trung Can', title: 'Hội thi Giáo viên dạy giỏi cấp Trường', detail: 'Bài giảng E-Learning & Sáng kiến kinh nghiệm', status: 'Đang thực hiện' }
@@ -840,20 +861,29 @@
             `;
         });
 
-        // 2. Bồi dưỡng học sinh giỏi (Mới)
+        // 2. Bồi dưỡng học sinh giỏi (Giáo viên -> Môn -> Nội dung/Kế hoạch -> Danh sách đội tuyển)
         const tbodyHsg = document.getElementById('hsgTaskTableBody');
         tbodyHsg.innerHTML = '';
-        (appData.hsgTasks || []).forEach((task, i) => {
-            const badgeClass = (task.status === 'Hoàn thành' || task.status === 'Đạt chỉ tiêu') ? 'badge-success' : 'badge-warning';
+        (appData.hsgTasks || []).forEach((item, i) => {
+            const isFile = item.fileName && item.fileName.length > 0;
+            let listHtml = '';
+            if (isFile) {
+                listHtml = `<button onclick="downloadDirectFile('${item.listLink}', '${item.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải DS Đội Tuyển</button>`;
+            } else if (item.listLink && item.listLink.startsWith('http')) {
+                listHtml = `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Danh Sách</a>`;
+            } else {
+                listHtml = item.listLink || 'Chưa cập nhật DS';
+            }
+
             tbodyHsg.innerHTML += `
                 <tr>
-                    <td><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
-                    <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
-                    <td>${task.detail}</td>
-                    <td><span class="badge ${badgeClass}">${task.status}</span></td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
+                    <td>${item.plan}</td>
+                    <td>${listHtml}</td>
                     <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openTaskModal('hsg', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTask('hsg', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn btn-edit btn-sm" onclick="openHsgModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteHsg(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
                 </tr>
             `;
@@ -1073,7 +1103,64 @@
         }
     }
 
-    // MỞ VÀ LƯU MODAL NHIỆM VỤ THEO CÁC MỤC NHỎ
+    // CÁC HÀM XỬ LÝ RIÊNG CHO MỤC BỒI DƯỠNG HSG
+    function openHsgModal(i = null) {
+        document.getElementById('editHsgIndex').value = i !== null ? i : '';
+        document.getElementById('inputHsgFile').value = '';
+        if (i !== null && appData.hsgTasks) {
+            document.getElementById('inputHsgTeacher').value = appData.hsgTasks[i].teacher;
+            document.getElementById('inputHsgSubject').value = appData.hsgTasks[i].subject;
+            document.getElementById('inputHsgPlan').value = appData.hsgTasks[i].plan;
+            document.getElementById('inputHsgLink').value = appData.hsgTasks[i].fileName ? '' : appData.hsgTasks[i].listLink;
+        } else {
+            document.getElementById('inputHsgTeacher').value = '';
+            document.getElementById('inputHsgSubject').value = '';
+            document.getElementById('inputHsgPlan').value = '';
+            document.getElementById('inputHsgLink').value = '';
+        }
+        document.getElementById('hsgModal').style.display = 'flex';
+    }
+
+    function saveHsg() {
+        const idx = document.getElementById('editHsgIndex').value;
+        const teacher = document.getElementById('inputHsgTeacher').value;
+        const subject = document.getElementById('inputHsgSubject').value;
+        const plan = document.getElementById('inputHsgPlan').value;
+        const fileInput = document.getElementById('inputHsgFile');
+        const listLink = document.getElementById('inputHsgLink').value;
+
+        if (!teacher || !subject) return alert('Nhập tên Giáo viên và Môn bồi dưỡng!');
+
+        if (!appData.hsgTasks) appData.hsgTasks = [];
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const hsgObj = { teacher, subject, plan, listLink: e.target.result, fileName: file.name };
+                if (idx !== '') appData.hsgTasks[idx] = hsgObj;
+                else appData.hsgTasks.push(hsgObj);
+                saveDataToCloud();
+                closeModal('hsgModal');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const hsgObj = { teacher, subject, plan, listLink: listLink || '', fileName: '' };
+            if (idx !== '') appData.hsgTasks[idx] = hsgObj;
+            else appData.hsgTasks.push(hsgObj);
+            saveDataToCloud();
+            closeModal('hsgModal');
+        }
+    }
+
+    function deleteHsg(i) {
+        if (confirm('Xóa mục bồi dưỡng HSG này?')) {
+            appData.hsgTasks.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
+    // MỞ VÀ LƯU MODAL CHO DẠY LỚP / THI ĐỦA
     function openTaskModal(category, i = null) {
         document.getElementById('editTaskCategory').value = category;
         document.getElementById('editTaskIndex').value = i !== null ? i : '';
@@ -1089,22 +1176,6 @@
                 document.getElementById('inputTaskTitle').value = appData.teachingTasks[i].title;
                 document.getElementById('inputTaskDetail').value = appData.teachingTasks[i].detail;
                 document.getElementById('inputTaskStatus').value = appData.teachingTasks[i].status;
-            } else {
-                document.getElementById('inputTaskAssignee').value = '';
-                document.getElementById('inputTaskTitle').value = '';
-                document.getElementById('inputTaskDetail').value = '';
-            }
-        } else if (category === 'hsg') {
-            document.getElementById('taskModalTitle').innerText = 'Bồi Dưỡng Học Sinh Giỏi';
-            document.getElementById('labelTaskAssignee').innerText = 'Giáo viên bồi dưỡng';
-            document.getElementById('labelTaskTitle').innerText = 'Môn / Đội tuyển';
-            document.getElementById('labelTaskDetail').innerText = 'Nội dung / Kế hoạch';
-
-            if (i !== null && appData.hsgTasks) {
-                document.getElementById('inputTaskAssignee').value = appData.hsgTasks[i].assignee;
-                document.getElementById('inputTaskTitle').value = appData.hsgTasks[i].title;
-                document.getElementById('inputTaskDetail').value = appData.hsgTasks[i].detail;
-                document.getElementById('inputTaskStatus').value = appData.hsgTasks[i].status;
             } else {
                 document.getElementById('inputTaskAssignee').value = '';
                 document.getElementById('inputTaskTitle').value = '';
@@ -1146,10 +1217,6 @@
             if (!appData.teachingTasks) appData.teachingTasks = [];
             if (idx !== '') appData.teachingTasks[idx] = taskObj;
             else appData.teachingTasks.push(taskObj);
-        } else if (category === 'hsg') {
-            if (!appData.hsgTasks) appData.hsgTasks = [];
-            if (idx !== '') appData.hsgTasks[idx] = taskObj;
-            else appData.hsgTasks.push(taskObj);
         } else {
             if (!appData.competitionTasks) appData.competitionTasks = [];
             if (idx !== '') appData.competitionTasks[idx] = taskObj;
@@ -1163,7 +1230,6 @@
     function deleteTask(category, i) {
         if (confirm('Xóa mục này?')) {
             if (category === 'day_lop') appData.teachingTasks.splice(i, 1);
-            else if (category === 'hsg') appData.hsgTasks.splice(i, 1);
             else appData.competitionTasks.splice(i, 1);
             saveDataToCloud();
         }
