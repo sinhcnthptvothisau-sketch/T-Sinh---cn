@@ -394,7 +394,7 @@
         </div>
     </section>
 
-    <!-- 6. NHIỆM VỤ VÀ PHÂN CÔNG (SỬA THỨ TỰ CỘT) -->
+    <!-- 6. NHIỆM VỤ VÀ PHÂN CÔNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -403,7 +403,7 @@
             </h2>
         </div>
 
-        <!-- MỤC NHỎ 1: DẠY LỚP VÀ CHỦ NHIỆM (THỨ TỰ: GIÁO VIÊN -> LỚP PHÂN CÔNG -> NHIỆM VỤ CỤ THỂ -> TRẠNG THÁI) -->
+        <!-- MỤC NHỎ 1: DẠY LỚP VÀ CHỦ NHIỆM -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -427,7 +427,7 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 2: ĐĂNG KÝ PHONG TRÀO THI ĐỦA -->
+        <!-- MỤC NHỎ 2: ĐĂNG KÝ PHONG TRÀO THI ĐỦA (CỘT: CÁ NHÂN -> PHONG TRÀO -> TÊN SẢN PHẨM -> TRẠNG THÁI) -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -439,9 +439,9 @@
                 <table class="custom-table">
                     <thead>
                         <tr>
-                            <th>Cá nhân / Tập thể đăng ký</th>
-                            <th>Danh hiệu / Phong trào</th>
-                            <th>Chỉ tiêu phấn đấu</th>
+                            <th>Cá nhân</th>
+                            <th>Phong trào</th>
+                            <th>Tên sản phẩm</th>
                             <th>Trạng thái</th>
                             <th class="admin-col">Thao tác</th>
                         </tr>
@@ -546,8 +546,8 @@
         <input type="hidden" id="editTaskIndex">
         
         <div class="form-group"><label id="labelTaskAssignee">Giáo viên phụ trách / Cá nhân</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskTitle">Lớp phân công / Danh hiệu</label><input type="text" id="inputTaskTitle" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Chỉ tiêu</label><input type="text" id="inputTaskDetail" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskTitle">Lớp phân công / Phong trào</label><input type="text" id="inputTaskTitle" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Tên sản phẩm</label><input type="text" id="inputTaskDetail" class="form-control"></div>
         <div class="form-group"><label>Trạng thái</label><select id="inputTaskStatus" class="form-control">
             <option value="Đang thực hiện">Đang thực hiện</option>
             <option value="Hoàn thành">Hoàn thành</option>
@@ -601,7 +601,7 @@
             { assignee: 'Thầy Trương Trung Can', title: 'Sinh học 12 & Chủ nhiệm 12A1', detail: 'Giảng dạy 4 tiết/tuần, Quản lý lớp 12A1', status: 'Đang thực hiện' }
         ],
         competitionTasks: [
-            { assignee: 'Toàn thể Giáo viên trong Tổ', title: 'Lao động tiên tiến / Chiến sĩ thi đua cơ sở', detail: 'Đạt 100% tiết dạy tốt, HSG cấp Tỉnh', status: 'Đang thực hiện' }
+            { assignee: 'Thầy Trương Trung Can', title: 'Hội thi Giáo viên dạy giỏi cấp Trường', detail: 'Bài giảng E-Learning & Sáng kiến kinh nghiệm', status: 'Đang thực hiện' }
         ]
     };
 
@@ -792,9 +792,9 @@
         });
     }
 
-    // RENDER NHIỆM VỤ THEO CÁC CỘT MỚI
+    // RENDER NHIỆM VỤ THEO TÊN CỘT MỚI
     function renderTasks() {
-        // 1. Dạy lớp và Chủ nhiệm (Giáo viên -> Lớp phân công -> Nhiệm vụ cụ thể -> Trạng thái)
+        // 1. Dạy lớp và Chủ nhiệm
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
         tbodyTeach.innerHTML = '';
         (appData.teachingTasks || []).forEach((task, i) => {
@@ -813,7 +813,7 @@
             `;
         });
 
-        // 2. Đăng ký phong trào thi đua (Cá nhân/Tập thể -> Danh hiệu -> Chỉ tiêu -> Trạng thái)
+        // 2. Đăng ký phong trào thi đua (Cá nhân -> Phong trào -> Tên sản phẩm -> Trạng thái)
         const tbodyComp = document.getElementById('competitionTaskTableBody');
         tbodyComp.innerHTML = '';
         (appData.competitionTasks || []).forEach((task, i) => {
@@ -1027,7 +1027,7 @@
         }
     }
 
-    // MỞ VÀ LƯU MODAL NHIỆM VỤ THEO THỨ TỰ CỘT MỚI
+    // MỞ VÀ LƯU MODAL NHIỆM VỤ THEO NHÃN MỚI
     function openTaskModal(category, i = null) {
         document.getElementById('editTaskCategory').value = category;
         document.getElementById('editTaskIndex').value = i !== null ? i : '';
@@ -1050,9 +1050,9 @@
             }
         } else {
             document.getElementById('taskModalTitle').innerText = 'Đăng Ký Phong Trào Thi Đua';
-            document.getElementById('labelTaskAssignee').innerText = 'Cá nhân / Tập thể đăng ký';
-            document.getElementById('labelTaskTitle').innerText = 'Danh hiệu / Phong trào thi đua';
-            document.getElementById('labelTaskDetail').innerText = 'Chỉ tiêu phấn đấu';
+            document.getElementById('labelTaskAssignee').innerText = 'Cá nhân';
+            document.getElementById('labelTaskTitle').innerText = 'Phong trào';
+            document.getElementById('labelTaskDetail').innerText = 'Tên sản phẩm';
 
             if (i !== null && appData.competitionTasks) {
                 document.getElementById('inputTaskAssignee').value = appData.competitionTasks[i].assignee;
@@ -1076,7 +1076,7 @@
         const detail = document.getElementById('inputTaskDetail').value;
         const status = document.getElementById('inputTaskStatus').value;
 
-        if (!assignee || !title) return alert('Điền đầy đủ thông tin Giáo viên và Lớp!');
+        if (!assignee || !title) return alert('Nhập đầy đủ thông tin cá nhân và nội dung!');
 
         const taskObj = { assignee, title, detail, status };
 
