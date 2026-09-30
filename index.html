@@ -8,13 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Thư viện đọc file Excel (SheetJS), Word (Mammoth), PDF (PDF.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
     <!-- Firebase SDK (Đồng bộ đám mây) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
         :root {
-            /* Theme Mặc định: Tím Dạ Tước */
             --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #151030 35%, #1d1841 70%, #0b132b 100%);
             --card-gradient-1: linear-gradient(135deg, rgba(67, 56, 202, 0.4) 0%, rgba(124, 58, 237, 0.3) 100%);
             --card-gradient-2: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(49, 46, 129, 0.5) 100%);
@@ -30,7 +34,6 @@
             --success-color: #10b981;
         }
 
-        /* Theme 2: Xanh Biển Sâu (Ocean) */
         [data-theme="ocean"] {
             --bg-gradient: linear-gradient(135deg, #021526 0%, #032541 35%, #083358 70%, #0d1b2a 100%);
             --card-gradient-1: linear-gradient(135deg, rgba(2, 62, 138, 0.5) 0%, rgba(0, 119, 182, 0.4) 100%);
@@ -38,7 +41,6 @@
             --border-glow: rgba(56, 189, 248, 0.3);
         }
 
-        /* Theme 3: Đen Huyền Bí (Cyber Black) */
         [data-theme="black"] {
             --bg-gradient: linear-gradient(135deg, #050505 0%, #0d0d0d 35%, #141414 70%, #000000 100%);
             --card-gradient-1: linear-gradient(135deg, rgba(38, 38, 38, 0.6) 0%, rgba(23, 23, 23, 0.5) 100%);
@@ -68,7 +70,6 @@
             gap: 2rem;
         }
 
-        /* BAR PHÂN QUYỀN VÀ TRẠNG THÁI TỰ ĐỘNG ĐỒNG BỘ */
         .admin-bar {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
@@ -130,7 +131,6 @@
         input:checked + .slider { background-color: var(--accent-gold); }
         input:checked + .slider:before { transform: translateX(22px); background-color: #0f172a; }
 
-        /* HEADER CARD */
         .header-card {
             background: var(--card-gradient-1);
             backdrop-filter: blur(16px);
@@ -162,7 +162,6 @@
             font-size: 0.95rem;
         }
 
-        /* CARDS */
         .card-box {
             background: var(--card-gradient-2);
             backdrop-filter: blur(16px);
@@ -209,13 +208,22 @@
             font-size: 1rem; margin-left: 0.5rem; display: none;
         }
 
-        /* PHÂN QUYỀN HIỂN THỊ NÚT SỬA */
+        .filter-input {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            outline: none;
+            width: 200px;
+        }
+
         .admin-btn, .admin-col { display: none !important; }
         .admin-active .edit-title-btn,
         .admin-active .admin-btn { display: inline-flex !important; }
         .admin-active .admin-col { display: table-cell !important; }
 
-        /* BUTTONS */
         .btn {
             padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
             display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; text-decoration: none;
@@ -230,7 +238,6 @@
         .btn-danger { background: var(--danger-color); color: white; }
         .btn-edit { background: var(--cyan-accent); color: #0f172a; }
 
-        /* BẢNG */
         .table-responsive { overflow-x: auto; }
         .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
         .custom-table th {
@@ -245,7 +252,6 @@
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
 
-        /* GRIDS */
         .resource-grid, .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
         }
@@ -256,14 +262,13 @@
         .resource-type { font-size: 0.75rem; font-weight: 700; color: var(--cyan-accent); text-transform: uppercase; }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
 
-        /* MODAL */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-content {
             background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
-            border-radius: 20px; width: 90%; max-width: 500px; display: flex; flex-direction: column; gap: 1rem;
+            border-radius: 20px; width: 90%; max-width: 550px; display: flex; flex-direction: column; gap: 1rem;
             max-height: 90vh; overflow-y: auto;
         }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
@@ -273,6 +278,7 @@
             padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
         .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
+        .import-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--cyan-accent); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -286,7 +292,6 @@
         </div>
 
         <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-            <!-- CHỌN GIAO DIỆN (THEME) -->
             <div style="display: flex; align-items: center; gap: 0.4rem;">
                 <i class="fa-solid fa-palette" style="color: var(--accent-gold);"></i>
                 <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
@@ -345,13 +350,16 @@
         </div>
     </section>
 
-    <!-- 3. NHIỆM VỤ VÀ PHÂN CÔNG -->
+    <!-- 3. NHIỆM VỤ VÀ PHÂN CÔNG (TÍCH HỢP ĐỌC FILE TOÀN TRƯỜNG & CHỌN LỌC TỰ ĐỘNG) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
                 <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
+            <button class="btn btn-outline btn-sm admin-btn" onclick="openImportSchoolModal()">
+                <i class="fa-solid fa-file-import" style="color:var(--accent-gold);"></i> Tải & Lọc File Toàn Trường (Excel/Word/PDF)
+            </button>
         </div>
 
         <!-- MỤC NHỎ 1: DẠY LỚP VÀ CHỦ NHIỆM -->
@@ -360,7 +368,10 @@
                 <div class="sub-section-title">
                     <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
                 </div>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterTeach" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="custom-table">
@@ -378,13 +389,16 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 2: BỒI DƯỠNG HỌC SINH GIỎI (CỘT: GIÁO VIÊN BỒI DƯỠNG -> MÔN -> NỘI DUNG/KẾ HOẠCH -> DANH SÁCH ĐỘI TUYỂN) -->
+        <!-- MỤC NHỎ 2: BỒI DƯỠNG HỌC SINH GIỎI -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
                 </div>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="custom-table">
@@ -439,7 +453,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 5. TÀI NGUYÊN SỐ (Tải File Trực Tiếp / Link) -->
+    <!-- 5. TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -451,7 +465,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 6. VĂN BẢN LƯU TRỮ (Tải File Trực Tiếp / Link) -->
+    <!-- 6. VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -477,7 +491,36 @@
     </section>
 </div>
 
-<!-- MODALS CẬP NHẬT DỮ LIỆU -->
+<!-- MODAL LỌC FILE DÙNG CHUNG TOÀN TRƯỜNG -->
+<div class="modal" id="importModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-excel me-2"></i> Tự Động Trích Xuất Dữ Liệu Từ File Toàn Trường</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted);">
+            Tải lên file phân công / kế hoạch / danh sách đội tuyển chung của Trường (.xlsx, .docx, .pdf). Hệ thống sẽ tự động quét và lọc ra bộ môn Sinh / Công nghệ!
+        </p>
+        <div class="import-box">
+            <div class="form-group"><label>1. Chọn Mục Cần Đưa Dữ Liệu Vào</label>
+                <select id="importCategory" class="form-control">
+                    <option value="day_lop">Dạy lớp & Chủ nhiệm</option>
+                    <option value="hsg">Bồi dưỡng Học sinh giỏi</option>
+                    <option value="thi_dua">Đăng ký Phong trào thi đua</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-top:0.8rem;"><label>2. Từ khóa lọc (Mặc định: Sinh, Công nghệ)</label>
+                <input type="text" id="importKeyword" class="form-control" value="Sinh, Công nghệ, CN">
+            </div>
+            <div class="form-group" style="margin-top:0.8rem;"><label>3. Chọn File Toàn Trường (.xlsx, .docx, .pdf)</label>
+                <input type="file" id="importFileInput" class="form-control" accept=".xlsx, .xls, .docx, .pdf">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
+            <button class="btn btn-outline" onclick="closeModal('importModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="processSchoolFile()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Thêm Vào Bảng</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS KHÁC -->
 <div class="modal" id="headerModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Cập Nhật Tên Trường & Tổ</h3>
@@ -562,7 +605,6 @@
     </div>
 </div>
 
-<!-- MODAL BỒI DƯỠNG HSG -->
 <div class="modal" id="hsgModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Bồi Dưỡng Học Sinh Giỏi</h3>
@@ -574,7 +616,7 @@
         
         <div class="form-group"><label>DANH SÁCH ĐỘI TUYỂN (Lựa chọn 1: Tải File Danh Sách từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Danh sách học sinh</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Nhập tên các em HS hoặc dán link Google Sheet..."></div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Tên các em HS</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Dán link Google Sheet hoặc gõ tên HS..."></div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
@@ -583,7 +625,6 @@
     </div>
 </div>
 
-<!-- MODAL PHÂN CÔNG CHUNG (DẠY LỚP / THI ĐỦA) -->
 <div class="modal" id="taskModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);" id="taskModalTitle">Nhiệm Vụ Công Việc</h3>
@@ -607,7 +648,6 @@
 </div>
 
 <script>
-    // 1. CẤU HÌNH FIREBASE REALTIME DATABASE
     const firebaseConfig = {
         databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
@@ -616,11 +656,8 @@
         firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
-
-    // MẬT KHẨU TỔ TRƯỞNG (MẶC ĐỊNH: 123456)
     const ADMIN_PASSWORD = "123456";
 
-    // DỮ LIỆU MẶC ĐỊNH
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         sectionTitles: {
@@ -653,13 +690,12 @@
         ]
     };
 
-    // TỰ ĐỘNG LẮNG NGHE DỮ LIỆU ĐÁM MÂY
     db.ref('to_sinh_cn_data').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
             appData = val;
             renderAll();
-            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã tự động cập nhật từ đám mây`;
+            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã đồng bộ từ đám mây`;
         } else {
             saveDataToCloud();
         }
@@ -676,7 +712,6 @@
         });
     }
 
-    // ĐỔI GIAO DIỆN (THEME)
     function changeTheme(themeName) {
         document.body.setAttribute('data-theme', themeName);
         localStorage.setItem('selectedTheme', themeName);
@@ -688,20 +723,19 @@
         document.getElementById('themeSelect').value = savedTheme;
     }
 
-    // TOGGLE ADMIN MODE BẮT BUỘC YÊU CẦU MẬT KHẨU
     function toggleAdminMode() {
         const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
         const roleBadge = document.getElementById('roleBadge');
         
         if (toggleInput.checked) {
-            const pass = prompt('Vui lòng nhập mật khẩu Tổ trưởng để mở khóa quyền chỉnh sửa:');
+            const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa:');
             if (pass === ADMIN_PASSWORD) {
                 container.classList.add('admin-active');
                 roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
-                alert('Xác thực thành công! Bạn có quyền chỉnh sửa.');
+                alert('Xác thực thành công!');
             } else {
-                if (pass !== null) alert('Mật khẩu không chính xác!');
+                if (pass !== null) alert('Mật khẩu sai!');
                 toggleInput.checked = false;
                 container.classList.remove('admin-active');
                 roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
@@ -719,19 +753,15 @@
     };
 
     function downloadDirectFile(dataUrl, fileName) {
-        if (!dataUrl || dataUrl === '#') {
-            alert('File chưa sẵn sàng hoặc không tồn tại!');
-            return;
-        }
+        if (!dataUrl || dataUrl === '#') return alert('File không tồn tại!');
         const a = document.createElement('a');
         a.href = dataUrl;
-        a.download = fileName || 'tai_lieu_to_chuyen_mon';
+        a.download = fileName || 'tai_lieu';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
     }
 
-    // RENDER GIAO DIỆN
     function renderAll() {
         renderHeader();
         renderSectionTitles();
@@ -840,12 +870,13 @@
         });
     }
 
-    // RENDER CÁC MỤC NHIỆM VỤ CHUYÊN MÔN
     function renderTasks() {
-        // 1. Dạy lớp và Chủ nhiệm
+        // 1. Dạy lớp & Chủ nhiệm (có lọc)
+        const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
         tbodyTeach.innerHTML = '';
         (appData.teachingTasks || []).forEach((task, i) => {
+            if (filterTeach && !task.assignee.toLowerCase().includes(filterTeach) && !task.title.toLowerCase().includes(filterTeach)) return;
             const badgeClass = task.status === 'Hoàn thành' ? 'badge-success' : 'badge-warning';
             tbodyTeach.innerHTML += `
                 <tr>
@@ -861,10 +892,12 @@
             `;
         });
 
-        // 2. Bồi dưỡng học sinh giỏi (Giáo viên -> Môn -> Nội dung/Kế hoạch -> Danh sách đội tuyển)
+        // 2. HSG (có lọc)
+        const filterHsg = (document.getElementById('filterHsg')?.value || '').toLowerCase();
         const tbodyHsg = document.getElementById('hsgTaskTableBody');
         tbodyHsg.innerHTML = '';
         (appData.hsgTasks || []).forEach((item, i) => {
+            if (filterHsg && !item.teacher.toLowerCase().includes(filterHsg) && !item.subject.toLowerCase().includes(filterHsg)) return;
             const isFile = item.fileName && item.fileName.length > 0;
             let listHtml = '';
             if (isFile) {
@@ -889,7 +922,7 @@
             `;
         });
 
-        // 3. Đăng ký phong trào thi đua
+        // 3. Thi đua
         const tbodyComp = document.getElementById('competitionTaskTableBody');
         tbodyComp.innerHTML = '';
         (appData.competitionTasks || []).forEach((task, i) => {
@@ -909,13 +942,95 @@
         });
     }
 
-    // THAO TÁC SỬA VÀ ĐỒNG BỘ ĐÁM MÂY
-    function editSectionTitle(titleKey) {
-        const newTitle = prompt('Nhập tên mới cho mục này:', appData.sectionTitles[titleKey]);
-        if (newTitle) {
-            appData.sectionTitles[titleKey] = newTitle;
-            saveDataToCloud();
+    // XỬ LÝ ĐỌC FILE TOÀN TRƯỜNG DÙNG CHUNG (EXCEL, WORD, PDF)
+    function openImportSchoolModal() {
+        document.getElementById('importModal').style.display = 'flex';
+    }
+
+    async function processSchoolFile() {
+        const fileInput = document.getElementById('importFileInput');
+        const category = document.getElementById('importCategory').value;
+        const keywords = document.getElementById('importKeyword').value.split(',').map(k => k.trim().toLowerCase());
+
+        if (!fileInput.files || !fileInput.files[0]) return alert('Vui lòng chọn File!');
+
+        const file = fileInput.files[0];
+        const fileName = file.name.toLowerCase();
+
+        alert('Hệ thống đang tiến hành đọc và lọc bộ môn từ file toàn trường. Vui lòng đợi trong giây lát...');
+
+        try {
+            if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+
+                    let importedCount = 0;
+                    jsonData.forEach(row => {
+                        const rowStr = row.join(' ').toLowerCase();
+                        if (keywords.some(kw => rowStr.includes(kw))) {
+                            const val1 = row[0] || row[1] || 'GV Tổ Sinh - CN';
+                            const val2 = row[2] || row[1] || 'Phân công chung';
+                            const val3 = row[3] || row[4] || 'Theo kế hoạch nhà trường';
+
+                            if (category === 'day_lop') {
+                                if (!appData.teachingTasks) appData.teachingTasks = [];
+                                appData.teachingTasks.push({ assignee: val1, title: val2, detail: val3, status: 'Đang thực hiện' });
+                            } else if (category === 'hsg') {
+                                if (!appData.hsgTasks) appData.hsgTasks = [];
+                                appData.hsgTasks.push({ teacher: val1, subject: val2, plan: val3, listLink: '', fileName: '' });
+                            } else {
+                                if (!appData.competitionTasks) appData.competitionTasks = [];
+                                appData.competitionTasks.push({ assignee: val1, title: val2, detail: val3, status: 'Đang thực hiện' });
+                            }
+                            importedCount++;
+                        }
+                    });
+                    saveDataToCloud();
+                    closeModal('importModal');
+                    alert(`Đã hoàn tất! Đã trích xuất và tự động lọc được ${importedCount} mục cho Tổ Sinh - CN.`);
+                };
+                reader.readAsArrayBuffer(file);
+            } else if (fileName.endsWith('.docx')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
+                        const lines = result.value.split('\n');
+                        let importedCount = 0;
+                        lines.forEach(line => {
+                            if (keywords.some(kw => line.toLowerCase().includes(kw))) {
+                                if (category === 'day_lop') {
+                                    appData.teachingTasks.push({ assignee: 'GV Phụ Trách', title: 'Phân công môn Sinh/CN', detail: line.trim(), status: 'Đang thực hiện' });
+                                } else if (category === 'hsg') {
+                                    appData.hsgTasks.push({ teacher: 'GV Bồi dưỡng', subject: 'Sinh học / CN', plan: line.trim(), listLink: '', fileName: '' });
+                                } else {
+                                    appData.competitionTasks.push({ assignee: 'Cá nhân/Tổ', title: 'Phong trào trường', detail: line.trim(), status: 'Đang thực hiện' });
+                                }
+                                importedCount++;
+                            }
+                        });
+                        saveDataToCloud();
+                        closeModal('importModal');
+                        alert(`Đã trích xuất ${importedCount} dòng từ file Word!`);
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                alert('Đã tải và nhận diện file PDF toàn trường!');
+                closeModal('importModal');
+            }
+        } catch(err) {
+            alert('Có lỗi khi xử lý file: ' + err.message);
         }
+    }
+
+    // CÁC HÀM XỬ LÝ MODAL KHÁC
+    function editSectionTitle(titleKey) {
+        const newTitle = prompt('Nhập tên mới:', appData.sectionTitles[titleKey]);
+        if (newTitle) { appData.sectionTitles[titleKey] = newTitle; saveDataToCloud(); }
     }
 
     function openHeaderModal() {
@@ -928,8 +1043,7 @@
         appData.headerData.school = document.getElementById('inputSchool').value;
         appData.headerData.dept = document.getElementById('inputDept').value;
         appData.headerData.year = document.getElementById('inputYear').value;
-        saveDataToCloud();
-        closeModal('headerModal');
+        saveDataToCloud(); closeModal('headerModal');
     }
 
     function openMemberModal(i = null) {
@@ -953,51 +1067,33 @@
         const role = document.getElementById('inputMemRole').value;
         const duty = document.getElementById('inputMemDuty').value;
         const phone = document.getElementById('inputMemPhone').value;
-        if (!name) return alert('Điền tên thành viên!');
-
+        if (!name) return alert('Điền tên!');
         if (!appData.membersData) appData.membersData = [];
-        if (idx !== '') {
-            appData.membersData[idx] = { name, role, duty, phone };
-        } else {
-            appData.membersData.push({ name, role, duty, phone });
-        }
-        saveDataToCloud();
-        closeModal('memberModal');
+        if (idx !== '') appData.membersData[idx] = { name, role, duty, phone };
+        else appData.membersData.push({ name, role, duty, phone });
+        saveDataToCloud(); closeModal('memberModal');
     }
-    function deleteMember(i) {
-        if (confirm('Xóa thành viên?')) {
-            appData.membersData.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
+    function deleteMember(i) { if (confirm('Xóa?')) { appData.membersData.splice(i, 1); saveDataToCloud(); } }
 
     function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
     function addImage() {
-        const caption = document.getElementById('inputImgCaption').value || 'Hoạt động tổ';
+        const caption = document.getElementById('inputImgCaption').value || 'Hoạt động';
         const fileInput = document.getElementById('inputImgFile');
         const urlInput = document.getElementById('inputImgUrl').value;
-
         if (!appData.imagesData) appData.imagesData = [];
         if (fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 appData.imagesData.push({ caption, url: e.target.result });
-                saveDataToCloud();
-                closeModal('imageModal');
+                saveDataToCloud(); closeModal('imageModal');
             };
             reader.readAsDataURL(fileInput.files[0]);
         } else if (urlInput) {
             appData.imagesData.push({ caption, url: urlInput });
-            saveDataToCloud();
-            closeModal('imageModal');
+            saveDataToCloud(); closeModal('imageModal');
         }
     }
-    function deleteImage(i) {
-        if (confirm('Xóa hình ảnh này?')) {
-            appData.imagesData.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
+    function deleteImage(i) { if (confirm('Xóa?')) { appData.imagesData.splice(i, 1); saveDataToCloud(); } }
 
     function openResourceModal(i = null) {
         document.getElementById('editResIndex').value = i !== null ? i : '';
@@ -1007,8 +1103,7 @@
             document.getElementById('inputResType').value = appData.resourcesData[i].type;
             document.getElementById('inputResLink').value = appData.resourcesData[i].fileName ? '' : appData.resourcesData[i].link;
         } else {
-            document.getElementById('inputResTitle').value = '';
-            document.getElementById('inputResLink').value = '';
+            document.getElementById('inputResTitle').value = ''; document.getElementById('inputResLink').value = '';
         }
         document.getElementById('resourceModal').style.display = 'flex';
     }
@@ -1018,10 +1113,8 @@
         const type = document.getElementById('inputResType').value;
         const fileInput = document.getElementById('inputResFile');
         const linkInput = document.getElementById('inputResLink').value;
-        if (!title) return alert('Nhập tên tài nguyên!');
-
+        if (!title) return alert('Nhập tên!');
         if (!appData.resourcesData) appData.resourcesData = [];
-
         if (fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -1029,25 +1122,17 @@
                 const resObj = { title, type, link: e.target.result, fileName: file.name };
                 if (idx !== '') appData.resourcesData[idx] = resObj;
                 else appData.resourcesData.push(resObj);
-                saveDataToCloud();
-                closeModal('resourceModal');
+                saveDataToCloud(); closeModal('resourceModal');
             };
             reader.readAsDataURL(file);
         } else {
-            const link = linkInput || '#';
-            const resObj = { title, type, link, fileName: '' };
+            const resObj = { title, type, link: linkInput || '#', fileName: '' };
             if (idx !== '') appData.resourcesData[idx] = resObj;
             else appData.resourcesData.push(resObj);
-            saveDataToCloud();
-            closeModal('resourceModal');
+            saveDataToCloud(); closeModal('resourceModal');
         }
     }
-    function deleteResource(i) {
-        if (confirm('Xóa tài nguyên?')) {
-            appData.resourcesData.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
+    function deleteResource(i) { if (confirm('Xóa?')) { appData.resourcesData.splice(i, 1); saveDataToCloud(); } }
 
     function openDocModal(i = null) {
         document.getElementById('editDocIndex').value = i !== null ? i : '';
@@ -1058,10 +1143,8 @@
             document.getElementById('inputDocDate').value = appData.docsData[i].date;
             document.getElementById('inputDocLink').value = appData.docsData[i].fileName ? '' : appData.docsData[i].link;
         } else {
-            document.getElementById('inputDocCode').value = '';
-            document.getElementById('inputDocSummary').value = '';
-            document.getElementById('inputDocDate').value = '';
-            document.getElementById('inputDocLink').value = '';
+            document.getElementById('inputDocCode').value = ''; document.getElementById('inputDocSummary').value = '';
+            document.getElementById('inputDocDate').value = ''; document.getElementById('inputDocLink').value = '';
         }
         document.getElementById('docModal').style.display = 'flex';
     }
@@ -1072,10 +1155,8 @@
         const date = document.getElementById('inputDocDate').value;
         const fileInput = document.getElementById('inputDocFile');
         const linkInput = document.getElementById('inputDocLink').value;
-        if (!code) return alert('Nhập số/ký hiệu!');
-
+        if (!code) return alert('Nhập số!');
         if (!appData.docsData) appData.docsData = [];
-
         if (fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -1083,27 +1164,18 @@
                 const docObj = { code, summary, date, link: e.target.result, fileName: file.name };
                 if (idx !== '') appData.docsData[idx] = docObj;
                 else appData.docsData.push(docObj);
-                saveDataToCloud();
-                closeModal('docModal');
+                saveDataToCloud(); closeModal('docModal');
             };
             reader.readAsDataURL(file);
         } else {
-            const link = linkInput || '#';
-            const docObj = { code, summary, date, link, fileName: '' };
+            const docObj = { code, summary, date, link: linkInput || '#', fileName: '' };
             if (idx !== '') appData.docsData[idx] = docObj;
             else appData.docsData.push(docObj);
-            saveDataToCloud();
-            closeModal('docModal');
+            saveDataToCloud(); closeModal('docModal');
         }
     }
-    function deleteDoc(i) {
-        if (confirm('Xóa văn bản?')) {
-            appData.docsData.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
+    function deleteDoc(i) { if (confirm('Xóa?')) { appData.docsData.splice(i, 1); saveDataToCloud(); } }
 
-    // CÁC HÀM XỬ LÝ RIÊNG CHO MỤC BỒI DƯỠNG HSG
     function openHsgModal(i = null) {
         document.getElementById('editHsgIndex').value = i !== null ? i : '';
         document.getElementById('inputHsgFile').value = '';
@@ -1113,10 +1185,8 @@
             document.getElementById('inputHsgPlan').value = appData.hsgTasks[i].plan;
             document.getElementById('inputHsgLink').value = appData.hsgTasks[i].fileName ? '' : appData.hsgTasks[i].listLink;
         } else {
-            document.getElementById('inputHsgTeacher').value = '';
-            document.getElementById('inputHsgSubject').value = '';
-            document.getElementById('inputHsgPlan').value = '';
-            document.getElementById('inputHsgLink').value = '';
+            document.getElementById('inputHsgTeacher').value = ''; document.getElementById('inputHsgSubject').value = '';
+            document.getElementById('inputHsgPlan').value = ''; document.getElementById('inputHsgLink').value = '';
         }
         document.getElementById('hsgModal').style.display = 'flex';
     }
@@ -1129,8 +1199,7 @@
         const fileInput = document.getElementById('inputHsgFile');
         const listLink = document.getElementById('inputHsgLink').value;
 
-        if (!teacher || !subject) return alert('Nhập tên Giáo viên và Môn bồi dưỡng!');
-
+        if (!teacher || !subject) return alert('Nhập đầy đủ!');
         if (!appData.hsgTasks) appData.hsgTasks = [];
 
         if (fileInput.files && fileInput.files[0]) {
@@ -1140,27 +1209,18 @@
                 const hsgObj = { teacher, subject, plan, listLink: e.target.result, fileName: file.name };
                 if (idx !== '') appData.hsgTasks[idx] = hsgObj;
                 else appData.hsgTasks.push(hsgObj);
-                saveDataToCloud();
-                closeModal('hsgModal');
+                saveDataToCloud(); closeModal('hsgModal');
             };
             reader.readAsDataURL(file);
         } else {
             const hsgObj = { teacher, subject, plan, listLink: listLink || '', fileName: '' };
             if (idx !== '') appData.hsgTasks[idx] = hsgObj;
             else appData.hsgTasks.push(hsgObj);
-            saveDataToCloud();
-            closeModal('hsgModal');
+            saveDataToCloud(); closeModal('hsgModal');
         }
     }
+    function deleteHsg(i) { if (confirm('Xóa?')) { appData.hsgTasks.splice(i, 1); saveDataToCloud(); } }
 
-    function deleteHsg(i) {
-        if (confirm('Xóa mục bồi dưỡng HSG này?')) {
-            appData.hsgTasks.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
-
-    // MỞ VÀ LƯU MODAL CHO DẠY LỚP / THI ĐỦA
     function openTaskModal(category, i = null) {
         document.getElementById('editTaskCategory').value = category;
         document.getElementById('editTaskIndex').value = i !== null ? i : '';
@@ -1170,32 +1230,26 @@
             document.getElementById('labelTaskAssignee').innerText = 'Giáo viên phụ trách';
             document.getElementById('labelTaskTitle').innerText = 'Lớp phân công';
             document.getElementById('labelTaskDetail').innerText = 'Nhiệm vụ cụ thể';
-            
             if (i !== null && appData.teachingTasks) {
                 document.getElementById('inputTaskAssignee').value = appData.teachingTasks[i].assignee;
                 document.getElementById('inputTaskTitle').value = appData.teachingTasks[i].title;
                 document.getElementById('inputTaskDetail').value = appData.teachingTasks[i].detail;
                 document.getElementById('inputTaskStatus').value = appData.teachingTasks[i].status;
             } else {
-                document.getElementById('inputTaskAssignee').value = '';
-                document.getElementById('inputTaskTitle').value = '';
-                document.getElementById('inputTaskDetail').value = '';
+                document.getElementById('inputTaskAssignee').value = ''; document.getElementById('inputTaskTitle').value = ''; document.getElementById('inputTaskDetail').value = '';
             }
         } else {
             document.getElementById('taskModalTitle').innerText = 'Đăng Ký Phong Trào Thi Đua';
             document.getElementById('labelTaskAssignee').innerText = 'Cá nhân';
             document.getElementById('labelTaskTitle').innerText = 'Phong trào';
             document.getElementById('labelTaskDetail').innerText = 'Tên sản phẩm';
-
             if (i !== null && appData.competitionTasks) {
                 document.getElementById('inputTaskAssignee').value = appData.competitionTasks[i].assignee;
                 document.getElementById('inputTaskTitle').value = appData.competitionTasks[i].title;
                 document.getElementById('inputTaskDetail').value = appData.competitionTasks[i].detail;
                 document.getElementById('inputTaskStatus').value = appData.competitionTasks[i].status;
             } else {
-                document.getElementById('inputTaskAssignee').value = '';
-                document.getElementById('inputTaskTitle').value = '';
-                document.getElementById('inputTaskDetail').value = '';
+                document.getElementById('inputTaskAssignee').value = ''; document.getElementById('inputTaskTitle').value = ''; document.getElementById('inputTaskDetail').value = '';
             }
         }
         document.getElementById('taskModal').style.display = 'flex';
@@ -1209,8 +1263,7 @@
         const detail = document.getElementById('inputTaskDetail').value;
         const status = document.getElementById('inputTaskStatus').value;
 
-        if (!assignee || !title) return alert('Nhập đầy đủ thông tin!');
-
+        if (!assignee || !title) return alert('Nhập đầy đủ!');
         const taskObj = { assignee, title, detail, status };
 
         if (category === 'day_lop') {
@@ -1222,13 +1275,11 @@
             if (idx !== '') appData.competitionTasks[idx] = taskObj;
             else appData.competitionTasks.push(taskObj);
         }
-
-        saveDataToCloud();
-        closeModal('taskModal');
+        saveDataToCloud(); closeModal('taskModal');
     }
 
     function deleteTask(category, i) {
-        if (confirm('Xóa mục này?')) {
+        if (confirm('Xóa?')) {
             if (category === 'day_lop') appData.teachingTasks.splice(i, 1);
             else appData.competitionTasks.splice(i, 1);
             saveDataToCloud();
