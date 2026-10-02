@@ -345,7 +345,7 @@
                     <tr>
                         <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
                         <th>Họ Và Tên</th>
-                        <th>Từ Khóa Nhận Diện TKB</th>
+                        <th>Từ Khóa Tên GV (TKB)</th>
                         <th>Nhiệm Vụ</th>
                         <th>Liên Hệ / Zalo</th>
                         <th class="admin-col">Thao Tác</th>
@@ -369,7 +369,7 @@
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn
+                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn (Lọc môn: Sinh, CN.CN, Lâm TS, CN.TT)
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
@@ -538,9 +538,11 @@
 <!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU -->
 <div class="modal" id="importTkbModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Siêu Nhạy</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Chuẩn Môn</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Hệ thống tự động quét sạch các ký tự rác (dấu gạch, khoảng trắng) để bóc tách chính xác tên 5 GV: <b>Can, Duyên, Tuyền, Vi, Nghé</b> từ bất kỳ File Excel TKB nào.
+            Hệ thống chỉ chắt lọc các ô thỏa mãn 2 điều kiện: <br>
+            1. Thuộc các môn: <b>Sinh</b>, <b>CN.CN</b>, <b>Lâm TS</b>, <b>CN.TT</b><br>
+            2. Thuộc tên GV trong Tổ: <b>Can</b>, <b>Duyên</b>, <b>Tuyền</b>, <b>Vi</b>, <b>Nghé</b>.
         </p>
         <div class="import-box">
             <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
@@ -566,7 +568,7 @@
         <h3 style="color: var(--accent-gold);">Thành Viên Tổ</h3>
         <input type="hidden" id="editMemIndex">
         <div class="form-group"><label>Họ và Tên</label><input type="text" id="inputMemName" class="form-control" placeholder="Tên chính (Ví dụ: Can)"></div>
-        <div class="form-group"><label>Từ khóa nhận diện TKB (cách nhau bởi dấu phẩy)</label><input type="text" id="inputMemRole" class="form-control" placeholder="Ví dụ: Can, T.Can, Trung Can, Can_Sinh"></div>
+        <div class="form-group"><label>Từ khóa tên GV trên TKB (cách nhau bởi dấu phẩy)</label><input type="text" id="inputMemRole" class="form-control" placeholder="Ví dụ: Can, T.Can, Trung Can"></div>
         <div class="form-group"><label>Nhiệm vụ phân công</label><input type="text" id="inputMemDuty" class="form-control"></div>
         <div class="form-group"><label>Số điện thoại / Zalo</label><input type="text" id="inputMemPhone" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
@@ -592,7 +594,7 @@
             </select>
         </div>
         <div class="form-group"><label>Tiết dạy</label><input type="text" id="inputTkbLesson" class="form-control" placeholder="Ví dụ: Tiết 1 hoặc 1, 2"></div>
-        <div class="form-group"><label>Môn học</label><input type="text" id="inputTkbSubject" class="form-control" placeholder="Sinh học / Công nghệ"></div>
+        <div class="form-group"><label>Môn học</label><input type="text" id="inputTkbSubject" class="form-control" placeholder="Sinh / CN.CN / Lâm TS / CN.TT"></div>
         <div class="form-group"><label>Lớp dạy</label><input type="text" id="inputTkbClass" class="form-control" placeholder="Ví dụ: 12A1"></div>
         <div class="form-group"><label>Giáo viên giảng dạy</label><input type="text" id="inputTkbTeacher" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
@@ -726,7 +728,6 @@
     const storage = firebase.storage();
     const ADMIN_PASSWORD = "123456";
 
-    // Mặc định sẵn 5 Giáo viên trong Tổ kèm Từ Khóa Viết Tắt Nhận Diện
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         sectionTitles: {
@@ -737,11 +738,11 @@
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
         membersData: [
-            { name: 'Can', role: 'Can, T.Can, Trung Can, Can_Sinh, Can_CN', duty: 'Phụ trách chung', phone: '0912.345.678' },
-            { name: 'Duyên', role: 'Duyên, C.Duyên, Duyen, Duyen_Sinh', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
-            { name: 'Tuyền', role: 'Tuyền, Tuyen, N.Tuyền, Tuyền_Sinh, Tuyền_CN', duty: 'Giảng dạy môn Sinh/CN', phone: '0987.333.444' },
-            { name: 'Vi', role: 'Vi, K.Vi, Vi_CN, Vi_Sinh', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
-            { name: 'Nghé', role: 'Nghé, Nghe, P.Nghé, Nghé_Sinh, Nghé_CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
+            { name: 'Can', role: 'Can, T.Can, Trung Can', duty: 'Phụ trách chung', phone: '0912.345.678' },
+            { name: 'Duyên', role: 'Duyên, C.Duyên, Duyen', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
+            { name: 'Tuyền', role: 'Tuyền, Tuyen, N.Tuyền', duty: 'Giảng dạy môn Sinh/CN', phone: '0987.333.444' },
+            { name: 'Vi', role: 'Vi, K.Vi', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
+            { name: 'Nghé', role: 'Nghé, Nghe, P.Nghé', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
         imagesData: [],
         resourcesData: [],
@@ -1038,7 +1039,7 @@
         });
     }
 
-    // HÀM XÓA SẠCH DẤU TIẾNG VIỆT VÀ KÝ TỰ ĐẶC BIỆT
+    // HÀM LÀM SẠCH CHUỖI VÀ CHUYỂN THÀNH CHỮ THƯỜNG
     function cleanStr(str) {
         if (!str) return '';
         str = String(str).toLowerCase().trim();
@@ -1049,19 +1050,39 @@
         str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
         str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
         str = str.replace(/đ/g, "d");
-        // Xóa hết các ký tự đặc biệt như _, -, ., (, ), /
         return str.replace(/[^a-z0-9]/g, '');
+    }
+
+    // HÀM NHẬN DIỆN MÔN HỌC BẮT BUỘC (Sinh, CN.CN, Lâm TS, CN.TT)
+    function detectSubject(cellRawText) {
+        const textClean = cleanStr(cellRawText);
+
+        if (textClean.includes('lamts') || textClean.includes('lamthuisan') || textClean.includes('thuisan')) {
+            return 'Lâm TS';
+        }
+        if (textClean.includes('cntt') || textClean.includes('trongtrot')) {
+            return 'CN.TT';
+        }
+        if (textClean.includes('cncn') || textClean.includes('congnghiep')) {
+            return 'CN.CN';
+        }
+        if (textClean.includes('sinh')) {
+            return 'Sinh học';
+        }
+        if (textClean.includes('cn') || textClean.includes('congnghe')) {
+            return 'Công nghệ';
+        }
+        return null; // Không thuộc danh sách môn yêu cầu
     }
 
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
-    // THUẬT TOÁN QUÉT VÀ BÓC TÁCH MỌI KÝ HIỆU TRÊN TKB
+    // THUẬT TOÁN QUÉT LỌC SONG SONG 2 ĐIỀU KIỆN (ĐÚNG MÔN HỌC + ĐÚNG GIÁO VIÊN)
     function parseSingleTkbFile(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
             let lessons = [];
 
-            // Xây dựng danh sách từ khóa nhận diện cho từng giáo viên
             let teacherMap = [];
             (appData.membersData || []).forEach(m => {
                 const mainName = m.name.trim();
@@ -1092,33 +1113,36 @@
                                     const cellVal = String(row[c]).trim();
                                     if (!cellVal) continue;
 
+                                    // ĐIỀU KIỆN 1: Kiểm tra xem ô có chứa đúng môn học yêu cầu không
+                                    const matchedSubject = detectSubject(cellVal);
+                                    if (!matchedSubject) continue; // Nếu ô không chứa Sinh, CN.CN, Lâm TS, CN.TT -> Bỏ qua
+
                                     const cellClean = cleanStr(cellVal);
 
-                                    // So sánh từ khóa làm sạch
+                                    // ĐIỀU KIỆN 2: Kiểm tra xem ô có khớp tên GV trong Tổ không
                                     teacherMap.forEach(tObj => {
-                                        const isMatched = tObj.keywords.some(kw => cellClean.includes(kw));
+                                        const isMatchedTeacher = tObj.keywords.some(kw => cellClean.includes(kw));
 
-                                        if (isMatched) {
+                                        if (isMatchedTeacher) {
                                             let day = 'Thứ 2';
                                             let lesson = 'Tiết ' + r;
                                             let classRoom = 'Lớp';
-                                            let subject = cellVal.toLowerCase().includes('sinh') ? 'Sinh học' : 'Công nghệ';
 
-                                            // Dò Thứ
+                                            // Dò tìm Thứ
                                             for (let kr = r; kr >= 0; kr--) {
                                                 const rowText = jsonData[kr].join(' ');
                                                 const matchDay = rowText.match(/Thứ\s*[2-7]|Thứ\s*Hai|Thứ\s*Ba|Thứ\s*Tư|Thứ\s*Năm|Thứ\s*Sáu|Thứ\s*Bảy/i);
                                                 if (matchDay) { day = matchDay[0]; break; }
                                             }
 
-                                            // Dò Lớp
+                                            // Dò tìm Lớp
                                             for (let kr = 0; kr < Math.min(6, jsonData.length); kr++) {
                                                 const colHeader = String(jsonData[kr][c] || '').trim();
                                                 const matchClass = colHeader.match(/\b(10|11|12)\s*[A-Z0-9]+\b/i) || colHeader.match(/\b[A-Z0-9]{3,5}\b/i);
                                                 if (matchClass) { classRoom = matchClass[0]; break; }
                                             }
 
-                                            // Dò Tiết
+                                            // Dò tìm Tiết
                                             const left1 = String(row[0] || '');
                                             const left2 = String(row[1] || '');
                                             const matchLesson = (left1 + ' ' + left2).match(/Tiết\s*\d+|\b[1-9]\b/i);
@@ -1127,7 +1151,7 @@
                                             lessons.push({
                                                 day: day,
                                                 lesson: lesson,
-                                                subject: subject,
+                                                subject: matchedSubject,
                                                 classRoom: classRoom,
                                                 teacher: tObj.realName
                                             });
@@ -1146,13 +1170,16 @@
                     mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
                         const lines = result.value.split('\n');
                         lines.forEach(line => {
+                            const matchedSubject = detectSubject(line);
+                            if (!matchedSubject) return;
+
                             const lineClean = cleanStr(line);
                             teacherMap.forEach(tObj => {
                                 if (tObj.keywords.some(kw => lineClean.includes(kw))) {
                                     lessons.push({
                                         day: 'Theo Lịch',
                                         lesson: 'Theo Lịch',
-                                        subject: line.toLowerCase().includes('sinh') ? 'Sinh học' : 'Công nghệ',
+                                        subject: matchedSubject,
                                         classRoom: 'Theo phân công',
                                         teacher: tObj.realName
                                     });
@@ -1187,7 +1214,7 @@
         }
 
         if (allExtractedLessons.length === 0) {
-            alert('Không tìm thấy tiết dạy nào!\n\n💡 Mẹo xử lý: Nhấp vào nút "Sửa" ở mục Hồ Sơ Thành Viên và điền chính xác ký hiệu viết tắt trên TKB trường bạn (ví dụ: Can_Sinh, T.Can, Vi_CN...) vào ô "Từ khóa nhận diện TKB".');
+            alert('Không tìm thấy tiết dạy nào thuộc các môn (Sinh, CN.CN, Lâm TS, CN.TT) của 5 GV trong Tổ!\n\nVui lòng kiểm tra lại xem tên các môn trên TKB có bị gõ sai khác không.');
             closeModal('importTkbModal');
             return;
         }
@@ -1201,7 +1228,7 @@
 
         saveDataToCloud();
         closeModal('importTkbModal');
-        alert(`Trích xuất thành công $100\%$! Đã chắt lọc được ${allExtractedLessons.length} tiết dạy cho Tổ.`);
+        alert(`Trích xuất thành công! Đã chắt lọc được ${allExtractedLessons.length} tiết dạy môn Sinh & CN của Giáo viên trong Tổ.`);
     }
 
     function openTkbModal(i = null) {
