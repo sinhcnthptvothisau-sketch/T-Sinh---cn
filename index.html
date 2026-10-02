@@ -8,10 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện đọc file Excel, Word, PDF -->
+    <!-- Thư viện đọc file Excel, Word -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -265,7 +264,7 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align- items: center; z-index: 1000;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-content {
             background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
@@ -282,6 +281,31 @@
         .import-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--cyan-accent); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
+
+        /* KHUNG TIẾN TRÌNH XỬ LÝ (PROGRESS BAR) */
+        .progress-box {
+            display: none;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--cyan-accent);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyan-accent), var(--accent-gold));
+            transition: width 0.2s ease;
+        }
     </style>
 </head>
 <body>
@@ -345,7 +369,7 @@
                 <thead>
                     <tr>
                         <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
-                        <th>Họ Và Tên</th>
+                        <th>Họ Và Tên (Tên ngắn/Viết tắt)</th>
                         <th>Chức Vụ</th>
                         <th>Nhiệm Vụ</th>
                         <th>Liên Hệ / Zalo</th>
@@ -536,32 +560,38 @@
     </section>
 </div>
 
-<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU CHÍNH XÁC THEO TÊN GIÁO VIÊN -->
+<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU TRÁNH TREO NGHẼN -->
 <div class="modal" id="importTkbModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Chuẩn Tên GV</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất TKB Siêu Tốc (Nhiều File)</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Hệ thống sẽ quét từng ô dữ liệu trong các file Excel/Word TKB. Chỉ những ô <strong>gắn đúng Tên/Tên viết tắt của Giáo viên trong Tổ</strong> (ví dụ: <i>Can_Sinh, Vi_CN, Trung Can</i>...) mới được trích xuất.
+            Thuật toán xử lý không đồng bộ mới giúp đọc mượt mà nhiều file cùng lúc mà <strong>không làm giật hay treo trình duyệt</strong>.
         </p>
         <div class="import-box">
-            <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
+            <div class="form-group"><label>1. Chọn các file TKB (.xlsx, .xls, .docx)</label>
                 <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx" multiple>
             </div>
             <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý dữ liệu</label>
                 <select id="importTkbOption" class="form-control">
-                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB mới từ các file này)</option>
+                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB từ các file này)</option>
                     <option value="append">Thêm nối tiếp vào TKB hiện tại</option>
                 </select>
             </div>
+
+            <!-- THANH TIẾN TRÌNH TRÁNH TÌNH TRẠNG HIỂU NHẦM LÀ BỊ TREO -->
+            <div class="progress-box" id="progressBox">
+                <div style="font-size:0.8rem; color:var(--cyan-accent); font-weight:700;" id="progressStatusText">Đang khởi tạo...</div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBarFill"></div></div>
+            </div>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="btn btn-outline" onclick="closeModal('importTkbModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Lọc Chính Xác</button>
+            <button class="btn btn-outline" id="btnCancelTkb" onclick="closeModal('importTkbModal')">Hủy</button>
+            <button class="btn btn-gold" id="btnProcessTkb" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Lọc TKB</button>
         </div>
     </div>
 </div>
 
-<!-- MODALS KHÁC KHÔNG ĐỔI -->
+<!-- MODALS BỔ TRỢ KHÁC -->
 <div class="modal" id="tkbModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thời Khóa Biểu Tiết Dạy</h3>
@@ -604,7 +634,7 @@
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thành Viên Tổ</h3>
         <input type="hidden" id="editMemIndex">
-        <div class="form-group"><label>Họ và Tên</label><input type="text" id="inputMemName" class="form-control"></div>
+        <div class="form-group"><label>Họ và Tên (Tên ngắn/Viết tắt dùng trong TKB)</label><input type="text" id="inputMemName" class="form-control" placeholder="Ví dụ: Can, Vi..."></div>
         <div class="form-group"><label>Chức vụ / Bộ môn</label><input type="text" id="inputMemRole" class="form-control"></div>
         <div class="form-group"><label>Nhiệm vụ phân công</label><input type="text" id="inputMemDuty" class="form-control"></div>
         <div class="form-group"><label>Số điện thoại / Zalo</label><input type="text" id="inputMemPhone" class="form-control"></div>
@@ -839,7 +869,6 @@
         }
     }
 
-    // CHỨC NĂNG CHỌN TẤT CẢ VÀ XÓA NHIỀU MỤC CÙNG LÚC
     function selectAllCheckboxes(masterCheckbox, tbodyId) {
         const tbody = document.getElementById(tbodyId);
         const checkboxes = tbody.querySelectorAll('.row-checkbox');
@@ -1039,59 +1068,58 @@
         });
     }
 
-    // THUẬT TOÁN TRÍCH XUẤT CHÍNH XÁC THEO TÊN GIÁO VIÊN TRONG TỔ
+    // THUẬT TOÁN ĐỌC FILE ASYNC TRÁNH LÀM TREO TRÌNH DUYỆT
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
-    function parseSingleTkbFile(file) {
+    // Đọc 1 file bất đồng bộ kèm nhường luồng CPU
+    function parseSingleTkbFileAsync(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
-            // Lấy danh sách tên giáo viên chuẩn
             const teachers = (appData.membersData || []).map(m => m.name.trim());
             let lessons = [];
 
-            if (teachers.length === 0) {
-                alert('Chưa có danh sách Giáo viên trong Hồ Sơ Thành Viên! Vui lòng thêm tên các GV trước.');
-                return resolve([]);
-            }
+            if (teachers.length === 0) return resolve([]);
 
             if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, {type: 'array'});
-                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+                    // Dùng setTimeout để không nghẽn UI khi parse dữ liệu
+                    setTimeout(() => {
+                        try {
+                            const data = new Uint8Array(e.target.result);
+                            const workbook = XLSX.read(data, {type: 'array', cellDates: false});
+                            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                            const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
 
-                        jsonData.forEach((row) => {
-                            row.forEach((cellVal, colIdx) => {
-                                if (cellVal) {
-                                    const strVal = String(cellVal).trim();
-                                    // Tìm xem ô này có chứa tên giáo viên nào trong tổ không (ví dụ: "Can_Sinh", "Vi_CN")
-                                    const matchedTeacher = teachers.find(tName => {
-                                        const regex = new RegExp('(^|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])' + tName + '($|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])', 'i');
-                                        return regex.test(strVal);
-                                    });
-
-                                    if (matchedTeacher) {
-                                        // Nhận diện Môn học gắn kèm (Sinh hoặc CN)
-                                        let subject = 'Sinh / CN';
-                                        if (strVal.toLowerCase().includes('sinh')) subject = 'Sinh học';
-                                        else if (strVal.toLowerCase().includes('cn') || strVal.toLowerCase().includes('công nghệ')) subject = 'Công nghệ';
-
-                                        lessons.push({
-                                            day: row[0] || 'Thứ 2',
-                                            lesson: row[1] || 'Tiết ' + (colIdx + 1),
-                                            subject: subject,
-                                            classRoom: row[2] || 'Lớp',
-                                            teacher: matchedTeacher
+                            jsonData.forEach((row) => {
+                                row.forEach((cellVal, colIdx) => {
+                                    if (cellVal) {
+                                        const strVal = String(cellVal).trim();
+                                        // Tìm chính xác tên GV trong ô
+                                        const matchedTeacher = teachers.find(tName => {
+                                            const regex = new RegExp('(^|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])' + tName + '($|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])', 'i');
+                                            return regex.test(strVal);
                                         });
+
+                                        if (matchedTeacher) {
+                                            let subject = 'Sinh / CN';
+                                            if (strVal.toLowerCase().includes('sinh')) subject = 'Sinh học';
+                                            else if (strVal.toLowerCase().includes('cn') || strVal.toLowerCase().includes('công nghệ')) subject = 'Công nghệ';
+
+                                            lessons.push({
+                                                day: row[0] || 'Thứ 2',
+                                                lesson: row[1] || 'Tiết ' + (colIdx + 1),
+                                                subject: subject,
+                                                classRoom: row[2] || 'Lớp',
+                                                teacher: matchedTeacher
+                                            });
+                                        }
                                     }
-                                }
+                                });
                             });
-                        });
-                    } catch(err) { console.error('Lỗi đọc Excel:', err); }
-                    resolve(lessons);
+                        } catch(err) { console.error('Lỗi đọc Excel:', err); }
+                        resolve(lessons);
+                    }, 50);
                 };
                 reader.readAsArrayBuffer(file);
             } else {
@@ -1100,6 +1128,7 @@
         });
     }
 
+    // Xử lý lần lượt từng file kèm Cập nhật Tiến trình Progress Bar
     async function processMultipleSchoolTkbFiles() {
         const fileInput = document.getElementById('importTkbFileInput');
         const option = document.getElementById('importTkbOption').value;
@@ -1107,12 +1136,27 @@
         if (!fileInput.files || fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 File TKB!');
 
         const files = Array.from(fileInput.files);
-        alert(`Hệ thống đang quét và trích xuất TKB chính xác cho Giáo viên trong Tổ từ ${files.length} file...`);
+        const progressBox = document.getElementById('progressBox');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const progressStatusText = document.getElementById('progressStatusText');
+        const btnProcess = document.getElementById('btnProcessTkb');
+
+        progressBox.style.display = 'flex';
+        btnProcess.disabled = true;
 
         let allExtractedLessons = [];
 
-        for (let file of files) {
-            const lessons = await parseSingleTkbFile(file);
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const percent = Math.round(((i + 1) / files.length) * 100);
+
+            progressStatusText.innerText = `Đang phân tích File ${i + 1}/${files.length}: ${file.name} (${percent}%)...`;
+            progressBarFill.style.width = percent + '%';
+
+            // Nhường luồng cho UI cập nhật
+            await new Promise(r => setTimeout(r, 100));
+
+            const lessons = await parseSingleTkbFileAsync(file);
             allExtractedLessons = allExtractedLessons.concat(lessons);
         }
 
@@ -1124,8 +1168,10 @@
         }
 
         saveDataToCloud();
+        btnProcess.disabled = false;
+        progressBox.style.display = 'none';
         closeModal('importTkbModal');
-        alert(`Hoàn tất! Đã trích xuất chính xác ${allExtractedLessons.length} tiết dạy của Giáo viên trong Tổ.`);
+        alert(`Hoàn tất! Đã trích xuất thành công ${allExtractedLessons.length} tiết dạy từ ${files.length} file.`);
     }
 
     // CÁC HÀM XỬ LÝ SỬA / XÓA KHÁC
