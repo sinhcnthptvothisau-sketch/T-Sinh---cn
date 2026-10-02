@@ -535,12 +535,12 @@
     </section>
 </div>
 
-<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU -->
+<!-- MODAL LỌC TKB -->
 <div class="modal" id="importTkbModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Cho Tổ</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Hệ thống tự động quét và lọc chính xác các dạng đặt tên trên TKB như: <b>Can-...</b>, <b>Duyên-...</b>, <b>Tuyền-...</b>, <b>Vi-...</b>, <b>Nghé-...</b>
+            Hệ thống tự động quét ma trận và lọc chính xác mọi định dạng như: <b>Can-...</b>, <b>Duyên-...</b>, <b>Tuyền-...</b>, <b>Vi-...</b>, <b>Nghé-...</b>
         </p>
         <div class="import-box">
             <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
@@ -560,7 +560,7 @@
     </div>
 </div>
 
-<!-- MODAL TKB THỦ CÔNG & MODALS KHÁC -->
+<!-- CÁC MODAL KHÁC -->
 <div class="modal" id="tkbModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thời Khóa Biểu Tiết Dạy</h3>
@@ -725,6 +725,7 @@
     const storage = firebase.storage();
     const ADMIN_PASSWORD = "123456";
 
+    // Mặc định cài đặt sẵn danh sách 5 giáo viên trong Tổ
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         sectionTitles: {
@@ -734,7 +735,6 @@
             title_docs: 'Văn Bản Lưu Trữ',
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
-        // Danh sách tự động bổ sung tên 5 giáo viên trong tổ
         membersData: [
             { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
             { name: 'Duyên', role: 'GV Sinh học', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
@@ -842,7 +842,6 @@
         }
     }
 
-    // CHỨC NĂNG CHỌN TẤT CẢ VÀ XÓA NHIỀU MỤC CÙNG LÚC
     function selectAllCheckboxes(masterCheckbox, tbodyId) {
         const tbody = document.getElementById(tbodyId);
         const checkboxes = tbody.querySelectorAll('.row-checkbox');
@@ -952,7 +951,6 @@
     }
 
     function renderTasks() {
-        // 1. RENDER THỜI KHÓA BIỂU
         const filterTkb = (document.getElementById('filterTkb')?.value || '').toLowerCase();
         const tbodyTkb = document.getElementById('tkbTableBody');
         tbodyTkb.innerHTML = '';
@@ -974,7 +972,6 @@
             `;
         });
 
-        // 2. DẠY LỚP & CHỦ NHIỆM
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
         tbodyTeach.innerHTML = '';
@@ -996,7 +993,6 @@
             `;
         });
 
-        // 3. HSG
         const filterHsg = (document.getElementById('filterHsg')?.value || '').toLowerCase();
         const tbodyHsg = document.getElementById('hsgTaskTableBody');
         tbodyHsg.innerHTML = '';
@@ -1021,7 +1017,6 @@
             `;
         });
 
-        // 4. THI ĐỦA
         const tbodyComp = document.getElementById('competitionTaskTableBody');
         tbodyComp.innerHTML = '';
         (appData.competitionTasks || []).forEach((task, i) => {
@@ -1042,20 +1037,31 @@
         });
     }
 
-    // THUẬT TOÁN TRÍCH XUẤT THỜI KHÓA BIỂU XỬ LÝ ĐƯỢC TẤT CẢ DẠNG "Can-...", "Duyên-...", "Vi-..."
+    // HÀM CHUẨN HÓA BÓC TÁCH DẤU TIẾNG VIỆT
+    function removeVietnameseTones(str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        return str;
+    }
+
+    // THUẬT TOÁN QUÉT MA TRẬN ĐA CHIỀU (2D CELL SCANNER) TRÍCH XUẤT TKB BẤT KỲ FILE EXCEL NÀO
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
     function parseSingleTkbFile(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
-            // Lấy danh sách tên thành viên trong tổ
-            const teachers = (appData.membersData || []).map(m => m.name.trim().toLowerCase()).filter(n => n !== '');
-            let lessons = [];
+            
+            // Danh sách tên gốc và tên bóc dấu
+            const teachersList = (appData.membersData && appData.membersData.length > 0) 
+                ? appData.membersData.map(m => m.name.trim()) 
+                : ['Can', 'Duyên', 'Tuyền', 'Vi', 'Nghé'];
 
-            if (teachers.length === 0) {
-                alert('Chưa có danh sách Giáo viên trong Hồ Sơ Thành Viên! Vui lòng kiểm tra lại.');
-                return resolve([]);
-            }
+            let lessons = [];
 
             if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 const reader = new FileReader();
@@ -1063,41 +1069,67 @@
                     try {
                         const data = new Uint8Array(e.target.result);
                         const workbook = XLSX.read(data, {type: 'array'});
-                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+                        
+                        // Quét qua tất cả các Sheet
+                        workbook.SheetNames.forEach(sheetName => {
+                            const sheet = workbook.Sheets[sheetName];
+                            const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: ''});
 
-                        jsonData.forEach((row) => {
-                            if (!row || row.length === 0) return;
-                            row.forEach((cellVal, colIdx) => {
-                                if (cellVal) {
-                                    const strVal = String(cellVal).trim();
-                                    const strValLower = strVal.toLowerCase();
+                            if (jsonData.length === 0) return;
 
-                                    // Lấy phần tên trước các ký tự phân cách như -, _, khoảng trắng
-                                    // Ví dụ: "Can-Sinh" -> "can", "Duyên_CN" -> "duyên"
-                                    const prefixName = strValLower.split(/[-_ \(\.\,]/)[0].trim();
+                            // Quét từng ô trong ma trận Bảng Excel
+                            for (let r = 0; r < jsonData.length; r++) {
+                                const row = jsonData[r];
+                                for (let c = 0; c < row.length; c++) {
+                                    const cellVal = String(row[c]).trim();
+                                    if (!cellVal) continue;
 
-                                    // Kiểm tra xem tên chính hoặc phần prefix có trùng với GV nào trong tổ không
-                                    const matchedIndex = teachers.findIndex(tName => 
-                                        prefixName === tName || strValLower.startsWith(tName) || strValLower.includes(tName)
-                                    );
+                                    const cellNoTone = removeVietnameseTones(cellVal.toLowerCase());
 
-                                    if (matchedIndex !== -1) {
-                                        const originalTeacherName = appData.membersData[matchedIndex].name;
-                                        let subject = 'Sinh / CN';
-                                        if (strValLower.includes('sinh')) subject = 'Sinh học';
-                                        else if (strValLower.includes('cn') || strValLower.includes('công nghệ')) subject = 'Công nghệ';
+                                    // Đối chiếu từng Tên trong Tổ
+                                    teachersList.forEach(tName => {
+                                        const tNameNoTone = removeVietnameseTones(tName.toLowerCase());
+                                        
+                                        // Kiểm tra sự xuất hiện của Tên (Vd: "can-sinh", "duyen", "vi_cn")
+                                        if (cellNoTone.includes(tNameNoTone)) {
+                                            
+                                            // Dò tìm Thứ/Tiết/Lớp theo Ma Trận Xung Quanh
+                                            let day = 'Thứ 2';
+                                            let lesson = 'Tiết ' + r;
+                                            let classRoom = 'Lớp';
+                                            let subject = cellVal.toLowerCase().includes('sinh') ? 'Sinh học' : 'Công nghệ';
 
-                                        lessons.push({
-                                            day: row[0] || 'Thứ 2',
-                                            lesson: row[1] || 'Tiết ' + (colIdx + 1),
-                                            subject: subject,
-                                            classRoom: row[2] || 'Lớp',
-                                            teacher: originalTeacherName
-                                        });
-                                    }
+                                            // 1. Tìm Thứ ở cột đầu hoặc tiêu đề hàng
+                                            for (let kr = r; kr >= 0; kr--) {
+                                                const rowText = jsonData[kr].join(' ');
+                                                const matchDay = rowText.match(/Thứ\s*[2-7]|Thứ\s*Hai|Thứ\s*Ba|Thứ\s*Tư|Thứ\s*Năm|Thứ\s*Sáu|Thứ\s*Bảy/i);
+                                                if (matchDay) { day = matchDay[0]; break; }
+                                            }
+
+                                            // 2. Tìm Lớp ở tiêu đề Cột hoặc hàng 1-3
+                                            for (let kr = 0; kr < Math.min(5, jsonData.length); kr++) {
+                                                const colHeader = String(jsonData[kr][c] || '').trim();
+                                                const matchClass = colHeader.match(/\b(10|11|12)\s*[A-Z0-9]+\b/i) || colHeader.match(/\b[A-Z0-9]{3,5}\b/i);
+                                                if (matchClass) { classRoom = matchClass[0]; break; }
+                                            }
+
+                                            // 3. Tìm Tiết ở cột 0 hoặc cột 1
+                                            const leftCell1 = String(row[0] || '');
+                                            const leftCell2 = String(row[1] || '');
+                                            const matchLesson = (leftCell1 + ' ' + leftCell2).match(/Tiết\s*\d+|\b[1-9]\b/i);
+                                            if (matchLesson) { lesson = matchLesson[0].includes('Tiết') ? matchLesson[0] : 'Tiết ' + matchLesson[0]; }
+
+                                            lessons.push({
+                                                day: day,
+                                                lesson: lesson,
+                                                subject: subject,
+                                                classRoom: classRoom,
+                                                teacher: tName
+                                            });
+                                        }
+                                    });
                                 }
-                            });
+                            }
                         });
                     } catch(err) { console.error('Lỗi đọc Excel:', err); }
                     resolve(lessons);
@@ -1109,17 +1141,19 @@
                     mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
                         const lines = result.value.split('\n');
                         lines.forEach(line => {
-                            const lineLower = line.toLowerCase();
-                            const matchedIndex = teachers.findIndex(tName => lineLower.includes(tName));
-                            if (matchedIndex !== -1) {
-                                lessons.push({
-                                    day: 'Theo Lịch',
-                                    lesson: 'N/A',
-                                    subject: lineLower.includes('sinh') ? 'Sinh học' : 'Công nghệ',
-                                    classRoom: 'Theo phân công',
-                                    teacher: appData.membersData[matchedIndex].name
-                                });
-                            }
+                            const lineNoTone = removeVietnameseTones(line.toLowerCase());
+                            teachersList.forEach(tName => {
+                                const tNameNoTone = removeVietnameseTones(tName.toLowerCase());
+                                if (lineNoTone.includes(tNameNoTone)) {
+                                    lessons.push({
+                                        day: 'Theo Lịch',
+                                        lesson: 'Theo Lịch',
+                                        subject: line.toLowerCase().includes('sinh') ? 'Sinh học' : 'Công nghệ',
+                                        classRoom: 'Theo phân công',
+                                        teacher: tName
+                                    });
+                                }
+                            });
                         });
                         resolve(lessons);
                     }).catch(() => resolve([]));
@@ -1143,14 +1177,13 @@
         document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang phân tích ${files.length} file...`;
 
         for (let i = 0; i < files.length; i++) {
-            // Cho trình duyệt nghỉ 50ms để tránh tràn RAM/treo máy
             await new Promise(resolve => setTimeout(resolve, 50));
             const lessons = await parseSingleTkbFile(files[i]);
             allExtractedLessons = allExtractedLessons.concat(lessons);
         }
 
         if (allExtractedLessons.length === 0) {
-            alert('Không tìm thấy tiết dạy nào khớp với tên các Giáo viên trong danh sách Tổ!\n\nVui lòng kiểm tra lại bảng "Hồ Sơ Thành Viên" xem đã thêm đủ 5 giáo viên: Can, Duyên, Tuyền, Vi, Nghé chưa.');
+            alert('Đã quét toàn bộ file nhưng không tìm thấy dữ liệu tên 5 GV (Can, Duyên, Tuyền, Vi, Nghé).\n\nVui lòng kiểm tra lại file TKB xem tên giáo viên có bị viết tắt quá khác biệt không.');
             closeModal('importTkbModal');
             return;
         }
@@ -1164,10 +1197,9 @@
 
         saveDataToCloud();
         closeModal('importTkbModal');
-        alert(`Thành công! Đã trích xuất chính xác ${allExtractedLessons.length} tiết dạy của Giáo viên trong Tổ.`);
+        alert(`Trích xuất thành công! Đã chắt lọc được ${allExtractedLessons.length} tiết dạy của Giáo viên trong Tổ.`);
     }
 
-    // CÁC HÀM XỬ LÝ KHÁC
     function openTkbModal(i = null) {
         document.getElementById('editTkbIndex').value = i !== null ? i : '';
         if (i !== null && appData.scheduleTasks) {
