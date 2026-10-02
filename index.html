@@ -8,14 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện đọc file Excel (SheetJS), Word (Mammoth), PDF (PDF.js) -->
+    <!-- Thư viện đọc file Excel, Word, PDF -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-    <!-- Firebase SDK (Đồng bộ đám mây) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <style>
         :root {
@@ -284,7 +285,7 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- BAR PHÂN QUYỀN, BỘ CHỌN GIAO DIỆN VÀ TỰ ĐỘNG ĐỒNG BỘ -->
+    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
     <div class="admin-bar">
         <div>
             <i class="fa-solid fa-user-shield me-2"></i>
@@ -315,7 +316,7 @@
         </div>
     </div>
 
-    <!-- 1. HEADER CARD -->
+    <!-- HEADER CARD -->
     <header class="header-card">
         <button class="btn btn-outline btn-sm admin-btn" style="position: absolute; right: 15px; top: 15px;" onclick="openHeaderModal()">
             <i class="fa-solid fa-pen"></i> Sửa Header
@@ -325,7 +326,7 @@
         <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
     </header>
 
-    <!-- 2. HỒ SƠ THÀNH VIÊN TỔ CHUYÊN MÔN (GIỚI THIỆU) -->
+    <!-- HỒ SƠ THÀNH VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -350,20 +351,48 @@
         </div>
     </section>
 
-    <!-- 3. NHIỆM VỤ VÀ PHÂN CÔNG (TÍCH HỢP ĐỌC FILE TOÀN TRƯỜNG & CHỌN LỌC TỰ ĐỘNG) -->
+    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công</span>
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <button class="btn btn-outline btn-sm admin-btn" onclick="openImportSchoolModal()">
-                <i class="fa-solid fa-file-import" style="color:var(--accent-gold);"></i> Tải & Lọc File Toàn Trường (Excel/Word/PDF)
-            </button>
         </div>
 
-        <!-- MỤC NHỎ 1: DẠY LỚP VÀ CHỦ NHIỆM -->
+        <!-- MỤC MỚI: THỜI KHÓA BIỂU CỦA TỔ -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                    <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTkbModal()"><i class="fa-solid fa-plus"></i> Thêm Tiết Dạy</button>
+                    <button class="btn btn-outline btn-sm admin-btn" onclick="openImportTkbModal()">
+                        <i class="fa-solid fa-file-import" style="color:var(--accent-gold);"></i> Tải & Lọc TKB Toàn Trường
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Thứ</th>
+                            <th>Tiết</th>
+                            <th>Môn Học</th>
+                            <th>Lớp</th>
+                            <th>Giáo Viên Giảng Dạy</th>
+                            <th class="admin-col">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tkbTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DẠY LỚP & CHỦ NHIỆM -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
@@ -389,7 +418,7 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 2: BỒI DƯỠNG HỌC SINH GIỎI -->
+        <!-- BỒI DƯỠNG HSG -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -416,7 +445,7 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 3: ĐĂNG KÝ PHONG TRÀO THI ĐỦA -->
+        <!-- ĐĂNG KÝ THI ĐỦA -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -441,7 +470,7 @@
         </div>
     </section>
 
-    <!-- 4. HÌNH ẢNH HOẠT ĐỘNG -->
+    <!-- HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -453,7 +482,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 5. TÀI NGUYÊN SỐ -->
+    <!-- TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -465,7 +494,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 6. VĂN BẢN LƯU TRỮ -->
+    <!-- VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -491,31 +520,53 @@
     </section>
 </div>
 
-<!-- MODAL LỌC FILE DÙNG CHUNG TOÀN TRƯỜNG -->
-<div class="modal" id="importModal">
+<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU TOÀN TRƯỜNG -->
+<div class="modal" id="importTkbModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-excel me-2"></i> Tự Động Trích Xuất Dữ Liệu Từ File Toàn Trường</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-filter me-2"></i> Trích Xuất & Lọc TKB Cho Tổ</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Tải lên file phân công / kế hoạch / danh sách đội tuyển chung của Trường (.xlsx, .docx, .pdf). Hệ thống sẽ tự động quét và lọc ra bộ môn Sinh / Công nghệ!
+            Tải lên file Thời khóa biểu toàn trường (.xlsx, .xls, .docx). Hệ thống sẽ tự đối chiếu danh sách Giáo viên trong Tổ để chắt lọc lịch dạy riêng!
         </p>
         <div class="import-box">
-            <div class="form-group"><label>1. Chọn Mục Cần Đưa Dữ Liệu Vào</label>
-                <select id="importCategory" class="form-control">
-                    <option value="day_lop">Dạy lớp & Chủ nhiệm</option>
-                    <option value="hsg">Bồi dưỡng Học sinh giỏi</option>
-                    <option value="thi_dua">Đăng ký Phong trào thi đua</option>
+            <div class="form-group"><label>1. Chọn File TKB Toàn Trường (.xlsx, .xls, .docx)</label>
+                <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx">
+            </div>
+            <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý</label>
+                <select id="importTkbOption" class="form-control">
+                    <option value="append">Thêm nối tiếp vào TKB hiện tại</option>
+                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB mới)</option>
                 </select>
-            </div>
-            <div class="form-group" style="margin-top:0.8rem;"><label>2. Từ khóa lọc (Mặc định: Sinh, Công nghệ)</label>
-                <input type="text" id="importKeyword" class="form-control" value="Sinh, Công nghệ, CN">
-            </div>
-            <div class="form-group" style="margin-top:0.8rem;"><label>3. Chọn File Toàn Trường (.xlsx, .docx, .pdf)</label>
-                <input type="file" id="importFileInput" class="form-control" accept=".xlsx, .xls, .docx, .pdf">
             </div>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="btn btn-outline" onclick="closeModal('importModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="processSchoolFile()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Thêm Vào Bảng</button>
+            <button class="btn btn-outline" onclick="closeModal('importTkbModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="processSchoolTkbFile()"><i class="fa-solid fa-wand-magic-sparkles"></i> Lọc TKB Cho Tổ</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL THÊM / SỬA TKB THỦ CÔNG -->
+<div class="modal" id="tkbModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);">Thời Khóa Biểu Tiết Dạy</h3>
+        <input type="hidden" id="editTkbIndex">
+        <div class="form-group"><label>Thứ</label>
+            <select id="inputTkbDay" class="form-control">
+                <option value="Thứ 2">Thứ 2</option>
+                <option value="Thứ 3">Thứ 3</option>
+                <option value="Thứ 4">Thứ 4</option>
+                <option value="Thứ 5">Thứ 5</option>
+                <option value="Thứ 6">Thứ 6</option>
+                <option value="Thứ 7">Thứ 7</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Tiết dạy</label><input type="text" id="inputTkbLesson" class="form-control" placeholder="Ví dụ: Tiết 1 hoặc 1, 2"></div>
+        <div class="form-group"><label>Môn học</label><input type="text" id="inputTkbSubject" class="form-control" placeholder="Sinh học / Công nghệ"></div>
+        <div class="form-group"><label>Lớp dạy</label><input type="text" id="inputTkbClass" class="form-control" placeholder="Ví dụ: 12A1"></div>
+        <div class="form-group"><label>Giáo viên giảng dạy</label><input type="text" id="inputTkbTeacher" class="form-control"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('tkbModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveTkb()">Lưu Tiết Dạy</button>
         </div>
     </div>
 </div>
@@ -616,7 +667,7 @@
         
         <div class="form-group"><label>DANH SÁCH ĐỘI TUYỂN (Lựa chọn 1: Tải File Danh Sách từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Tên các em HS</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Dán link Google Sheet hoặc gõ tên HS..."></div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Tên học sinh</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Dán link Google Sheet hoặc gõ tên HS..."></div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
@@ -649,13 +700,15 @@
 
 <script>
     const firebaseConfig = {
-        databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app"
+        databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app",
+        storageBucket: "quan-ly-to-sinh-cn.appspot.com"
     };
 
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
+    const storage = firebase.storage();
     const ADMIN_PASSWORD = "123456";
 
     let appData = {
@@ -665,7 +718,7 @@
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
-            title_tasks: 'Nhiệm Vụ & Phân Công'
+            title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
         membersData: [
             { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
@@ -673,21 +726,14 @@
         imagesData: [
             { caption: 'Sinh hoạt chuyên đề Tổ Sinh', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
         ],
-        resourcesData: [
-            { title: 'Bài giảng PPT Chuyên đề Sinh 12 GDPT 2018', type: 'Bài giảng điện tử', link: '#', fileName: '' }
+        resourcesData: [],
+        docsData: [],
+        scheduleTasks: [
+            { day: 'Thứ 2', lesson: '1, 2', subject: 'Sinh học 12', classRoom: '12A1', teacher: 'Thầy Trương Trung Can' }
         ],
-        docsData: [
-            { code: '5512/BGDĐT-GDTrH', summary: 'Hướng dẫn xây dựng và tổ chức thực hiện kế hoạch giáo dục', date: '2020-12-18', link: '#', fileName: '' }
-        ],
-        teachingTasks: [
-            { assignee: 'Thầy Trương Trung Can', title: 'Sinh học 12 & Chủ nhiệm 12A1', detail: 'Giảng dạy 4 tiết/tuần, Quản lý lớp 12A1', status: 'Đang thực hiện' }
-        ],
-        hsgTasks: [
-            { teacher: 'Thầy Trương Trung Can', subject: 'Sinh học 12', plan: 'Ôn luyện Chuyên đề Di truyền & Biến dị', listLink: '#', fileName: '' }
-        ],
-        competitionTasks: [
-            { assignee: 'Thầy Trương Trung Can', title: 'Hội thi Giáo viên dạy giỏi cấp Trường', detail: 'Bài giảng E-Learning & Sáng kiến kinh nghiệm', status: 'Đang thực hiện' }
-        ]
+        teachingTasks: [],
+        hsgTasks: [],
+        competitionTasks: []
     };
 
     db.ref('to_sinh_cn_data').on('value', (snapshot) => {
@@ -710,6 +756,13 @@
                 document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã đồng bộ thành công!`;
             }
         });
+    }
+
+    async function uploadFileToFirebase(file) {
+        const fileName = Date.now() + '_' + file.name;
+        const storageRef = storage.ref('files_to_sinh_cn/' + fileName);
+        const snapshot = await storageRef.put(file);
+        return await snapshot.ref.getDownloadURL();
     }
 
     function changeTheme(themeName) {
@@ -751,16 +804,6 @@
         if (toggleInput) toggleInput.checked = false;
         document.getElementById('appContainer').classList.remove('admin-active');
     };
-
-    function downloadDirectFile(dataUrl, fileName) {
-        if (!dataUrl || dataUrl === '#') return alert('File không tồn tại!');
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = fileName || 'tai_lieu';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
 
     function renderAll() {
         renderHeader();
@@ -823,11 +866,6 @@
         const grid = document.getElementById('resourceGrid');
         grid.innerHTML = '';
         (appData.resourcesData || []).forEach((res, i) => {
-            const isFile = res.fileName && res.fileName.length > 0;
-            const btnHtml = isFile 
-                ? `<button onclick="downloadDirectFile('${res.link}', '${res.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Về File</button>`
-                : `<a href="${res.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Truy Cập Link</a>`;
-
             grid.innerHTML += `
                 <div class="resource-card">
                     <div>
@@ -835,7 +873,7 @@
                         <div style="font-weight:700; color:#fff; font-size:0.95rem; margin-top:0.3rem;">${res.title}</div>
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-                        ${btnHtml}
+                        <a href="${res.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a>
                         <div class="admin-btn">
                             <button class="btn btn-edit btn-sm" onclick="openResourceModal(${i})"><i class="fa-solid fa-pen"></i></button>
                             <button class="btn btn-danger btn-sm" onclick="deleteResource(${i})"><i class="fa-solid fa-trash"></i></button>
@@ -850,17 +888,12 @@
         const tbody = document.getElementById('docTableBody');
         tbody.innerHTML = '';
         (appData.docsData || []).forEach((doc, i) => {
-            const isFile = doc.fileName && doc.fileName.length > 0;
-            const btnHtml = isFile 
-                ? `<button onclick="downloadDirectFile('${doc.link}', '${doc.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Về File</button>`
-                : `<a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Link</a>`;
-
             tbody.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
                     <td>${doc.summary}</td>
                     <td>${doc.date}</td>
-                    <td>${btnHtml}</td>
+                    <td><a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a></td>
                     <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openDocModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteDoc(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
@@ -871,7 +904,28 @@
     }
 
     function renderTasks() {
-        // 1. Dạy lớp & Chủ nhiệm (có lọc)
+        // 1. RENDER THỜI KHÓA BIỂU CỦA TỔ
+        const filterTkb = (document.getElementById('filterTkb')?.value || '').toLowerCase();
+        const tbodyTkb = document.getElementById('tkbTableBody');
+        tbodyTkb.innerHTML = '';
+        (appData.scheduleTasks || []).forEach((item, i) => {
+            if (filterTkb && !item.teacher.toLowerCase().includes(filterTkb) && !item.classRoom.toLowerCase().includes(filterTkb) && !item.subject.toLowerCase().includes(filterTkb)) return;
+            tbodyTkb.innerHTML += `
+                <tr>
+                    <td><strong style="color:var(--accent-gold);">${item.day}</strong></td>
+                    <td>${item.lesson}</td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
+                    <td><span class="badge badge-warning">${item.classRoom}</span></td>
+                    <td><strong>${item.teacher}</strong></td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openTkbModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTkb(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // 2. DẠY LỚP & CHỦ NHIỆM
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
         tbodyTeach.innerHTML = '';
@@ -892,21 +946,15 @@
             `;
         });
 
-        // 2. HSG (có lọc)
+        // 3. HSG
         const filterHsg = (document.getElementById('filterHsg')?.value || '').toLowerCase();
         const tbodyHsg = document.getElementById('hsgTaskTableBody');
         tbodyHsg.innerHTML = '';
         (appData.hsgTasks || []).forEach((item, i) => {
             if (filterHsg && !item.teacher.toLowerCase().includes(filterHsg) && !item.subject.toLowerCase().includes(filterHsg)) return;
-            const isFile = item.fileName && item.fileName.length > 0;
-            let listHtml = '';
-            if (isFile) {
-                listHtml = `<button onclick="downloadDirectFile('${item.listLink}', '${item.fileName}')" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải DS Đội Tuyển</button>`;
-            } else if (item.listLink && item.listLink.startsWith('http')) {
-                listHtml = `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Xem Danh Sách</a>`;
-            } else {
-                listHtml = item.listLink || 'Chưa cập nhật DS';
-            }
+            let listHtml = item.listLink && item.listLink.startsWith('http') 
+                ? `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải DS Đội Tuyển</a>`
+                : (item.listLink || 'Chưa cập nhật DS');
 
             tbodyHsg.innerHTML += `
                 <tr>
@@ -922,7 +970,7 @@
             `;
         });
 
-        // 3. Thi đua
+        // 4. THI ĐỦA
         const tbodyComp = document.getElementById('competitionTaskTableBody');
         tbodyComp.innerHTML = '';
         (appData.competitionTasks || []).forEach((task, i) => {
@@ -942,22 +990,23 @@
         });
     }
 
-    // XỬ LÝ ĐỌC FILE TOÀN TRƯỜNG DÙNG CHUNG (EXCEL, WORD, PDF)
-    function openImportSchoolModal() {
-        document.getElementById('importModal').style.display = 'flex';
-    }
+    // XỬ LÝ LỌC THỜI KHÓA BIỂU TỪ FILE TOÀN TRƯỜNG
+    function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
-    async function processSchoolFile() {
-        const fileInput = document.getElementById('importFileInput');
-        const category = document.getElementById('importCategory').value;
-        const keywords = document.getElementById('importKeyword').value.split(',').map(k => k.trim().toLowerCase());
+    async function processSchoolTkbFile() {
+        const fileInput = document.getElementById('importTkbFileInput');
+        const option = document.getElementById('importTkbOption').value;
 
-        if (!fileInput.files || !fileInput.files[0]) return alert('Vui lòng chọn File!');
+        if (!fileInput.files || !fileInput.files[0]) return alert('Vui lòng chọn File TKB toàn trường!');
 
         const file = fileInput.files[0];
         const fileName = file.name.toLowerCase();
 
-        alert('Hệ thống đang tiến hành đọc và lọc bộ môn từ file toàn trường. Vui lòng đợi trong giây lát...');
+        // Lấy danh sách tên Giáo viên trong tổ để tự động lọc
+        const teacherList = (appData.membersData || []).map(m => m.name.toLowerCase().trim());
+        if (teacherList.length === 0) return alert('Vui lòng thêm thành viên vào danh sách Tổ trước để hệ thống làm căn cứ chắt lọc TKB!');
+
+        alert('Đang tiến hành chắt lọc Thời khóa biểu riêng cho Tổ Sinh - CN...');
 
         try {
             if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
@@ -968,66 +1017,163 @@
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
 
-                    let importedCount = 0;
+                    let filteredLessons = [];
+
                     jsonData.forEach(row => {
                         const rowStr = row.join(' ').toLowerCase();
-                        if (keywords.some(kw => rowStr.includes(kw))) {
-                            const val1 = row[0] || row[1] || 'GV Tổ Sinh - CN';
-                            const val2 = row[2] || row[1] || 'Phân công chung';
-                            const val3 = row[3] || row[4] || 'Theo kế hoạch nhà trường';
+                        // Kiểm tra nếu dòng chứa tên Giáo viên trong tổ HOẶC từ khóa bộ môn Sinh/Công nghệ
+                        const matchedTeacher = (appData.membersData || []).find(m => rowStr.includes(m.name.toLowerCase().trim()));
+                        const isSubjectMatch = rowStr.includes('sinh') || rowStr.includes('công nghệ') || rowStr.includes('cn');
 
-                            if (category === 'day_lop') {
-                                if (!appData.teachingTasks) appData.teachingTasks = [];
-                                appData.teachingTasks.push({ assignee: val1, title: val2, detail: val3, status: 'Đang thực hiện' });
-                            } else if (category === 'hsg') {
-                                if (!appData.hsgTasks) appData.hsgTasks = [];
-                                appData.hsgTasks.push({ teacher: val1, subject: val2, plan: val3, listLink: '', fileName: '' });
-                            } else {
-                                if (!appData.competitionTasks) appData.competitionTasks = [];
-                                appData.competitionTasks.push({ assignee: val1, title: val2, detail: val3, status: 'Đang thực hiện' });
-                            }
-                            importedCount++;
+                        if (matchedTeacher || isSubjectMatch) {
+                            filteredLessons.push({
+                                day: row[0] || 'Thứ 2',
+                                lesson: row[1] || '1',
+                                subject: isSubjectMatch ? (rowStr.includes('sinh') ? 'Sinh học' : 'Công nghệ') : 'Sinh / CN',
+                                classRoom: row[3] || row[2] || 'Lớp',
+                                teacher: matchedTeacher ? matchedTeacher.name : (row[4] || 'GV Tổ Sinh - CN')
+                            });
                         }
                     });
+
+                    if (option === 'replace') appData.scheduleTasks = filteredLessons;
+                    else {
+                        if (!appData.scheduleTasks) appData.scheduleTasks = [];
+                        appData.scheduleTasks = appData.scheduleTasks.concat(filteredLessons);
+                    }
+
                     saveDataToCloud();
-                    closeModal('importModal');
-                    alert(`Đã hoàn tất! Đã trích xuất và tự động lọc được ${importedCount} mục cho Tổ Sinh - CN.`);
-                };
-                reader.readAsArrayBuffer(file);
-            } else if (fileName.endsWith('.docx')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
-                        const lines = result.value.split('\n');
-                        let importedCount = 0;
-                        lines.forEach(line => {
-                            if (keywords.some(kw => line.toLowerCase().includes(kw))) {
-                                if (category === 'day_lop') {
-                                    appData.teachingTasks.push({ assignee: 'GV Phụ Trách', title: 'Phân công môn Sinh/CN', detail: line.trim(), status: 'Đang thực hiện' });
-                                } else if (category === 'hsg') {
-                                    appData.hsgTasks.push({ teacher: 'GV Bồi dưỡng', subject: 'Sinh học / CN', plan: line.trim(), listLink: '', fileName: '' });
-                                } else {
-                                    appData.competitionTasks.push({ assignee: 'Cá nhân/Tổ', title: 'Phong trào trường', detail: line.trim(), status: 'Đang thực hiện' });
-                                }
-                                importedCount++;
-                            }
-                        });
-                        saveDataToCloud();
-                        closeModal('importModal');
-                        alert(`Đã trích xuất ${importedCount} dòng từ file Word!`);
-                    });
+                    closeModal('importTkbModal');
+                    alert(`Đã trích xuất và chắt lọc thành công ${filteredLessons.length} tiết dạy của Tổ Sinh - CN!`);
                 };
                 reader.readAsArrayBuffer(file);
             } else {
-                alert('Đã tải và nhận diện file PDF toàn trường!');
-                closeModal('importModal');
+                closeModal('importTkbModal');
             }
-        } catch(err) {
-            alert('Có lỗi khi xử lý file: ' + err.message);
+        } catch(err) { alert('Có lỗi khi xử lý file TKB: ' + err.message); }
+    }
+
+    // XỬ LÝ MODAL TKB THỦ CÔNG
+    function openTkbModal(i = null) {
+        document.getElementById('editTkbIndex').value = i !== null ? i : '';
+        if (i !== null && appData.scheduleTasks) {
+            document.getElementById('inputTkbDay').value = appData.scheduleTasks[i].day;
+            document.getElementById('inputTkbLesson').value = appData.scheduleTasks[i].lesson;
+            document.getElementById('inputTkbSubject').value = appData.scheduleTasks[i].subject;
+            document.getElementById('inputTkbClass').value = appData.scheduleTasks[i].classRoom;
+            document.getElementById('inputTkbTeacher').value = appData.scheduleTasks[i].teacher;
+        } else {
+            document.getElementById('inputTkbLesson').value = '';
+            document.getElementById('inputTkbSubject').value = '';
+            document.getElementById('inputTkbClass').value = '';
+            document.getElementById('inputTkbTeacher').value = '';
+        }
+        document.getElementById('tkbModal').style.display = 'flex';
+    }
+
+    function saveTkb() {
+        const idx = document.getElementById('editTkbIndex').value;
+        const day = document.getElementById('inputTkbDay').value;
+        const lesson = document.getElementById('inputTkbLesson').value;
+        const subject = document.getElementById('inputTkbSubject').value;
+        const classRoom = document.getElementById('inputTkbClass').value;
+        const teacher = document.getElementById('inputTkbTeacher').value;
+
+        if (!lesson || !teacher) return alert('Nhập đầy đủ thông tin tiết dạy!');
+
+        const tkbObj = { day, lesson, subject, classRoom, teacher };
+        if (!appData.scheduleTasks) appData.scheduleTasks = [];
+
+        if (idx !== '') appData.scheduleTasks[idx] = tkbObj;
+        else appData.scheduleTasks.push(tkbObj);
+
+        saveDataToCloud();
+        closeModal('tkbModal');
+    }
+
+    function deleteTkb(i) {
+        if (confirm('Xóa tiết dạy này khỏi TKB?')) {
+            appData.scheduleTasks.splice(i, 1);
+            saveDataToCloud();
         }
     }
 
     // CÁC HÀM XỬ LÝ MODAL KHÁC
+    async function saveResource() {
+        const idx = document.getElementById('editResIndex').value;
+        const title = document.getElementById('inputResTitle').value;
+        const type = document.getElementById('inputResType').value;
+        const fileInput = document.getElementById('inputResFile');
+        const linkInput = document.getElementById('inputResLink').value;
+        if (!title) return alert('Nhập tên tài nguyên!');
+
+        if (!appData.resourcesData) appData.resourcesData = [];
+        let finalLink = linkInput || '#';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const resObj = { title, type, link: finalLink };
+        if (idx !== '') appData.resourcesData[idx] = resObj;
+        else appData.resourcesData.push(resObj);
+
+        saveDataToCloud(); closeModal('resourceModal');
+    }
+
+    async function saveDoc() {
+        const idx = document.getElementById('editDocIndex').value;
+        const code = document.getElementById('inputDocCode').value;
+        const summary = document.getElementById('inputDocSummary').value;
+        const date = document.getElementById('inputDocDate').value;
+        const fileInput = document.getElementById('inputDocFile');
+        const linkInput = document.getElementById('inputDocLink').value;
+        if (!code) return alert('Nhập số văn bản!');
+
+        if (!appData.docsData) appData.docsData = [];
+        let finalLink = linkInput || '#';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const docObj = { code, summary, date, link: finalLink };
+        if (idx !== '') appData.docsData[idx] = docObj;
+        else appData.docsData.push(docObj);
+
+        saveDataToCloud(); closeModal('docModal');
+    }
+
+    async function saveHsg() {
+        const idx = document.getElementById('editHsgIndex').value;
+        const teacher = document.getElementById('inputHsgTeacher').value;
+        const subject = document.getElementById('inputHsgSubject').value;
+        const plan = document.getElementById('inputHsgPlan').value;
+        const fileInput = document.getElementById('inputHsgFile');
+        const listLink = document.getElementById('inputHsgLink').value;
+
+        if (!teacher || !subject) return alert('Nhập đầy đủ!');
+        if (!appData.hsgTasks) appData.hsgTasks = [];
+
+        let finalLink = listLink || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải danh sách lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const hsgObj = { teacher, subject, plan, listLink: finalLink };
+        if (idx !== '') appData.hsgTasks[idx] = hsgObj;
+        else appData.hsgTasks.push(hsgObj);
+
+        saveDataToCloud(); closeModal('hsgModal');
+    }
+
     function editSectionTitle(titleKey) {
         const newTitle = prompt('Nhập tên mới:', appData.sectionTitles[titleKey]);
         if (newTitle) { appData.sectionTitles[titleKey] = newTitle; saveDataToCloud(); }
@@ -1054,10 +1200,8 @@
             document.getElementById('inputMemDuty').value = appData.membersData[i].duty;
             document.getElementById('inputMemPhone').value = appData.membersData[i].phone;
         } else {
-            document.getElementById('inputMemName').value = '';
-            document.getElementById('inputMemRole').value = '';
-            document.getElementById('inputMemDuty').value = '';
-            document.getElementById('inputMemPhone').value = '';
+            document.getElementById('inputMemName').value = ''; document.getElementById('inputMemRole').value = '';
+            document.getElementById('inputMemDuty').value = ''; document.getElementById('inputMemPhone').value = '';
         }
         document.getElementById('memberModal').style.display = 'flex';
     }
@@ -1076,20 +1220,21 @@
     function deleteMember(i) { if (confirm('Xóa?')) { appData.membersData.splice(i, 1); saveDataToCloud(); } }
 
     function openImageModal() { document.getElementById('imageModal').style.display = 'flex'; }
-    function addImage() {
+    async function addImage() {
         const caption = document.getElementById('inputImgCaption').value || 'Hoạt động';
         const fileInput = document.getElementById('inputImgFile');
         const urlInput = document.getElementById('inputImgUrl').value;
+
         if (!appData.imagesData) appData.imagesData = [];
+        let finalUrl = urlInput;
         if (fileInput.files && fileInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                appData.imagesData.push({ caption, url: e.target.result });
-                saveDataToCloud(); closeModal('imageModal');
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else if (urlInput) {
-            appData.imagesData.push({ caption, url: urlInput });
+            alert('Đang tải hình ảnh lên Firebase Storage...');
+            try { finalUrl = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải ảnh: ' + e.message); }
+        }
+
+        if (finalUrl) {
+            appData.imagesData.push({ caption, url: finalUrl });
             saveDataToCloud(); closeModal('imageModal');
         }
     }
@@ -1101,36 +1246,11 @@
         if (i !== null) {
             document.getElementById('inputResTitle').value = appData.resourcesData[i].title;
             document.getElementById('inputResType').value = appData.resourcesData[i].type;
-            document.getElementById('inputResLink').value = appData.resourcesData[i].fileName ? '' : appData.resourcesData[i].link;
+            document.getElementById('inputResLink').value = appData.resourcesData[i].link;
         } else {
             document.getElementById('inputResTitle').value = ''; document.getElementById('inputResLink').value = '';
         }
         document.getElementById('resourceModal').style.display = 'flex';
-    }
-    function saveResource() {
-        const idx = document.getElementById('editResIndex').value;
-        const title = document.getElementById('inputResTitle').value;
-        const type = document.getElementById('inputResType').value;
-        const fileInput = document.getElementById('inputResFile');
-        const linkInput = document.getElementById('inputResLink').value;
-        if (!title) return alert('Nhập tên!');
-        if (!appData.resourcesData) appData.resourcesData = [];
-        if (fileInput.files && fileInput.files[0]) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const resObj = { title, type, link: e.target.result, fileName: file.name };
-                if (idx !== '') appData.resourcesData[idx] = resObj;
-                else appData.resourcesData.push(resObj);
-                saveDataToCloud(); closeModal('resourceModal');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const resObj = { title, type, link: linkInput || '#', fileName: '' };
-            if (idx !== '') appData.resourcesData[idx] = resObj;
-            else appData.resourcesData.push(resObj);
-            saveDataToCloud(); closeModal('resourceModal');
-        }
     }
     function deleteResource(i) { if (confirm('Xóa?')) { appData.resourcesData.splice(i, 1); saveDataToCloud(); } }
 
@@ -1141,38 +1261,12 @@
             document.getElementById('inputDocCode').value = appData.docsData[i].code;
             document.getElementById('inputDocSummary').value = appData.docsData[i].summary;
             document.getElementById('inputDocDate').value = appData.docsData[i].date;
-            document.getElementById('inputDocLink').value = appData.docsData[i].fileName ? '' : appData.docsData[i].link;
+            document.getElementById('inputDocLink').value = appData.docsData[i].link;
         } else {
             document.getElementById('inputDocCode').value = ''; document.getElementById('inputDocSummary').value = '';
             document.getElementById('inputDocDate').value = ''; document.getElementById('inputDocLink').value = '';
         }
         document.getElementById('docModal').style.display = 'flex';
-    }
-    function saveDoc() {
-        const idx = document.getElementById('editDocIndex').value;
-        const code = document.getElementById('inputDocCode').value;
-        const summary = document.getElementById('inputDocSummary').value;
-        const date = document.getElementById('inputDocDate').value;
-        const fileInput = document.getElementById('inputDocFile');
-        const linkInput = document.getElementById('inputDocLink').value;
-        if (!code) return alert('Nhập số!');
-        if (!appData.docsData) appData.docsData = [];
-        if (fileInput.files && fileInput.files[0]) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const docObj = { code, summary, date, link: e.target.result, fileName: file.name };
-                if (idx !== '') appData.docsData[idx] = docObj;
-                else appData.docsData.push(docObj);
-                saveDataToCloud(); closeModal('docModal');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const docObj = { code, summary, date, link: linkInput || '#', fileName: '' };
-            if (idx !== '') appData.docsData[idx] = docObj;
-            else appData.docsData.push(docObj);
-            saveDataToCloud(); closeModal('docModal');
-        }
     }
     function deleteDoc(i) { if (confirm('Xóa?')) { appData.docsData.splice(i, 1); saveDataToCloud(); } }
 
@@ -1183,41 +1277,12 @@
             document.getElementById('inputHsgTeacher').value = appData.hsgTasks[i].teacher;
             document.getElementById('inputHsgSubject').value = appData.hsgTasks[i].subject;
             document.getElementById('inputHsgPlan').value = appData.hsgTasks[i].plan;
-            document.getElementById('inputHsgLink').value = appData.hsgTasks[i].fileName ? '' : appData.hsgTasks[i].listLink;
+            document.getElementById('inputHsgLink').value = appData.hsgTasks[i].listLink;
         } else {
             document.getElementById('inputHsgTeacher').value = ''; document.getElementById('inputHsgSubject').value = '';
             document.getElementById('inputHsgPlan').value = ''; document.getElementById('inputHsgLink').value = '';
         }
         document.getElementById('hsgModal').style.display = 'flex';
-    }
-
-    function saveHsg() {
-        const idx = document.getElementById('editHsgIndex').value;
-        const teacher = document.getElementById('inputHsgTeacher').value;
-        const subject = document.getElementById('inputHsgSubject').value;
-        const plan = document.getElementById('inputHsgPlan').value;
-        const fileInput = document.getElementById('inputHsgFile');
-        const listLink = document.getElementById('inputHsgLink').value;
-
-        if (!teacher || !subject) return alert('Nhập đầy đủ!');
-        if (!appData.hsgTasks) appData.hsgTasks = [];
-
-        if (fileInput.files && fileInput.files[0]) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const hsgObj = { teacher, subject, plan, listLink: e.target.result, fileName: file.name };
-                if (idx !== '') appData.hsgTasks[idx] = hsgObj;
-                else appData.hsgTasks.push(hsgObj);
-                saveDataToCloud(); closeModal('hsgModal');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const hsgObj = { teacher, subject, plan, listLink: listLink || '', fileName: '' };
-            if (idx !== '') appData.hsgTasks[idx] = hsgObj;
-            else appData.hsgTasks.push(hsgObj);
-            saveDataToCloud(); closeModal('hsgModal');
-        }
     }
     function deleteHsg(i) { if (confirm('Xóa?')) { appData.hsgTasks.splice(i, 1); saveDataToCloud(); } }
 
