@@ -360,7 +360,7 @@
             </h2>
         </div>
 
-        <!-- MỤC MỚI: THỜI KHÓA BIỂU CỦA TỔ -->
+        <!-- MỤC THỜI KHÓA BIỂU CỦA TỔ (HỖ TRỢ CHỌN NHIỀU FILE FILE LỌC TKB) -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -370,7 +370,7 @@
                     <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openTkbModal()"><i class="fa-solid fa-plus"></i> Thêm Tiết Dạy</button>
                     <button class="btn btn-outline btn-sm admin-btn" onclick="openImportTkbModal()">
-                        <i class="fa-solid fa-file-import" style="color:var(--accent-gold);"></i> Tải & Lọc TKB Toàn Trường
+                        <i class="fa-solid fa-folder-open" style="color:var(--accent-gold);"></i> Tải & Lọc Từ Nhiều File TKB
                     </button>
                 </div>
             </div>
@@ -520,27 +520,28 @@
     </section>
 </div>
 
-<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU TOÀN TRƯỜNG -->
+<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU TỪ NHIỀU FILE CÙNG LÚC -->
 <div class="modal" id="importTkbModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-filter me-2"></i> Trích Xuất & Lọc TKB Cho Tổ</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Từ Nhiều File Cùng Lúc</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Tải lên file Thời khóa biểu toàn trường (.xlsx, .xls, .docx). Hệ thống sẽ tự đối chiếu danh sách Giáo viên trong Tổ để chắt lọc lịch dạy riêng!
+            Bạn có thể chọn <strong>nhiều file Excel/Word TKB cùng lúc</strong> (giữ phím Ctrl hoặc Shift khi chọn file). Hệ thống sẽ tự động lọc dữ liệu của tất cả giáo viên trong tổ!
         </p>
         <div class="import-box">
-            <div class="form-group"><label>1. Chọn File TKB Toàn Trường (.xlsx, .xls, .docx)</label>
-                <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx">
+            <div class="form-group"><label>1. Chọn Một hoặc Nhiều File TKB (.xlsx, .xls, .docx)</label>
+                <!-- Thuộc tính multiple cho phép chọn nhiều file cùng lúc -->
+                <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx" multiple>
             </div>
-            <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý</label>
+            <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý dữ liệu</label>
                 <select id="importTkbOption" class="form-control">
+                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB mới từ các file này)</option>
                     <option value="append">Thêm nối tiếp vào TKB hiện tại</option>
-                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB mới)</option>
                 </select>
             </div>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
             <button class="btn btn-outline" onclick="closeModal('importTkbModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="processSchoolTkbFile()"><i class="fa-solid fa-wand-magic-sparkles"></i> Lọc TKB Cho Tổ</button>
+            <button class="btn btn-gold" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Lọc TKB Từ Tất Cả File Được Chọn</button>
         </div>
     </div>
 </div>
@@ -990,67 +991,99 @@
         });
     }
 
-    // XỬ LÝ LỌC THỜI KHÓA BIỂU TỪ FILE TOÀN TRƯỜNG
+    // XỬ LÝ LỌC THỜI KHÓA BIỂU TỪ NHIỀU FILE CÙNG LÚC
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
-    async function processSchoolTkbFile() {
-        const fileInput = document.getElementById('importTkbFileInput');
-        const option = document.getElementById('importTkbOption').value;
+    // Đọc 1 file đơn lẻ (trả về Promise)
+    function parseSingleTkbFile(file) {
+        return new Promise((resolve) => {
+            const fileName = file.name.toLowerCase();
+            const teacherList = (appData.membersData || []).map(m => m.name.toLowerCase().trim());
+            let lessons = [];
 
-        if (!fileInput.files || !fileInput.files[0]) return alert('Vui lòng chọn File TKB toàn trường!');
-
-        const file = fileInput.files[0];
-        const fileName = file.name.toLowerCase();
-
-        // Lấy danh sách tên Giáo viên trong tổ để tự động lọc
-        const teacherList = (appData.membersData || []).map(m => m.name.toLowerCase().trim());
-        if (teacherList.length === 0) return alert('Vui lòng thêm thành viên vào danh sách Tổ trước để hệ thống làm căn cứ chắt lọc TKB!');
-
-        alert('Đang tiến hành chắt lọc Thời khóa biểu riêng cho Tổ Sinh - CN...');
-
-        try {
             if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
 
-                    let filteredLessons = [];
+                        jsonData.forEach(row => {
+                            const rowStr = row.join(' ').toLowerCase();
+                            const matchedTeacher = (appData.membersData || []).find(m => rowStr.includes(m.name.toLowerCase().trim()));
+                            const isSubjectMatch = rowStr.includes('sinh') || rowStr.includes('công nghệ') || rowStr.includes('cn');
 
-                    jsonData.forEach(row => {
-                        const rowStr = row.join(' ').toLowerCase();
-                        // Kiểm tra nếu dòng chứa tên Giáo viên trong tổ HOẶC từ khóa bộ môn Sinh/Công nghệ
-                        const matchedTeacher = (appData.membersData || []).find(m => rowStr.includes(m.name.toLowerCase().trim()));
-                        const isSubjectMatch = rowStr.includes('sinh') || rowStr.includes('công nghệ') || rowStr.includes('cn');
-
-                        if (matchedTeacher || isSubjectMatch) {
-                            filteredLessons.push({
-                                day: row[0] || 'Thứ 2',
-                                lesson: row[1] || '1',
-                                subject: isSubjectMatch ? (rowStr.includes('sinh') ? 'Sinh học' : 'Công nghệ') : 'Sinh / CN',
-                                classRoom: row[3] || row[2] || 'Lớp',
-                                teacher: matchedTeacher ? matchedTeacher.name : (row[4] || 'GV Tổ Sinh - CN')
-                            });
-                        }
-                    });
-
-                    if (option === 'replace') appData.scheduleTasks = filteredLessons;
-                    else {
-                        if (!appData.scheduleTasks) appData.scheduleTasks = [];
-                        appData.scheduleTasks = appData.scheduleTasks.concat(filteredLessons);
-                    }
-
-                    saveDataToCloud();
-                    closeModal('importTkbModal');
-                    alert(`Đã trích xuất và chắt lọc thành công ${filteredLessons.length} tiết dạy của Tổ Sinh - CN!`);
+                            if (matchedTeacher || isSubjectMatch) {
+                                lessons.push({
+                                    day: row[0] || 'Thứ 2',
+                                    lesson: row[1] || '1',
+                                    subject: isSubjectMatch ? (rowStr.includes('sinh') ? 'Sinh học' : 'Công nghệ') : 'Sinh / CN',
+                                    classRoom: row[3] || row[2] || 'Lớp',
+                                    teacher: matchedTeacher ? matchedTeacher.name : (row[4] || 'GV Tổ Sinh - CN')
+                                });
+                            }
+                        });
+                    } catch(err) { console.error('Lỗi đọc file Excel:', err); }
+                    resolve(lessons);
+                };
+                reader.readAsArrayBuffer(file);
+            } else if (fileName.endsWith('.docx')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
+                        const lines = result.value.split('\n');
+                        lines.forEach(line => {
+                            const lineLower = line.toLowerCase();
+                            const matchedTeacher = (appData.membersData || []).find(m => lineLower.includes(m.name.toLowerCase().trim()));
+                            if (matchedTeacher || lineLower.includes('sinh') || lineLower.includes('công nghệ')) {
+                                lessons.push({
+                                    day: 'Theo Lịch',
+                                    lesson: 'N/A',
+                                    subject: 'Sinh / CN',
+                                    classRoom: 'Theo phân công',
+                                    teacher: matchedTeacher ? matchedTeacher.name : 'GV Tổ Sinh - CN'
+                                });
+                            }
+                        });
+                        resolve(lessons);
+                    }).catch(() => resolve([]));
                 };
                 reader.readAsArrayBuffer(file);
             } else {
-                closeModal('importTkbModal');
+                resolve([]);
             }
-        } catch(err) { alert('Có lỗi khi xử lý file TKB: ' + err.message); }
+        });
+    }
+
+    // Xử lý tất cả các file TKB đã chọn
+    async function processMultipleSchoolTkbFiles() {
+        const fileInput = document.getElementById('importTkbFileInput');
+        const option = document.getElementById('importTkbOption').value;
+
+        if (!fileInput.files || fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 File TKB toàn trường!');
+
+        const files = Array.from(fileInput.files);
+        alert(`Đang tiến hành xử lý và chắt lọc dữ liệu từ ${files.length} file đã chọn...`);
+
+        let allExtractedLessons = [];
+
+        for (let file of files) {
+            const lessons = await parseSingleTkbFile(file);
+            allExtractedLessons = allExtractedLessons.concat(lessons);
+        }
+
+        if (option === 'replace') {
+            appData.scheduleTasks = allExtractedLessons;
+        } else {
+            if (!appData.scheduleTasks) appData.scheduleTasks = [];
+            appData.scheduleTasks = appData.scheduleTasks.concat(allExtractedLessons);
+        }
+
+        saveDataToCloud();
+        closeModal('importTkbModal');
+        alert(`Hoàn tất! Đã tổng hợp thành công ${allExtractedLessons.length} tiết dạy của Tổ Sinh - CN từ ${files.length} file đã chọn!`);
     }
 
     // XỬ LÝ MODAL TKB THỦ CÔNG
