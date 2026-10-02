@@ -265,7 +265,7 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align- items: center; z-index: 1000;
         }
         .modal-content {
             background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
@@ -280,6 +280,8 @@
         }
         .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
         .import-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--cyan-accent); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
+        .checkbox-cell { width: 40px; text-align: center; }
+        .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -333,17 +335,21 @@
                 <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="custom-table">
                 <thead>
                     <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
                         <th>Họ Và Tên</th>
                         <th>Chức Vụ</th>
                         <th>Nhiệm Vụ</th>
                         <th>Liên Hệ / Zalo</th>
-                        <th class="admin-col">Thao Tác Quản Trị</th>
+                        <th class="admin-col">Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody id="memberTableBody"></tbody>
@@ -360,7 +366,7 @@
             </h2>
         </div>
 
-        <!-- MỤC THỜI KHÓA BIỂU CỦA TỔ (HỖ TRỢ CHỌN NHIỀU FILE FILE LỌC TKB) -->
+        <!-- THỜI KHÓA BIỂU TỔ CHUYÊN MÔN -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -368,6 +374,7 @@
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('scheduleTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openTkbModal()"><i class="fa-solid fa-plus"></i> Thêm Tiết Dạy</button>
                     <button class="btn btn-outline btn-sm admin-btn" onclick="openImportTkbModal()">
                         <i class="fa-solid fa-folder-open" style="color:var(--accent-gold);"></i> Tải & Lọc Từ Nhiều File TKB
@@ -378,6 +385,7 @@
                 <table class="custom-table">
                     <thead>
                         <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'tkbTableBody')"></th>
                             <th>Thứ</th>
                             <th>Tiết</th>
                             <th>Môn Học</th>
@@ -399,6 +407,7 @@
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterTeach" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('teachingTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
                 </div>
             </div>
@@ -406,6 +415,7 @@
                 <table class="custom-table">
                     <thead>
                         <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'teachingTaskTableBody')"></th>
                             <th>Giáo viên</th>
                             <th>Lớp phân công</th>
                             <th>Nhiệm vụ cụ thể</th>
@@ -426,6 +436,7 @@
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('hsgTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
                 </div>
             </div>
@@ -433,6 +444,7 @@
                 <table class="custom-table">
                     <thead>
                         <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'hsgTaskTableBody')"></th>
                             <th>Giáo viên bồi dưỡng</th>
                             <th>Môn</th>
                             <th>Nội dung / Kế hoạch</th>
@@ -451,12 +463,16 @@
                 <div class="sub-section-title">
                     <i class="fa-solid fa-trophy"></i> Đăng Ký Phong Trào Thi Đua
                 </div>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('thi_dua')"><i class="fa-solid fa-plus"></i> Thêm Đăng Ký Thi Đua</button>
+                <div style="display:flex; gap:0.5rem;">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('competitionTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('thi_dua')"><i class="fa-solid fa-plus"></i> Thêm Đăng Ký Thi Đua</button>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="custom-table">
                     <thead>
                         <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'competitionTaskTableBody')"></th>
                             <th>Cá nhân</th>
                             <th>Phong trào</th>
                             <th>Tên sản phẩm</th>
@@ -520,16 +536,15 @@
     </section>
 </div>
 
-<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU TỪ NHIỀU FILE CÙNG LÚC -->
+<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU CHÍNH XÁC THEO TÊN GIÁO VIÊN -->
 <div class="modal" id="importTkbModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Từ Nhiều File Cùng Lúc</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Chuẩn Tên GV</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Bạn có thể chọn <strong>nhiều file Excel/Word TKB cùng lúc</strong> (giữ phím Ctrl hoặc Shift khi chọn file). Hệ thống sẽ tự động lọc dữ liệu của tất cả giáo viên trong tổ!
+            Hệ thống sẽ quét từng ô dữ liệu trong các file Excel/Word TKB. Chỉ những ô <strong>gắn đúng Tên/Tên viết tắt của Giáo viên trong Tổ</strong> (ví dụ: <i>Can_Sinh, Vi_CN, Trung Can</i>...) mới được trích xuất.
         </p>
         <div class="import-box">
-            <div class="form-group"><label>1. Chọn Một hoặc Nhiều File TKB (.xlsx, .xls, .docx)</label>
-                <!-- Thuộc tính multiple cho phép chọn nhiều file cùng lúc -->
+            <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
                 <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx" multiple>
             </div>
             <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý dữ liệu</label>
@@ -541,12 +556,12 @@
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
             <button class="btn btn-outline" onclick="closeModal('importTkbModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Lọc TKB Từ Tất Cả File Được Chọn</button>
+            <button class="btn btn-gold" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Lọc Chính Xác</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL THÊM / SỬA TKB THỦ CÔNG -->
+<!-- MODALS KHÁC KHÔNG ĐỔI -->
 <div class="modal" id="tkbModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thời Khóa Biểu Tiết Dạy</h3>
@@ -572,7 +587,6 @@
     </div>
 </div>
 
-<!-- MODALS KHÁC -->
 <div class="modal" id="headerModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Cập Nhật Tên Trường & Tổ</h3>
@@ -722,16 +736,13 @@
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
         membersData: [
-            { name: 'Thầy Trương Trung Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG khối 12', phone: '0912.345.678' }
+            { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG 12', phone: '0912.345.678' },
+            { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy CN, Phụ trách BĐHSG CN', phone: '0987.654.321' }
         ],
-        imagesData: [
-            { caption: 'Sinh hoạt chuyên đề Tổ Sinh', url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500' }
-        ],
+        imagesData: [],
         resourcesData: [],
         docsData: [],
-        scheduleTasks: [
-            { day: 'Thứ 2', lesson: '1, 2', subject: 'Sinh học 12', classRoom: '12A1', teacher: 'Thầy Trương Trung Can' }
-        ],
+        scheduleTasks: [],
         teachingTasks: [],
         hsgTasks: [],
         competitionTasks: []
@@ -828,12 +839,45 @@
         }
     }
 
+    // CHỨC NĂNG CHỌN TẤT CẢ VÀ XÓA NHIỀU MỤC CÙNG LÚC
+    function selectAllCheckboxes(masterCheckbox, tbodyId) {
+        const tbody = document.getElementById(tbodyId);
+        const checkboxes = tbody.querySelectorAll('.row-checkbox');
+        checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+    }
+
+    function deleteSelectedItems(dataKey) {
+        let tbodyId = '';
+        if (dataKey === 'membersData') tbodyId = 'memberTableBody';
+        else if (dataKey === 'scheduleTasks') tbodyId = 'tkbTableBody';
+        else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
+        else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
+        else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
+
+        const tbody = document.getElementById(tbodyId);
+        const checkboxes = tbody.querySelectorAll('.row-checkbox:checked');
+        
+        if (checkboxes.length === 0) return alert('Vui lòng tích chọn ít nhất 1 dòng để xóa!');
+
+        if (confirm(`Bạn có chắc chắn muốn xóa ${checkboxes.length} mục đã chọn không?`)) {
+            const indexesToDelete = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
+            
+            indexesToDelete.forEach(idx => {
+                if (appData[dataKey]) appData[dataKey].splice(idx, 1);
+            });
+
+            saveDataToCloud();
+            alert('Đã xóa thành công các mục đã chọn!');
+        }
+    }
+
     function renderMembers() {
         const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
         (appData.membersData || []).forEach((mem, i) => {
             tbody.innerHTML += `
                 <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${mem.name}</strong></td>
                     <td>${mem.role}</td>
                     <td>${mem.duty}</td>
@@ -905,7 +949,7 @@
     }
 
     function renderTasks() {
-        // 1. RENDER THỜI KHÓA BIỂU CỦA TỔ
+        // 1. RENDER THỜI KHÓA BIỂU
         const filterTkb = (document.getElementById('filterTkb')?.value || '').toLowerCase();
         const tbodyTkb = document.getElementById('tkbTableBody');
         tbodyTkb.innerHTML = '';
@@ -913,6 +957,7 @@
             if (filterTkb && !item.teacher.toLowerCase().includes(filterTkb) && !item.classRoom.toLowerCase().includes(filterTkb) && !item.subject.toLowerCase().includes(filterTkb)) return;
             tbodyTkb.innerHTML += `
                 <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${item.day}</strong></td>
                     <td>${item.lesson}</td>
                     <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
@@ -935,6 +980,7 @@
             const badgeClass = task.status === 'Hoàn thành' ? 'badge-success' : 'badge-warning';
             tbodyTeach.innerHTML += `
                 <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
                     <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
                     <td>${task.detail}</td>
@@ -959,6 +1005,7 @@
 
             tbodyHsg.innerHTML += `
                 <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
                     <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
                     <td>${item.plan}</td>
@@ -978,6 +1025,7 @@
             const badgeClass = (task.status === 'Hoàn thành' || task.status === 'Đạt chỉ tiêu') ? 'badge-success' : 'badge-warning';
             tbodyComp.innerHTML += `
                 <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
                     <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
                     <td>${task.detail}</td>
@@ -991,15 +1039,20 @@
         });
     }
 
-    // XỬ LÝ LỌC THỜI KHÓA BIỂU TỪ NHIỀU FILE CÙNG LÚC
+    // THUẬT TOÁN TRÍCH XUẤT CHÍNH XÁC THEO TÊN GIÁO VIÊN TRONG TỔ
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
-    // Đọc 1 file đơn lẻ (trả về Promise)
     function parseSingleTkbFile(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
-            const teacherList = (appData.membersData || []).map(m => m.name.toLowerCase().trim());
+            // Lấy danh sách tên giáo viên chuẩn
+            const teachers = (appData.membersData || []).map(m => m.name.trim());
             let lessons = [];
+
+            if (teachers.length === 0) {
+                alert('Chưa có danh sách Giáo viên trong Hồ Sơ Thành Viên! Vui lòng thêm tên các GV trước.');
+                return resolve([]);
+            }
 
             if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
                 const reader = new FileReader();
@@ -1010,45 +1063,35 @@
                         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                         const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
 
-                        jsonData.forEach(row => {
-                            const rowStr = row.join(' ').toLowerCase();
-                            const matchedTeacher = (appData.membersData || []).find(m => rowStr.includes(m.name.toLowerCase().trim()));
-                            const isSubjectMatch = rowStr.includes('sinh') || rowStr.includes('công nghệ') || rowStr.includes('cn');
+                        jsonData.forEach((row) => {
+                            row.forEach((cellVal, colIdx) => {
+                                if (cellVal) {
+                                    const strVal = String(cellVal).trim();
+                                    // Tìm xem ô này có chứa tên giáo viên nào trong tổ không (ví dụ: "Can_Sinh", "Vi_CN")
+                                    const matchedTeacher = teachers.find(tName => {
+                                        const regex = new RegExp('(^|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])' + tName + '($|[^a-zA-Z0-9àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ])', 'i');
+                                        return regex.test(strVal);
+                                    });
 
-                            if (matchedTeacher || isSubjectMatch) {
-                                lessons.push({
-                                    day: row[0] || 'Thứ 2',
-                                    lesson: row[1] || '1',
-                                    subject: isSubjectMatch ? (rowStr.includes('sinh') ? 'Sinh học' : 'Công nghệ') : 'Sinh / CN',
-                                    classRoom: row[3] || row[2] || 'Lớp',
-                                    teacher: matchedTeacher ? matchedTeacher.name : (row[4] || 'GV Tổ Sinh - CN')
-                                });
-                            }
+                                    if (matchedTeacher) {
+                                        // Nhận diện Môn học gắn kèm (Sinh hoặc CN)
+                                        let subject = 'Sinh / CN';
+                                        if (strVal.toLowerCase().includes('sinh')) subject = 'Sinh học';
+                                        else if (strVal.toLowerCase().includes('cn') || strVal.toLowerCase().includes('công nghệ')) subject = 'Công nghệ';
+
+                                        lessons.push({
+                                            day: row[0] || 'Thứ 2',
+                                            lesson: row[1] || 'Tiết ' + (colIdx + 1),
+                                            subject: subject,
+                                            classRoom: row[2] || 'Lớp',
+                                            teacher: matchedTeacher
+                                        });
+                                    }
+                                }
+                            });
                         });
-                    } catch(err) { console.error('Lỗi đọc file Excel:', err); }
+                    } catch(err) { console.error('Lỗi đọc Excel:', err); }
                     resolve(lessons);
-                };
-                reader.readAsArrayBuffer(file);
-            } else if (fileName.endsWith('.docx')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
-                        const lines = result.value.split('\n');
-                        lines.forEach(line => {
-                            const lineLower = line.toLowerCase();
-                            const matchedTeacher = (appData.membersData || []).find(m => lineLower.includes(m.name.toLowerCase().trim()));
-                            if (matchedTeacher || lineLower.includes('sinh') || lineLower.includes('công nghệ')) {
-                                lessons.push({
-                                    day: 'Theo Lịch',
-                                    lesson: 'N/A',
-                                    subject: 'Sinh / CN',
-                                    classRoom: 'Theo phân công',
-                                    teacher: matchedTeacher ? matchedTeacher.name : 'GV Tổ Sinh - CN'
-                                });
-                            }
-                        });
-                        resolve(lessons);
-                    }).catch(() => resolve([]));
                 };
                 reader.readAsArrayBuffer(file);
             } else {
@@ -1057,15 +1100,14 @@
         });
     }
 
-    // Xử lý tất cả các file TKB đã chọn
     async function processMultipleSchoolTkbFiles() {
         const fileInput = document.getElementById('importTkbFileInput');
         const option = document.getElementById('importTkbOption').value;
 
-        if (!fileInput.files || fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 File TKB toàn trường!');
+        if (!fileInput.files || fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 File TKB!');
 
         const files = Array.from(fileInput.files);
-        alert(`Đang tiến hành xử lý và chắt lọc dữ liệu từ ${files.length} file đã chọn...`);
+        alert(`Hệ thống đang quét và trích xuất TKB chính xác cho Giáo viên trong Tổ từ ${files.length} file...`);
 
         let allExtractedLessons = [];
 
@@ -1083,10 +1125,10 @@
 
         saveDataToCloud();
         closeModal('importTkbModal');
-        alert(`Hoàn tất! Đã tổng hợp thành công ${allExtractedLessons.length} tiết dạy của Tổ Sinh - CN từ ${files.length} file đã chọn!`);
+        alert(`Hoàn tất! Đã trích xuất chính xác ${allExtractedLessons.length} tiết dạy của Giáo viên trong Tổ.`);
     }
 
-    // XỬ LÝ MODAL TKB THỦ CÔNG
+    // CÁC HÀM XỬ LÝ SỬA / XÓA KHÁC
     function openTkbModal(i = null) {
         document.getElementById('editTkbIndex').value = i !== null ? i : '';
         if (i !== null && appData.scheduleTasks) {
@@ -1131,7 +1173,6 @@
         }
     }
 
-    // CÁC HÀM XỬ LÝ MODAL KHÁC
     async function saveResource() {
         const idx = document.getElementById('editResIndex').value;
         const title = document.getElementById('inputResTitle').value;
