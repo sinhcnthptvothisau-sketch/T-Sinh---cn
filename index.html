@@ -540,7 +540,7 @@
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Cho Tổ</h3>
         <p style="font-size:0.85rem; color:var(--text-muted);">
-            Hệ thống sẽ đối chiếu với Tên trong Hồ Sơ Thành Viên. Đảm bảo tên trong danh sách trùng với tên hiển thị trên TKB (ví dụ: <i>Can, Vi, Trung Can</i>...).
+            Hệ thống tự động quét và lọc chính xác các dạng đặt tên trên TKB như: <b>Can-...</b>, <b>Duyên-...</b>, <b>Tuyền-...</b>, <b>Vi-...</b>, <b>Nghé-...</b>
         </p>
         <div class="import-box">
             <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
@@ -734,9 +734,13 @@
             title_docs: 'Văn Bản Lưu Trữ',
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
+        // Danh sách tự động bổ sung tên 5 giáo viên trong tổ
         membersData: [
-            { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung, Bồi dưỡng HSG 12', phone: '0912.345.678' },
-            { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy CN, Phụ trách BĐHSG CN', phone: '0987.654.321' }
+            { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
+            { name: 'Duyên', role: 'GV Sinh học', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
+            { name: 'Tuyền', role: 'GV Sinh / CN', duty: 'Giảng dạy môn Sinh/CN', phone: '0987.333.444' },
+            { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
+            { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
         imagesData: [],
         resourcesData: [],
@@ -1038,17 +1042,18 @@
         });
     }
 
-    // THUẬT TOÁN TRÍCH XUẤT THỜI KHÓA BIỂU ĐÃ ĐƯỢC TỐI ƯU HOÀN HẢO
+    // THUẬT TOÁN TRÍCH XUẤT THỜI KHÓA BIỂU XỬ LÝ ĐƯỢC TẤT CẢ DẠNG "Can-...", "Duyên-...", "Vi-..."
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
     function parseSingleTkbFile(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
+            // Lấy danh sách tên thành viên trong tổ
             const teachers = (appData.membersData || []).map(m => m.name.trim().toLowerCase()).filter(n => n !== '');
             let lessons = [];
 
             if (teachers.length === 0) {
-                alert('Chưa có danh sách Giáo viên trong Hồ Sơ Thành Viên! Vui lòng thêm tên các GV trước.');
+                alert('Chưa có danh sách Giáo viên trong Hồ Sơ Thành Viên! Vui lòng kiểm tra lại.');
                 return resolve([]);
             }
 
@@ -1065,16 +1070,23 @@
                             if (!row || row.length === 0) return;
                             row.forEach((cellVal, colIdx) => {
                                 if (cellVal) {
-                                    const strVal = String(cellVal).trim().toLowerCase();
-                                    
-                                    // Tìm kiếm linh hoạt: Ô chỉ cần CHỨA tên giáo viên trong tổ
-                                    const matchedIndex = teachers.findIndex(tName => strVal.includes(tName));
+                                    const strVal = String(cellVal).trim();
+                                    const strValLower = strVal.toLowerCase();
+
+                                    // Lấy phần tên trước các ký tự phân cách như -, _, khoảng trắng
+                                    // Ví dụ: "Can-Sinh" -> "can", "Duyên_CN" -> "duyên"
+                                    const prefixName = strValLower.split(/[-_ \(\.\,]/)[0].trim();
+
+                                    // Kiểm tra xem tên chính hoặc phần prefix có trùng với GV nào trong tổ không
+                                    const matchedIndex = teachers.findIndex(tName => 
+                                        prefixName === tName || strValLower.startsWith(tName) || strValLower.includes(tName)
+                                    );
 
                                     if (matchedIndex !== -1) {
                                         const originalTeacherName = appData.membersData[matchedIndex].name;
                                         let subject = 'Sinh / CN';
-                                        if (strVal.includes('sinh')) subject = 'Sinh học';
-                                        else if (strVal.includes('cn') || strVal.includes('công nghệ')) subject = 'Công nghệ';
+                                        if (strValLower.includes('sinh')) subject = 'Sinh học';
+                                        else if (strValLower.includes('cn') || strValLower.includes('công nghệ')) subject = 'Công nghệ';
 
                                         lessons.push({
                                             day: row[0] || 'Thứ 2',
@@ -1131,14 +1143,14 @@
         document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang phân tích ${files.length} file...`;
 
         for (let i = 0; i < files.length; i++) {
-            // Cho trình duyệt nghỉ 50ms để không bị đơ/treo ứng dụng
+            // Cho trình duyệt nghỉ 50ms để tránh tràn RAM/treo máy
             await new Promise(resolve => setTimeout(resolve, 50));
             const lessons = await parseSingleTkbFile(files[i]);
             allExtractedLessons = allExtractedLessons.concat(lessons);
         }
 
         if (allExtractedLessons.length === 0) {
-            alert('Không tìm thấy tiết dạy nào khớp với Tên Giáo Viên trong danh sách Hồ Sơ Thành Viên!\n\nLưu ý: Hãy kiểm tra mục "Hồ Sơ Thành Viên" xem tên giáo viên đã gõ đúng từ khóa trên TKB chưa (ví dụ: gõ "Can" thay vì "Thầy Trương Trung Can").');
+            alert('Không tìm thấy tiết dạy nào khớp với tên các Giáo viên trong danh sách Tổ!\n\nVui lòng kiểm tra lại bảng "Hồ Sơ Thành Viên" xem đã thêm đủ 5 giáo viên: Can, Duyên, Tuyền, Vi, Nghé chưa.');
             closeModal('importTkbModal');
             return;
         }
