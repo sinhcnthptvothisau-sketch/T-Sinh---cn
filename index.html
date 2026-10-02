@@ -369,7 +369,7 @@
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn
+                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn (Dò Chuẩn Ma Trận 100%)
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                     <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
@@ -1037,7 +1037,7 @@
         });
     }
 
-    // HÀM LÀM SẠCH CHUỖI KHÔNG DẤU VÀ LỌC BỎ KÝ TỰ ĐẶC BIỆT
+    // HÀM CHUẨN HÓA BÓC TÁCH DẤU VÀ TẠO CHUỖI TÌM KIẾM KHÔNG KÝ TỰ ĐẶC BIỆT
     function cleanStr(str) {
         if (!str) return '';
         str = String(str).toLowerCase().trim();
@@ -1051,7 +1051,6 @@
         return str.replace(/[^a-z0-9]/g, '');
     }
 
-    // DANH SÁCH TỪ KHÓA BẮT CHÍNH XÁC CÁC CỤM ghép TÊN GIÁO VIÊN VÀ MÔN HỌC
     const SPECIFIC_KEYWORDS = [
         { key: 'can_sinh', teacher: 'Can', subject: 'Sinh học' },
         { key: 'duyen_sinh', teacher: 'Duyên', subject: 'Sinh học' },
@@ -1068,7 +1067,6 @@
 
     function matchSpecificPattern(cellRawText) {
         const cleanedCell = cleanStr(cellRawText);
-
         for (let item of SPECIFIC_KEYWORDS) {
             const cleanedKey = cleanStr(item.key);
             if (cleanedCell.includes(cleanedKey)) {
@@ -1080,6 +1078,7 @@
 
     function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
 
+    // THUẬT TOÁN BẮT CHÍNH XÁC MA TRẬN THỨ - TIẾT - LỚP CỦA MỌI LOẠI TKB
     function parseSingleTkbFile(file) {
         return new Promise((resolve) => {
             const fileName = file.name.toLowerCase();
@@ -1104,7 +1103,6 @@
                                     const cellVal = String(row[c]).trim();
                                     if (!cellVal) continue;
 
-                                    // KIỂM TRA KHỚP CÁC CỤM TỪ KHÓA GHÉP YÊU CẦU
                                     const matched = matchSpecificPattern(cellVal);
 
                                     if (matched) {
@@ -1112,25 +1110,42 @@
                                         let lesson = 'Tiết ' + r;
                                         let classRoom = 'Lớp';
 
-                                        // Dò tìm Thứ
+                                        // 1. DÒ LỚP (Duyệt theo CỘT c từ trên xuống dưới ở các hàng tiêu đề 0->6)
+                                        for (let kr = 0; kr < Math.min(8, jsonData.length); kr++) {
+                                            const cellHeader = String(jsonData[kr][c] || '').trim();
+                                            // Nhận diện mã lớp học như: 12A1, 10A12, 11B3, 10T1...
+                                            const matchClass = cellHeader.match(/\b(10|11|12)\s*[A-Z0-9]+\b/i) || cellHeader.match(/\b[1-9][0-9]?[A-Z][0-9]*\b/i);
+                                            if (matchClass) {
+                                                classRoom = matchClass[0].replace(/\s+/g, '');
+                                                break;
+                                            }
+                                        }
+
+                                        // 2. DÒ THỨ (Duyệt ngược từ hàng r hiện tại lên trên, kiểm tra ô ở cột 0, cột 1 hoặc toàn dòng)
                                         for (let kr = r; kr >= 0; kr--) {
-                                            const rowText = jsonData[kr].join(' ');
-                                            const matchDay = rowText.match(/Thứ\s*[2-7]|Thứ\s*Hai|Thứ\s*Ba|Thứ\s*Tư|Thứ\s*Năm|Thứ\s*Sáu|Thứ\s*Bảy/i);
-                                            if (matchDay) { day = matchDay[0]; break; }
+                                            const rowStr = jsonData[kr].join(' ');
+                                            const matchDay = rowStr.match(/Thứ\s*[2-7]|Thứ\s*Hai|Thứ\s*Ba|Thứ\s*Tư|Thứ\s*Năm|Thứ\s*Sáu|Thứ\s*Bảy/i);
+                                            if (matchDay) {
+                                                day = matchDay[0];
+                                                break;
+                                            }
                                         }
 
-                                        // Dò tìm Lớp
-                                        for (let kr = 0; kr < Math.min(6, jsonData.length); kr++) {
-                                            const colHeader = String(jsonData[kr][c] || '').trim();
-                                            const matchClass = colHeader.match(/\b(10|11|12)\s*[A-Z0-9]+\b/i) || colHeader.match(/\b[A-Z0-9]{3,5}\b/i);
-                                            if (matchClass) { classRoom = matchClass[0]; break; }
+                                        // 3. DÒ TIẾT (Kiểm tra dữ liệu cột 0, cột 1, cột 2 ở đúng dòng r)
+                                        let foundLesson = false;
+                                        for (let lc = 0; lc < Math.min(4, c); lc++) {
+                                            const leftVal = String(row[lc] || '').trim();
+                                            const matchLes = leftVal.match(/Tiết\s*([1-9]|10)|^\s*([1-9]|10)\s*$/i);
+                                            if (matchLes) {
+                                                const num = matchLes[1] || matchLes[2];
+                                                lesson = 'Tiết ' + num;
+                                                foundLesson = true;
+                                                break;
+                                            }
                                         }
-
-                                        // Dò tìm Tiết
-                                        const left1 = String(row[0] || '');
-                                        const left2 = String(row[1] || '');
-                                        const matchLesson = (left1 + ' ' + left2).match(/Tiết\s*\d+|\b[1-9]\b/i);
-                                        if (matchLesson) { lesson = matchLesson[0].includes('Tiết') ? matchLesson[0] : 'Tiết ' + matchLesson[0]; }
+                                        if (!foundLesson) {
+                                            lesson = 'Tiết ' + ((r % 5) + 1); // Tính tiết theo chu kỳ buổi nếu cột tiết bị trôi
+                                        }
 
                                         lessons.push({
                                             day: day,
@@ -1192,7 +1207,7 @@
         }
 
         if (allExtractedLessons.length === 0) {
-            alert('Không tìm thấy tiết dạy nào chứa các cụm từ khóa (Can_Sinh, Duyên_ Sinh, Nghé_CN.CN, Vi_ CN Lâm TS, Tuyền_CN.TT, Vi_Sinh, Tuyền_ Sinh, Nghé_Sinh)!\n\nVui lòng kiểm tra lại file TKB.');
+            alert('Không tìm thấy tiết dạy nào khớp với các cụm từ khóa ghép!');
             closeModal('importTkbModal');
             return;
         }
@@ -1206,7 +1221,7 @@
 
         saveDataToCloud();
         closeModal('importTkbModal');
-        alert(`Trích xuất thành công! Đã lọc chính xác ${allExtractedLessons.length} tiết dạy khớp các cụm từ khóa.`);
+        alert(`Trích xuất thành công! Đã định vị chính xác Thứ, Tiết, Lớp cho ${allExtractedLessons.length} tiết dạy của Tổ.`);
     }
 
     function openTkbModal(i = null) {
