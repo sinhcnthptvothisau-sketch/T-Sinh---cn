@@ -7,10 +7,6 @@
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Thư viện đọc file Excel, Word -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -288,7 +284,6 @@
             padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
         .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
-        .import-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--cyan-accent); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
     </style>
@@ -351,7 +346,7 @@
         </div>
     </section>
 
-    <!-- MỤC MỚI THÊM: HỒ SƠ TỔ CHUYÊN MÔN -->
+    <!-- HỒ SƠ TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -419,41 +414,8 @@
             </h2>
         </div>
 
-        <!-- THỜI KHÓA BIỂU TỔ CHUYÊN MÔN -->
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-            <div class="card-header-flex">
-                <div class="sub-section-title">
-                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn
-                </div>
-                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                    <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
-                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('scheduleTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTkbModal()"><i class="fa-solid fa-plus"></i> Thêm Tiết Dạy</button>
-                    <button class="btn btn-outline btn-sm admin-btn" onclick="openImportTkbModal()">
-                        <i class="fa-solid fa-folder-open" style="color:var(--accent-gold);"></i> Tải & Lọc Từ Nhiều File TKB
-                    </button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'tkbTableBody')"></th>
-                            <th>Thứ</th>
-                            <th>Tiết</th>
-                            <th>Môn Học</th>
-                            <th>Lớp</th>
-                            <th>Giáo Viên Giảng Dạy</th>
-                            <th class="admin-col">Thao Tác</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tkbTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- DẠY LỚP & CHỦ NHIỆM -->
-        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
@@ -633,31 +595,6 @@
     </div>
 </div>
 
-<!-- MODAL CẮT VÀ LỌC THỜI KHÓA BIỂU -->
-<div class="modal" id="importTkbModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-layer-group me-2"></i> Trích Xuất & Lọc TKB Từ Thứ 2 đến Thứ 6</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted);">
-            Tự động bóc tách các từ khóa ghép: <b>Can_Sinh</b>, <b>Duyên_ Sinh</b>, <b>Nghé_CN.CN</b>, <b>Vi_ CN Lâm TS</b>, <b>Tuyền_CN.TT</b>, <b>Vi_Sinh</b>, <b>Tuyền_ Sinh</b>, <b>Nghé_Sinh</b>.
-        </p>
-        <div class="import-box">
-            <div class="form-group"><label>1. Chọn File TKB (.xlsx, .xls, .docx)</label>
-                <input type="file" id="importTkbFileInput" class="form-control" accept=".xlsx, .xls, .docx" multiple>
-            </div>
-            <div class="form-group" style="margin-top:0.8rem;"><label>2. Lựa chọn xử lý dữ liệu</label>
-                <select id="importTkbOption" class="form-control">
-                    <option value="replace">Ghi đè (Xóa TKB cũ và thay bằng TKB mới)</option>
-                    <option value="append">Thêm nối tiếp vào TKB hiện tại</option>
-                </select>
-            </div>
-        </div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
-            <button class="btn btn-outline" onclick="closeModal('importTkbModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="processMultipleSchoolTkbFiles()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Lọc TKB</button>
-        </div>
-    </div>
-</div>
-
 <!-- MODAL THÀNH VIÊN TỔ -->
 <div class="modal" id="memberModal">
     <div class="modal-content">
@@ -670,32 +607,6 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('memberModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveMember()">Lưu Thông Tin</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL TKB -->
-<div class="modal" id="tkbModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);">Thời Khóa Biểu Tiết Dạy</h3>
-        <input type="hidden" id="editTkbIndex">
-        <div class="form-group"><label>Thứ</label>
-            <select id="inputTkbDay" class="form-control">
-                <option value="Thứ 2">Thứ 2</option>
-                <option value="Thứ 3">Thứ 3</option>
-                <option value="Thứ 4">Thứ 4</option>
-                <option value="Thứ 5">Thứ 5</option>
-                <option value="Thứ 6">Thứ 6</option>
-                <option value="Thứ 7">Thứ 7</option>
-            </select>
-        </div>
-        <div class="form-group"><label>Tiết dạy</label><input type="text" id="inputTkbLesson" class="form-control" placeholder="Ví dụ: Tiết 1 hoặc 1, 2"></div>
-        <div class="form-group"><label>Môn học</label><input type="text" id="inputTkbSubject" class="form-control"></div>
-        <div class="form-group"><label>Lớp dạy</label><input type="text" id="inputTkbClass" class="form-control"></div>
-        <div class="form-group"><label>Giáo viên giảng dạy</label><input type="text" id="inputTkbTeacher" class="form-control"></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('tkbModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveTkb()">Lưu Tiết Dạy</button>
         </div>
     </div>
 </div>
@@ -847,7 +758,6 @@
         imagesData: [],
         resourcesData: [],
         docsData: [],
-        scheduleTasks: [],
         teachingTasks: [],
         hsgTasks: [],
         competitionTasks: []
@@ -1052,7 +962,6 @@
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
-        else if (dataKey === 'scheduleTasks') tbodyId = 'tkbTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
         else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
@@ -1152,27 +1061,6 @@
     }
 
     function renderTasks() {
-        const filterTkb = (document.getElementById('filterTkb')?.value || '').toLowerCase();
-        const tbodyTkb = document.getElementById('tkbTableBody');
-        tbodyTkb.innerHTML = '';
-        (appData.scheduleTasks || []).forEach((item, i) => {
-            if (filterTkb && !item.teacher.toLowerCase().includes(filterTkb) && !item.classRoom.toLowerCase().includes(filterTkb) && !item.subject.toLowerCase().includes(filterTkb)) return;
-            tbodyTkb.innerHTML += `
-                <tr>
-                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td><strong style="color:var(--accent-gold);">${item.day}</strong></td>
-                    <td>${item.lesson}</td>
-                    <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
-                    <td><span class="badge badge-warning">${item.classRoom}</span></td>
-                    <td><strong>${item.teacher}</strong></td>
-                    <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openTkbModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTkb(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </td>
-                </tr>
-            `;
-        });
-
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
         tbodyTeach.innerHTML = '';
@@ -1236,262 +1124,6 @@
                 </tr>
             `;
         });
-    }
-
-    function cleanStr(str) {
-        if (!str) return '';
-        str = String(str).toLowerCase().trim();
-        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
-        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
-        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
-        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
-        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
-        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
-        str = str.replace(/đ/g, "d");
-        return str.replace(/[^a-z0-9]/g, '');
-    }
-
-    const SPECIFIC_KEYWORDS = [
-        { key: 'can_sinh', teacher: 'Can', subject: 'Sinh học' },
-        { key: 'duyen_sinh', teacher: 'Duyên', subject: 'Sinh học' },
-        { key: 'nghe_cn.cn', teacher: 'Nghé', subject: 'CN.CN' },
-        { key: 'nghe_cncn', teacher: 'Nghé', subject: 'CN.CN' },
-        { key: 'vi_cn lam ts', teacher: 'Vi', subject: 'CN Lâm TS' },
-        { key: 'vi_cnlamts', teacher: 'Vi', subject: 'CN Lâm TS' },
-        { key: 'tuyen_cn.tt', teacher: 'Tuyền', subject: 'CN.TT' },
-        { key: 'tuyen_cntt', teacher: 'Tuyền', subject: 'CN.TT' },
-        { key: 'vi_sinh', teacher: 'Vi', subject: 'Sinh học' },
-        { key: 'tuyen_sinh', teacher: 'Tuyền', subject: 'Sinh học' },
-        { key: 'nghe_sinh', teacher: 'Nghé', subject: 'Sinh học' }
-    ];
-
-    function matchSpecificPattern(cellRawText) {
-        const cleanedCell = cleanStr(cellRawText);
-        for (let item of SPECIFIC_KEYWORDS) {
-            const cleanedKey = cleanStr(item.key);
-            if (cleanedCell.includes(cleanedKey)) {
-                return { teacher: item.teacher, subject: item.subject };
-            }
-        }
-        return null;
-    }
-
-    function detectDayFromText(text) {
-        if (!text) return null;
-        const str = String(text).toLowerCase();
-        if (/thứ\s*2|thứ\s*hai|\b2\b/i.test(str) && str.includes('thứ')) return 'Thứ 2';
-        if (/thứ\s*3|thứ\s*ba|\b3\b/i.test(str) && str.includes('thứ')) return 'Thứ 3';
-        if (/thứ\s*4|thứ\s*tư|\b4\b/i.test(str) && str.includes('thứ')) return 'Thứ 4';
-        if (/thứ\s*5|thứ\s*năm|\b5\b/i.test(str) && str.includes('thứ')) return 'Thứ 5';
-        if (/thứ\s*6|thứ\s*sáu|\b6\b/i.test(str) && str.includes('thứ')) return 'Thứ 6';
-        if (/thứ\s*7|thứ\s*bảy|\b7\b/i.test(str) && str.includes('thứ')) return 'Thứ 7';
-        return null;
-    }
-
-    function openImportTkbModal() { document.getElementById('importTkbModal').style.display = 'flex'; }
-
-    function parseSingleTkbFile(file) {
-        return new Promise((resolve) => {
-            const fileName = file.name.toLowerCase();
-            let lessons = [];
-
-            if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, {type: 'array'});
-                        
-                        workbook.SheetNames.forEach(sheetName => {
-                            const sheet = workbook.Sheets[sheetName];
-                            const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1, defval: ''});
-
-                            if (jsonData.length === 0) return;
-
-                            let maxCols = 0;
-                            jsonData.forEach(r => maxCols = Math.max(maxCols, r.length));
-
-                            let grid = Array.from({ length: jsonData.length }, () => Array(maxCols).fill(''));
-                            for (let r = 0; r < jsonData.length; r++) {
-                                for (let c = 0; c < jsonData[r].length; c++) {
-                                    grid[r][c] = String(jsonData[r][c] || '').trim();
-                                }
-                            }
-
-                            let dayRanges = [];
-                            for (let r = 0; r < grid.length; r++) {
-                                for (let c = 0; c < Math.min(5, maxCols); c++) {
-                                    const dayFound = detectDayFromText(grid[r][c]);
-                                    if (dayFound) {
-                                        dayRanges.push({ day: dayFound, startRow: r });
-                                        break;
-                                    }
-                                }
-                            }
-
-                            dayRanges.sort((a, b) => a.startRow - b.startRow);
-                            for (let i = 0; i < dayRanges.length; i++) {
-                                dayRanges[i].endRow = (i < dayRanges.length - 1) ? dayRanges[i + 1].startRow - 1 : grid.length - 1;
-                            }
-
-                            for (let r = 0; r < grid.length; r++) {
-                                for (let c = 0; c < maxCols; c++) {
-                                    const cellVal = grid[r][c];
-                                    if (!cellVal) continue;
-
-                                    const matched = matchSpecificPattern(cellVal);
-                                    if (matched) {
-                                        let day = 'Thứ 2';
-                                        const foundRange = dayRanges.find(range => r >= range.startRow && r <= range.endRow);
-                                        if (foundRange) {
-                                            day = foundRange.day;
-                                        }
-
-                                        let lesson = 'Tiết 1';
-                                        let classRoom = 'Lớp';
-
-                                        for (let kr = 0; kr < Math.min(10, grid.length); kr++) {
-                                            const headerVal = grid[kr][c];
-                                            const matchClass = headerVal.match(/\b(10|11|12)\s*[A-Z0-9]+\b/i) || headerVal.match(/\b[1-9][0-9]?[A-Z][0-9]*\b/i);
-                                            if (matchClass) {
-                                                classRoom = matchClass[0].replace(/\s+/g, '');
-                                                break;
-                                            }
-                                        }
-
-                                        for (let kc = 0; kc < c; kc++) {
-                                            const val = grid[r][kc];
-                                            const matchLes = val.match(/Tiết\s*([1-9]|10)|^\s*([1-9]|10)\s*$/i);
-                                            if (matchLes) {
-                                                const lesNum = matchLes[1] || matchLes[2];
-                                                lesson = 'Tiết ' + lesNum;
-                                                break;
-                                            }
-                                        }
-
-                                        lessons.push({
-                                            day: day,
-                                            lesson: lesson,
-                                            subject: matched.subject,
-                                            classRoom: classRoom,
-                                            teacher: matched.teacher
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    } catch(err) { console.error('Lỗi đọc Excel:', err); }
-                    resolve(lessons);
-                };
-                reader.readAsArrayBuffer(file);
-            } else if (fileName.endsWith('.docx')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mammoth.extractRawText({arrayBuffer: e.target.result}).then(function(result) {
-                        const lines = result.value.split('\n');
-                        let currentDay = 'Thứ 2';
-                        lines.forEach(line => {
-                            const detectedDay = detectDayFromText(line);
-                            if (detectedDay) currentDay = detectedDay;
-
-                            const matched = matchSpecificPattern(line);
-                            if (matched) {
-                                lessons.push({
-                                    day: currentDay,
-                                    lesson: 'Theo Lịch',
-                                    subject: matched.subject,
-                                    classRoom: 'Theo phân công',
-                                    teacher: matched.teacher
-                                });
-                            }
-                        });
-                        resolve(lessons);
-                    }).catch(() => resolve([]));
-                };
-                reader.readAsArrayBuffer(file);
-            } else {
-                resolve([]);
-            }
-        });
-    }
-
-    async function processMultipleSchoolTkbFiles() {
-        const fileInput = document.getElementById('importTkbFileInput');
-        const option = document.getElementById('importTkbOption').value;
-
-        if (!fileInput.files || fileInput.files.length === 0) return alert('Vui lòng chọn ít nhất 1 File TKB!');
-
-        const files = Array.from(fileInput.files);
-        let allExtractedLessons = [];
-
-        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang phân tích ${files.length} file...`;
-
-        for (let i = 0; i < files.length; i++) {
-            await new Promise(resolve => setTimeout(resolve, 50));
-            const lessons = await parseSingleTkbFile(files[i]);
-            allExtractedLessons = allExtractedLessons.concat(lessons);
-        }
-
-        if (allExtractedLessons.length === 0) {
-            alert('Không tìm thấy tiết dạy nào khớp với các cụm từ khóa ghép!');
-            closeModal('importTkbModal');
-            return;
-        }
-
-        if (option === 'replace') {
-            appData.scheduleTasks = allExtractedLessons;
-        } else {
-            if (!appData.scheduleTasks) appData.scheduleTasks = [];
-            appData.scheduleTasks = appData.scheduleTasks.concat(allExtractedLessons);
-        }
-
-        saveDataToCloud();
-        closeModal('importTkbModal');
-        alert(`Trích xuất thành công! Đã chia chính xác Thứ 2 đến Thứ 6 cho ${allExtractedLessons.length} tiết dạy.`);
-    }
-
-    function openTkbModal(i = null) {
-        document.getElementById('editTkbIndex').value = i !== null ? i : '';
-        if (i !== null && appData.scheduleTasks) {
-            document.getElementById('inputTkbDay').value = appData.scheduleTasks[i].day;
-            document.getElementById('inputTkbLesson').value = appData.scheduleTasks[i].lesson;
-            document.getElementById('inputTkbSubject').value = appData.scheduleTasks[i].subject;
-            document.getElementById('inputTkbClass').value = appData.scheduleTasks[i].classRoom;
-            document.getElementById('inputTkbTeacher').value = appData.scheduleTasks[i].teacher;
-        } else {
-            document.getElementById('inputTkbLesson').value = '';
-            document.getElementById('inputTkbSubject').value = '';
-            document.getElementById('inputTkbClass').value = '';
-            document.getElementById('inputTkbTeacher').value = '';
-        }
-        document.getElementById('tkbModal').style.display = 'flex';
-    }
-
-    function saveTkb() {
-        const idx = document.getElementById('editTkbIndex').value;
-        const day = document.getElementById('inputTkbDay').value;
-        const lesson = document.getElementById('inputTkbLesson').value;
-        const subject = document.getElementById('inputTkbSubject').value;
-        const classRoom = document.getElementById('inputTkbClass').value;
-        const teacher = document.getElementById('inputTkbTeacher').value;
-
-        if (!lesson || !teacher) return alert('Nhập đầy đủ thông tin tiết dạy!');
-
-        const tkbObj = { day, lesson, subject, classRoom, teacher };
-        if (!appData.scheduleTasks) appData.scheduleTasks = [];
-
-        if (idx !== '') appData.scheduleTasks[idx] = tkbObj;
-        else appData.scheduleTasks.push(tkbObj);
-
-        saveDataToCloud();
-        closeModal('tkbModal');
-    }
-
-    function deleteTkb(i) {
-        if (confirm('Xóa tiết dạy này khỏi TKB?')) {
-            appData.scheduleTasks.splice(i, 1);
-            saveDataToCloud();
-        }
     }
 
     async function saveResource() {
