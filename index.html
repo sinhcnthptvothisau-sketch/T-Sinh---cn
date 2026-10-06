@@ -248,16 +248,6 @@
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
 
-        .intro-text-box {
-            line-height: 1.7;
-            font-size: 1rem;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--border-glow);
-            padding: 1.2rem;
-            border-radius: 16px;
-        }
-
         .resource-grid, .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
         }
@@ -332,50 +322,6 @@
         <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
     </header>
 
-    <!-- MỤC 1: GIỚI THIỆU TỔ CHUYÊN MÔN -->
-    <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-circle-info"></i> <span id="title_intro">Giới Thiệu Tổ Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_intro')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <button class="btn btn-gold admin-btn" onclick="openIntroModal()"><i class="fa-solid fa-pen"></i> Chỉnh Sửa Giới Thiệu</button>
-        </div>
-        <div class="intro-text-box" id="displayIntroContent">
-            Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.
-        </div>
-    </section>
-
-    <!-- MỤC 2: HỒ SƠ TỔ CHUYÊN MÔN (ĐẶT NGAY DƯỚI MỤC GIỚI THIỆU) -->
-    <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Tổ Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center;">
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('profilesData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold admin-btn" onclick="openProfileModal()"><i class="fa-solid fa-plus"></i> Thêm Hồ Sơ Tổ</button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'profileTableBody')"></th>
-                        <th>Tên Hồ Sơ / Kế Hoạch</th>
-                        <th>Phân Loại</th>
-                        <th>Năm Học / Thời Gian</th>
-                        <th>Trạng Thái / Ghi Chú</th>
-                        <th>File / Link Đính Kèm</th>
-                        <th class="admin-col">Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="profileTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
     <!-- HỒ SƠ THÀNH VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
@@ -405,7 +351,7 @@
         </div>
     </section>
 
-    <!-- QUẢN LÝ HỌP TỔ CHUYÊN MÔN -->
+    <!-- MỤC MỚI: QUẢN LÝ HỌP TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -581,50 +527,6 @@
     </section>
 </div>
 
-<!-- MODAL GIỚI THIỆU TỔ -->
-<div class="modal" id="introModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-circle-info me-2"></i> Giới Thiệu Tổ Chuyên Môn</h3>
-        <div class="form-group">
-            <label>Nội dung giới thiệu tổ chuyên môn</label>
-            <textarea id="inputIntroText" class="form-control" rows="6"></textarea>
-        </div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('introModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveIntroContent()">Lưu Giới Thiệu</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL HỒ SƠ TỔ CHUYÊN MÔN -->
-<div class="modal" id="profileModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-folder-tree me-2"></i> Hồ Sơ Tổ Chuyên Môn</h3>
-        <input type="hidden" id="editProfileIndex">
-        <div class="form-group"><label>1. Tên Hồ Sơ / Kế Hoạch</label><input type="text" id="inputProfileTitle" class="form-control" placeholder="Ví dụ: Kế hoạch giáo dục tổ Sinh-CN"></div>
-        <div class="form-group"><label>2. Phân loại hồ sơ</label>
-            <select id="inputProfileCategory" class="form-control">
-                <option value="Kế hoạch năm học">Kế hoạch năm học</option>
-                <option value="Quyết định thành lập">Quyết định thành lập</option>
-                <option value="Hồ sơ Bồi dưỡng chuyên môn">Hồ sơ Bồi dưỡng chuyên môn</option>
-                <option value="Hồ sơ Kiểm tra nội bộ">Hồ sơ Kiểm tra nội bộ</option>
-                <option value="Báo cáo tổng kết">Báo cáo tổng kết</option>
-            </select>
-        </div>
-        <div class="form-group"><label>3. Năm học / Thời gian áp dụng</label><input type="text" id="inputProfileYear" class="form-control" placeholder="Ví dụ: 2026 - 2027"></div>
-        <div class="form-group"><label>4. Ghi chú / Trạng thái</label><input type="text" id="inputProfileNote" class="form-control" placeholder="Ví dụ: Đã phê duyệt / Đang cập nhật"></div>
-        
-        <div class="form-group"><label>5. FILE HỒ SƠ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputProfileFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputProfileLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('profileModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveProfile()">Lưu Hồ Sơ</button>
-        </div>
-    </div>
-</div>
-
 <!-- MODAL HỌP TỔ CHUYÊN MÔN -->
 <div class="modal" id="meetingModal">
     <div class="modal-content">
@@ -788,10 +690,7 @@
 
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
-        introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
-            title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_profile: 'Hồ Sơ Tổ Chuyên Môn',
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
             title_meetings: 'Quản Lý Họp Tổ Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
@@ -799,7 +698,6 @@
             title_docs: 'Văn Bản Lưu Trữ',
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
-        profilesData: [],
         membersData: [
             { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
             { name: 'Duyên', role: 'GV Sinh học', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
@@ -887,8 +785,6 @@
 
     function renderAll() {
         renderHeader();
-        renderIntro();
-        renderProfiles();
         renderSectionTitles();
         renderMembers();
         renderMeetings();
@@ -902,102 +798,6 @@
         document.getElementById('displaySchool').innerText = appData.headerData.school;
         document.getElementById('displayDept').innerText = appData.headerData.dept;
         document.getElementById('displayYear').innerHTML = `<i class="fa-solid fa-calendar-days me-1"></i> ${appData.headerData.year}`;
-    }
-
-    function renderIntro() {
-        if (appData.introText) {
-            document.getElementById('displayIntroContent').innerText = appData.introText;
-        }
-    }
-
-    function openIntroModal() {
-        document.getElementById('inputIntroText').value = appData.introText || '';
-        document.getElementById('introModal').style.display = 'flex';
-    }
-
-    function saveIntroContent() {
-        const text = document.getElementById('inputIntroText').value;
-        appData.introText = text;
-        saveDataToCloud();
-        closeModal('introModal');
-    }
-
-    function renderProfiles() {
-        const tbody = document.getElementById('profileTableBody');
-        tbody.innerHTML = '';
-        (appData.profilesData || []).forEach((item, i) => {
-            let fileHtml = item.link && item.link.startsWith('http')
-                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Hồ Sơ</a>`
-                : (item.link || 'Chưa đính kèm');
-
-            tbody.innerHTML += `
-                <tr>
-                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td><strong style="color:var(--accent-gold);">${item.title}</strong></td>
-                    <td><span class="badge badge-warning">${item.category}</span></td>
-                    <td style="color:var(--cyan-accent); font-weight:600;">${item.year}</td>
-                    <td>${item.note}</td>
-                    <td>${fileHtml}</td>
-                    <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openProfileModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteProfile(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-
-    function openProfileModal(i = null) {
-        document.getElementById('editProfileIndex').value = i !== null ? i : '';
-        document.getElementById('inputProfileFile').value = '';
-        if (i !== null && appData.profilesData) {
-            document.getElementById('inputProfileTitle').value = appData.profilesData[i].title;
-            document.getElementById('inputProfileCategory').value = appData.profilesData[i].category;
-            document.getElementById('inputProfileYear').value = appData.profilesData[i].year;
-            document.getElementById('inputProfileNote').value = appData.profilesData[i].note;
-            document.getElementById('inputProfileLink').value = appData.profilesData[i].link;
-        } else {
-            document.getElementById('inputProfileTitle').value = '';
-            document.getElementById('inputProfileYear').value = '';
-            document.getElementById('inputProfileNote').value = '';
-            document.getElementById('inputProfileLink').value = '';
-        }
-        document.getElementById('profileModal').style.display = 'flex';
-    }
-
-    async function saveProfile() {
-        const idx = document.getElementById('editProfileIndex').value;
-        const title = document.getElementById('inputProfileTitle').value;
-        const category = document.getElementById('inputProfileCategory').value;
-        const year = document.getElementById('inputProfileYear').value;
-        const note = document.getElementById('inputProfileNote').value;
-        const fileInput = document.getElementById('inputProfileFile');
-        const linkInput = document.getElementById('inputProfileLink').value;
-
-        if (!title) return alert('Nhập tên hồ sơ / kế hoạch!');
-
-        if (!appData.profilesData) appData.profilesData = [];
-        let finalLink = linkInput || '';
-
-        if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file hồ sơ lên Firebase Storage...');
-            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
-            catch(e) { return alert('Lỗi tải file: ' + e.message); }
-        }
-
-        const profileObj = { title, category, year, note, link: finalLink };
-        if (idx !== '') appData.profilesData[idx] = profileObj;
-        else appData.profilesData.push(profileObj);
-
-        saveDataToCloud();
-        closeModal('profileModal');
-    }
-
-    function deleteProfile(i) {
-        if (confirm('Xóa hồ sơ này?')) {
-            appData.profilesData.splice(i, 1);
-            saveDataToCloud();
-        }
     }
 
     function renderSectionTitles() {
@@ -1015,7 +815,6 @@
     function deleteSelectedItems(dataKey) {
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
-        else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
         else if (dataKey === 'meetingsData') tbodyId = 'meetingTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
