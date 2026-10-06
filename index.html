@@ -71,4 +71,420 @@
         }
 
         .admin-bar {
-            background: rgba(
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .role-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--cyan-accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .admin-active .role-badge {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .sync-status {
+            font-size: 0.8rem;
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-select {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border-glow);
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .theme-select option { background: #0f172a; color: white; }
+
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-gold); }
+        input:checked + .slider:before { transform: translateX(22px); background-color: #0f172a; }
+
+        .header-card {
+            background: var(--card-gradient-1);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .department-name {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent-gold-bright);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--accent-gold-glow);
+            margin-bottom: 0.5rem;
+        }
+
+        .academic-year {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid var(--border-gold-glow);
+            color: var(--accent-gold);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .card-box {
+            background: var(--card-gradient-2);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-gold-bright);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sub-section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyan-accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3);
+        }
+
+        .edit-title-btn {
+            background: none; border: none; color: var(--cyan-accent); cursor: pointer;
+            font-size: 1rem; margin-left: 0.5rem; display: none;
+        }
+
+        .filter-input {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            outline: none;
+            width: 200px;
+        }
+
+        .admin-btn, .admin-col { display: none !important; }
+        .admin-active .edit-title-btn,
+        .admin-active .admin-btn { display: inline-flex !important; }
+        .admin-active .admin-col { display: table-cell !important; }
+
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; text-decoration: none;
+        }
+        .btn-gold { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #0f172a; }
+        .btn-gold:hover { transform: translateY(-2px); background: linear-gradient(135deg, #ffe600 0%, #f59e0b 100%); }
+        .btn-outline { background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.2); }
+        .btn-download { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
+        .btn-download:hover { background: rgba(16, 185, 129, 0.45); color: #ffffff; }
+        .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; border-radius: 8px; }
+        .btn-danger { background: var(--danger-color); color: white; }
+        .btn-edit { background: var(--cyan-accent); color: #0f172a; }
+
+        .table-responsive { overflow-x: auto; }
+        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .custom-table th {
+            padding: 1rem; text-align: left; font-size: 0.85rem; text-transform: uppercase;
+            color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-table td { padding: 1rem; background: rgba(255, 255, 255, 0.02); font-size: 0.95rem; }
+        .custom-table tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        .custom-table tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+        .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+        .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
+        .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+
+        .resource-grid, .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
+        }
+        .resource-card, .gallery-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem;
+        }
+        .resource-type { font-size: 0.75rem; font-weight: 700; color: var(--cyan-accent); text-transform: uppercase; }
+        .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
+            border-radius: 20px; width: 90%; max-width: 550px; display: flex; flex-direction: column; gap: 1rem;
+            max-height: 90vh; overflow-y: auto;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label { font-size: 0.85rem; color: var(--text-muted); }
+        .form-control {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem; border-radius: 10px; color: white; outline: none;
+        }
+        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
+        .import-box { background: rgba(56, 189, 248, 0.1); border: 1px dashed var(--cyan-accent); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
+        .checkbox-cell { width: 40px; text-align: center; }
+        .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="appContainer">
+    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
+    <div class="admin-bar">
+        <div>
+            <i class="fa-solid fa-user-shield me-2"></i>
+            <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fa-solid fa-palette" style="color: var(--accent-gold);"></i>
+                <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
+                    <option value="default">Giao diện: Tím Dạ Tước</option>
+                    <option value="ocean">Giao diện: Xanh Biển Sâu</option>
+                    <option value="black">Giao diện: Đen Huyền Bí</option>
+                </select>
+            </div>
+
+            <div class="sync-status" id="syncStatus">
+                <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối cơ sở dữ liệu...
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.8rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Tổ trưởng:</span>
+                <label class="switch">
+                    <input type="checkbox" id="adminToggle" onchange="toggleAdminMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER CARD -->
+    <header class="header-card">
+        <button class="btn btn-outline btn-sm admin-btn" style="position: absolute; right: 15px; top: 15px;" onclick="openHeaderModal()">
+            <i class="fa-solid fa-pen"></i> Sửa Header
+        </button>
+        <div class="school-name" id="displaySchool">TRƯỜNG THPT VÕ THỊ SÁU</div>
+        <h1 class="department-name" id="displayDept">TỔ SINH - CN</h1>
+        <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
+    </header>
+
+    <!-- HỒ SƠ THÀNH VIÊN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
+                        <th>Họ Và Tên</th>
+                        <th>Chức Vụ</th>
+                        <th>Nhiệm Vụ</th>
+                        <th>Liên Hệ / Zalo</th>
+                        <th class="admin-col">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+        </div>
+
+        <!-- THỜI KHÓA BIỂU TỔ CHUYÊN MÔN -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-calendar-days"></i> Thời Khóa Biểu Tổ Chuyên Môn (Định Vị Chuẩn Từ Thứ 2 Đến Thứ 6/7)
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                    <input type="text" class="filter-input" id="filterTkb" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('scheduleTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTkbModal()"><i class="fa-solid fa-plus"></i> Thêm Tiết Dạy</button>
+                    <button class="btn btn-outline btn-sm admin-btn" onclick="openImportTkbModal()">
+                        <i class="fa-solid fa-folder-open" style="color:var(--accent-gold);"></i> Tải & Lọc Từ Nhiều File TKB
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'tkbTableBody')"></th>
+                            <th>Thứ</th>
+                            <th>Tiết</th>
+                            <th>Môn Học</th>
+                            <th>Lớp</th>
+                            <th>Giáo Viên Giảng Dạy</th>
+                            <th class="admin-col">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tkbTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DẠY LỚP & CHỦ NHIỆM -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterTeach" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('teachingTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'teachingTaskTableBody')"></th>
+                            <th>Giáo viên</th>
+                            <th>Lớp phân công</th>
+                            <th>Nhiệm vụ cụ thể</th>
+                            <th>Trạng thái</th>
+                            <th class="admin-col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teachingTaskTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BỒI DƯỠNG HSG -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('hsgTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'hsgTaskTableBody')"></th>
+                            <th>Giáo viên bồi dưỡng</th>
+                            <th>Môn</th>
+                            <th>Nội dung / Kế hoạch</th>
+                            <th>Danh sách đội tuyển</th>
+                            <th class="admin-col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hsgTaskTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ĐĂNG KÝ THI ĐỦA -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-trophy"></i> Đăng Ký Phong Trào Thi Đua
+                </div>
+                <div style="display:flex; gap:0.5rem;">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('competitionTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('thi_dua')"><i class="fa-solid fa-plus"></i> Thêm Đăng Ký Thi Đua</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'competitionTaskTableBody')"></th>
+                            <th>Cá nhân</th>
+                            <th>Phong trào</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Trạng thái</th>
+                            <th class="admin-col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="competitionTaskTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- HÌNH ẢNH HOẠT ĐỘNG -->
+    <section class="card-box">
+        <div class="card
