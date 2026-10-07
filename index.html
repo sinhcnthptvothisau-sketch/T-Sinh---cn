@@ -70,22 +70,33 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
             border-radius: 20px;
-            padding: 0.8rem 1.5rem;
+            padding: 0.6rem 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .admin-bar-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
         }
 
         .role-badge {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            padding: 0.3rem 0.8rem;
+            padding: 0.25rem 0.7rem;
             border-radius: 20px;
             background: rgba(56, 189, 248, 0.15);
             color: var(--cyan-accent);
             border: 1px solid rgba(56, 189, 248, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
         .admin-active .role-badge {
@@ -95,37 +106,37 @@
         }
 
         .sync-status {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--success-color);
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
         .theme-select {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid var(--border-glow);
-            padding: 0.35rem 0.8rem;
+            padding: 0.25rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             outline: none;
             cursor: pointer;
         }
         .theme-select option { background: #0f172a; color: white; }
 
-        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {
             position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #475569; transition: .4s; border-radius: 34px;
         }
         .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
             background-color: white; transition: .4s; border-radius: 50%;
         }
         input:checked + .slider { background-color: var(--accent-gold); }
-        input:checked + .slider:before { transform: translateX(22px); background-color: #0f172a; }
+        input:checked + .slider:before { transform: translateX(20px); background-color: #0f172a; }
 
         .header-card {
             background: var(--card-gradient-1);
@@ -257,6 +268,7 @@
         .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+        .badge-cyan { background: rgba(56, 189, 248, 0.15); color: var(--cyan-accent); border: 1px solid rgba(56, 189, 248, 0.3); }
 
         .resource-grid, .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
@@ -293,27 +305,22 @@
 <div class="container" id="appContainer">
     <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
     <div class="admin-bar">
-        <div>
-            <i class="fa-solid fa-user-shield me-2"></i>
-            <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
+        <div class="admin-bar-group">
+            <span class="role-badge" id="roleBadge"><i class="fa-solid fa-user-shield"></i> <span id="roleText">Chế độ Xem / Tải File</span></span>
+            <div class="sync-status" id="syncStatus">
+                <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối...
+            </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 0.4rem;">
-                <i class="fa-solid fa-palette" style="color: var(--accent-gold);"></i>
-                <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
-                    <option value="default">Giao diện: Tím Dạ Tước</option>
-                    <option value="ocean">Giao diện: Xanh Biển Sâu</option>
-                    <option value="black">Giao diện: Đen Huyền Bí</option>
-                </select>
-            </div>
+        <div class="admin-bar-group">
+            <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
+                <option value="default">Giao diện: Tím Dạ Tước</option>
+                <option value="ocean">Giao diện: Xanh Biển Sâu</option>
+                <option value="black">Giao diện: Đen Huyền Bí</option>
+            </select>
 
-            <div class="sync-status" id="syncStatus">
-                <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối cơ sở dữ liệu...
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.8rem;">
-                <span style="font-size: 0.85rem; color: var(--text-muted);">Tổ trưởng:</span>
+            <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.6rem;">
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Tổ trưởng:</span>
                 <label class="switch">
                     <input type="checkbox" id="adminToggle" onchange="toggleAdminMode()">
                     <span class="slider"></span>
@@ -401,6 +408,36 @@
                     </tr>
                 </thead>
                 <tbody id="memberTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- MỤC MỚI: CHUYÊN ĐỀ CHUYÊN MÔN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-book-open-reader"></i> <span id="title_topics">Chuyên Đề Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_topics')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('topicsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold admin-btn" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'topicTableBody')"></th>
+                        <th>Tên Chuyên Đề</th>
+                        <th>Loại Chuyên Đề</th>
+                        <th>Người Thực Hiện / Phụ Trách</th>
+                        <th>Thời Gian / Lớp Áp Dụng</th>
+                        <th>Tài Liệu / File Đính Kèm</th>
+                        <th class="admin-col">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="topicTableBody"></tbody>
             </table>
         </div>
     </section>
@@ -595,6 +632,34 @@
     </div>
 </div>
 
+<!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN -->
+<div class="modal" id="topicModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn</h3>
+        <input type="hidden" id="editTopicIndex">
+        <div class="form-group"><label>1. Tên Chuyên Đề / Bài Học</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Dạy học STEM - Chế tạo Kính hiển vi đơn giản"></div>
+        <div class="form-group"><label>2. Loại Chuyên Đề</label>
+            <select id="inputTopicCategory" class="form-control">
+                <option value="Nghiên cứu bài học">Nghiên cứu bài học</option>
+                <option value="STEM / STEAM">STEM / STEAM</option>
+                <option value="Ứng dụng AI trong giảng dạy">Ứng dụng AI trong giảng dạy</option>
+                <option value="Chuyên đề khác">Chuyên đề khác</option>
+            </select>
+        </div>
+        <div class="form-group"><label>3. Người Thực Hiện / Phụ Trách</label><input type="text" id="inputTopicAuthor" class="form-control" placeholder="Ví dụ: Cô Duyên, Thầy Can"></div>
+        <div class="form-group"><label>4. Thời Gian / Lớp Áp Dụng</label><input type="text" id="inputTopicTime" class="form-control" placeholder="Ví dụ: Học kỳ 1 - Lớp 11A1"></div>
+        
+        <div class="form-group"><label>5. TÀI LIỆU CHUYÊN ĐỀ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL THÀNH VIÊN TỔ -->
 <div class="modal" id="memberModal">
     <div class="modal-content">
@@ -742,6 +807,7 @@
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
             title_profile: 'Hồ Sơ Tổ Chuyên Môn',
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
+            title_topics: 'Chuyên Đề Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
@@ -755,6 +821,7 @@
             { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
             { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
+        topicsData: [],
         imagesData: [],
         resourcesData: [],
         docsData: [],
@@ -768,19 +835,19 @@
         if (val) {
             appData = val;
             renderAll();
-            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã đồng bộ từ đám mây`;
+            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối`;
         } else {
             saveDataToCloud();
         }
     });
 
     function saveDataToCloud() {
-        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang đồng bộ...`;
+        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
         db.ref('to_sinh_cn_data').set(appData, (error) => {
             if (error) {
-                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--danger-color);"></i> Lỗi đồng bộ`;
+                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--danger-color);"></i> Lỗi lưu`;
             } else {
-                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã đồng bộ thành công!`;
+                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối`;
             }
         });
     }
@@ -806,23 +873,23 @@
     function toggleAdminMode() {
         const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
-        const roleBadge = document.getElementById('roleBadge');
+        const roleText = document.getElementById('roleText');
         
         if (toggleInput.checked) {
             const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa:');
             if (pass === ADMIN_PASSWORD) {
                 container.classList.add('admin-active');
-                roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
+                roleText.innerText = 'Chế độ Tổ trưởng';
                 alert('Xác thực thành công!');
             } else {
                 if (pass !== null) alert('Mật khẩu sai!');
                 toggleInput.checked = false;
                 container.classList.remove('admin-active');
-                roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
+                roleText.innerText = 'Chế độ Xem / Tải File';
             }
         } else {
             container.classList.remove('admin-active');
-            roleBadge.innerText = 'Chế độ Xem / Tải File (Dành cho Giáo viên)';
+            roleText.innerText = 'Chế độ Xem / Tải File';
         }
     }
 
@@ -836,6 +903,7 @@
         renderHeader();
         renderIntro();
         renderProfiles();
+        renderTopics();
         renderSectionTitles();
         renderMembers();
         renderImages();
@@ -946,6 +1014,89 @@
         }
     }
 
+    /* RENDER CHUYÊN ĐỀ CHUYÊN MÔN */
+    function renderTopics() {
+        const tbody = document.getElementById('topicTableBody');
+        tbody.innerHTML = '';
+        (appData.topicsData || []).forEach((item, i) => {
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            let badgeClass = 'badge-cyan';
+            if (item.category === 'STEM / STEAM') badgeClass = 'badge-warning';
+            if (item.category === 'Ứng dụng AI trong giảng dạy') badgeClass = 'badge-success';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.title}</strong></td>
+                    <td><span class="badge ${badgeClass}">${item.category}</span></td>
+                    <td><strong>${item.author}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.time}</td>
+                    <td>${fileHtml}</td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openTopicModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTopic(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function openTopicModal(i = null) {
+        document.getElementById('editTopicIndex').value = i !== null ? i : '';
+        document.getElementById('inputTopicFile').value = '';
+        if (i !== null && appData.topicsData) {
+            document.getElementById('inputTopicTitle').value = appData.topicsData[i].title;
+            document.getElementById('inputTopicCategory').value = appData.topicsData[i].category;
+            document.getElementById('inputTopicAuthor').value = appData.topicsData[i].author;
+            document.getElementById('inputTopicTime').value = appData.topicsData[i].time;
+            document.getElementById('inputTopicLink').value = appData.topicsData[i].link;
+        } else {
+            document.getElementById('inputTopicTitle').value = '';
+            document.getElementById('inputTopicAuthor').value = '';
+            document.getElementById('inputTopicTime').value = '';
+            document.getElementById('inputTopicLink').value = '';
+        }
+        document.getElementById('topicModal').style.display = 'flex';
+    }
+
+    async function saveTopic() {
+        const idx = document.getElementById('editTopicIndex').value;
+        const title = document.getElementById('inputTopicTitle').value;
+        const category = document.getElementById('inputTopicCategory').value;
+        const author = document.getElementById('inputTopicAuthor').value;
+        const time = document.getElementById('inputTopicTime').value;
+        const fileInput = document.getElementById('inputTopicFile');
+        const linkInput = document.getElementById('inputTopicLink').value;
+
+        if (!title) return alert('Nhập tên chuyên đề!');
+
+        if (!appData.topicsData) appData.topicsData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file chuyên đề lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const topicObj = { title, category, author, time, link: finalLink };
+        if (idx !== '') appData.topicsData[idx] = topicObj;
+        else appData.topicsData.push(topicObj);
+
+        saveDataToCloud();
+        closeModal('topicModal');
+    }
+
+    function deleteTopic(i) {
+        if (confirm('Xóa chuyên đề này?')) {
+            appData.topicsData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
     function renderSectionTitles() {
         for (let key in appData.sectionTitles) {
             if (document.getElementById(key)) document.getElementById(key).innerText = appData.sectionTitles[key];
@@ -962,6 +1113,7 @@
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
+        else if (dataKey === 'topicsData') tbodyId = 'topicTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
         else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
