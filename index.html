@@ -66,6 +66,7 @@
             gap: 2rem;
         }
 
+        /* BAR PHÂN QUYỀN TRÊN 1 HÀNG */
         .admin-bar {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
@@ -254,6 +255,7 @@
         .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; border-radius: 8px; }
         .btn-danger { background: var(--danger-color); color: white; }
         .btn-edit { background: var(--cyan-accent); color: #0f172a; }
+        .btn-perm { background: rgba(167, 139, 250, 0.3); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.5); }
 
         .table-responsive { overflow-x: auto; }
         .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
@@ -313,6 +315,11 @@
         </div>
 
         <div class="admin-bar-group">
+            <span style="font-size:0.78rem; color:var(--text-muted);">Đăng nhập GV:</span>
+            <select id="userSelect" class="theme-select" onchange="changeCurrentUser(this.value)">
+                <option value="GUEST">Khách / Giáo viên chung</option>
+            </select>
+
             <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
                 <option value="default">Giao diện: Tím Dạ Tước</option>
                 <option value="ocean">Giao diện: Xanh Biển Sâu</option>
@@ -375,7 +382,7 @@
                         <th>Năm Học / Thời Gian</th>
                         <th>Trạng Thái / Ghi Chú</th>
                         <th>File / Link Đính Kèm</th>
-                        <th class="admin-col">Thao Tác</th>
+                        <th>Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody id="profileTableBody"></tbody>
@@ -412,7 +419,38 @@
         </div>
     </section>
 
-    <!-- MỤC MỚI: CHUYÊN ĐỀ CHUYÊN MÔN -->
+    <!-- MỤC MỚI: KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-file-signature"></i> <span id="title_lesson_plans">Kế Hoạch Bài Dạy Của Giáo Viên</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_lesson_plans')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc Bài dạy / Giáo viên..." onkeyup="renderLessonPlans()">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('lessonPlansData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal()"><i class="fa-solid fa-plus"></i> Nộp / Thêm Bài Dạy</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'lessonPlanTableBody')"></th>
+                        <th>Tên Tác Giả / Giáo Viên</th>
+                        <th>Môn Học & Khối Lớp</th>
+                        <th>Tên Bài Dạy / Tiết Theo PPCT</th>
+                        <th>Tuần / Tuần Áp Dụng</th>
+                        <th>File Bài Dạy / Link Đính Kèm</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="lessonPlanTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- CHUYÊN ĐỀ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -434,7 +472,7 @@
                         <th>Người Thực Hiện / Phụ Trách</th>
                         <th>Thời Gian / Lớp Áp Dụng</th>
                         <th>Tài Liệu / File Đính Kèm</th>
-                        <th class="admin-col">Thao Tác</th>
+                        <th>Thao Tác</th>
                     </tr>
                 </thead>
                 <tbody id="topicTableBody"></tbody>
@@ -586,6 +624,50 @@
             </table>
         </div>
     </section>
+</div>
+
+<!-- MODAL KẾ HOẠCH BÀI DẠY -->
+<div class="modal" id="lessonPlanModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-signature me-2"></i> Kế Hoạch Bài Dạy / Giáo Án</h3>
+        <input type="hidden" id="editLessonPlanIndex">
+        
+        <div class="form-group"><label>1. Tên Tác Giả / Giáo Viên Đăng Bài</label>
+            <select id="inputLessonPlanTeacher" class="form-control"></select>
+        </div>
+        <div class="form-group"><label>2. Môn Học & Khối Lớp</label><input type="text" id="inputLessonPlanSubject" class="form-control" placeholder="Ví dụ: Sinh học 11, Công nghệ 10"></div>
+        <div class="form-group"><label>3. Tên Bài Dạy / Tên Tiết PPCT</label><input type="text" id="inputLessonPlanTitle" class="form-control" placeholder="Ví dụ: Bài 12: Quang hợp ở thực vật"></div>
+        <div class="form-group"><label>4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLessonPlanWeek" class="form-control" placeholder="Ví dụ: Tuần 15 (Học kỳ 1)"></div>
+        
+        <div class="form-group"><label>5. FILE KHBD (Lựa chọn 1: Tải File Word/PDF từ máy)</label><input type="file" id="inputLessonPlanFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputLessonPlanLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch Bài Dạy</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PHÂN QUYỀN MỤC -->
+<div class="modal" id="permissionModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Cho Giáo Viên Sửa Mục</h3>
+        <input type="hidden" id="permSectionKey">
+        <input type="hidden" id="permItemIndex">
+        <p style="font-size:0.9rem; color:var(--text-muted);" id="permItemTitle">Mục: ...</p>
+        
+        <div class="form-group" style="margin-top: 0.5rem;">
+            <label>Tích chọn Giáo viên được phép Chỉnh sửa/Xóa mục này:</label>
+            <div id="teacherCheckboxList" style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.8rem; background:rgba(255,255,255,0.05); padding:1rem; border-radius:12px;"></div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('permissionModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="savePermissions()">Lưu Phân Quyền</button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL GIỚI THIỆU TỔ -->
@@ -800,6 +882,8 @@
     const storage = firebase.storage();
     const ADMIN_PASSWORD = "123456";
 
+    let currentUser = localStorage.getItem('currentUser') || 'GUEST';
+
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
@@ -807,6 +891,7 @@
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
             title_profile: 'Hồ Sơ Tổ Chuyên Môn',
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
+            title_lesson_plans: 'Kế Hoạch Bài Dạy Của Giáo Viên',
             title_topics: 'Chuyên Đề Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
@@ -821,6 +906,7 @@
             { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
             { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
+        lessonPlansData: [],
         topicsData: [],
         imagesData: [],
         resourcesData: [],
@@ -835,6 +921,7 @@
         if (val) {
             appData = val;
             renderAll();
+            updateUserDropdown();
             document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối`;
         } else {
             saveDataToCloud();
@@ -870,6 +957,34 @@
         document.getElementById('themeSelect').value = savedTheme;
     }
 
+    function updateUserDropdown() {
+        const select = document.getElementById('userSelect');
+        select.innerHTML = `<option value="GUEST">Khách / Giáo viên chung</option>`;
+        (appData.membersData || []).forEach(mem => {
+            select.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
+        });
+        select.value = currentUser;
+    }
+
+    function changeCurrentUser(val) {
+        currentUser = val;
+        localStorage.setItem('currentUser', val);
+        renderAll();
+    }
+
+    function isCurrentAdmin() {
+        return document.getElementById('appContainer').classList.contains('admin-active');
+    }
+
+    function canUserEdit(itemAuthor, allowedEditors = []) {
+        if (isCurrentAdmin()) return true;
+        if (currentUser !== 'GUEST') {
+            if (itemAuthor === currentUser) return true;
+            if (Array.isArray(allowedEditors) && allowedEditors.includes(currentUser)) return true;
+        }
+        return false;
+    }
+
     function toggleAdminMode() {
         const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
@@ -881,6 +996,7 @@
                 container.classList.add('admin-active');
                 roleText.innerText = 'Chế độ Tổ trưởng';
                 alert('Xác thực thành công!');
+                renderAll();
             } else {
                 if (pass !== null) alert('Mật khẩu sai!');
                 toggleInput.checked = false;
@@ -890,6 +1006,7 @@
         } else {
             container.classList.remove('admin-active');
             roleText.innerText = 'Chế độ Xem / Tải File';
+            renderAll();
         }
     }
 
@@ -903,6 +1020,7 @@
         renderHeader();
         renderIntro();
         renderProfiles();
+        renderLessonPlans();
         renderTopics();
         renderSectionTitles();
         renderMembers();
@@ -936,6 +1054,7 @@
         closeModal('introModal');
     }
 
+    /* HỒ SƠ TỔ CHUYÊN MÔN */
     function renderProfiles() {
         const tbody = document.getElementById('profileTableBody');
         tbody.innerHTML = '';
@@ -943,6 +1062,22 @@
             let fileHtml = item.link && item.link.startsWith('http')
                 ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Hồ Sơ</a>`
                 : (item.link || 'Chưa đính kèm');
+
+            let canEdit = canUserEdit(item.author, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('profilesData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openProfileModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProfile(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
 
             tbody.innerHTML += `
                 <tr>
@@ -952,10 +1087,7 @@
                     <td style="color:var(--cyan-accent); font-weight:600;">${item.year}</td>
                     <td>${item.note}</td>
                     <td>${fileHtml}</td>
-                    <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openProfileModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteProfile(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
@@ -999,7 +1131,12 @@
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
-        const profileObj = { title, category, year, note, link: finalLink };
+        const profileObj = { 
+            title, category, year, note, link: finalLink, 
+            author: idx !== '' ? appData.profilesData[idx].author : currentUser,
+            allowedEditors: idx !== '' ? (appData.profilesData[idx].allowedEditors || []) : []
+        };
+
         if (idx !== '') appData.profilesData[idx] = profileObj;
         else appData.profilesData.push(profileObj);
 
@@ -1010,6 +1147,115 @@
     function deleteProfile(i) {
         if (confirm('Xóa hồ sơ này?')) {
             appData.profilesData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
+    /* MỤC KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN */
+    function renderLessonPlans() {
+        const filterVal = (document.getElementById('filterLessonPlan')?.value || '').toLowerCase();
+        const tbody = document.getElementById('lessonPlanTableBody');
+        tbody.innerHTML = '';
+
+        (appData.lessonPlansData || []).forEach((item, i) => {
+            if (filterVal && !item.title.toLowerCase().includes(filterVal) && !item.teacher.toLowerCase().includes(filterVal) && !item.subject.toLowerCase().includes(filterVal)) return;
+
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải KHBD</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            let canEdit = canUserEdit(item.teacher, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('lessonPlansData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openLessonPlanModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteLessonPlan(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td><span class="badge badge-cyan">${item.subject}</span></td>
+                    <td><strong style="color:#fff;">${item.title}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.week}</td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function openLessonPlanModal(i = null) {
+        document.getElementById('editLessonPlanIndex').value = i !== null ? i : '';
+        document.getElementById('inputLessonPlanFile').value = '';
+
+        const teacherSelect = document.getElementById('inputLessonPlanTeacher');
+        teacherSelect.innerHTML = '';
+        (appData.membersData || []).forEach(mem => {
+            teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
+        });
+
+        if (i !== null && appData.lessonPlansData) {
+            teacherSelect.value = appData.lessonPlansData[i].teacher;
+            document.getElementById('inputLessonPlanSubject').value = appData.lessonPlansData[i].subject;
+            document.getElementById('inputLessonPlanTitle').value = appData.lessonPlansData[i].title;
+            document.getElementById('inputLessonPlanWeek').value = appData.lessonPlansData[i].week;
+            document.getElementById('inputLessonPlanLink').value = appData.lessonPlansData[i].link;
+        } else {
+            if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
+            document.getElementById('inputLessonPlanSubject').value = '';
+            document.getElementById('inputLessonPlanTitle').value = '';
+            document.getElementById('inputLessonPlanWeek').value = '';
+            document.getElementById('inputLessonPlanLink').value = '';
+        }
+
+        document.getElementById('lessonPlanModal').style.display = 'flex';
+    }
+
+    async function saveLessonPlan() {
+        const idx = document.getElementById('editLessonPlanIndex').value;
+        const teacher = document.getElementById('inputLessonPlanTeacher').value;
+        const subject = document.getElementById('inputLessonPlanSubject').value;
+        const title = document.getElementById('inputLessonPlanTitle').value;
+        const week = document.getElementById('inputLessonPlanWeek').value;
+        const fileInput = document.getElementById('inputLessonPlanFile');
+        const linkInput = document.getElementById('inputLessonPlanLink').value;
+
+        if (!title || !subject) return alert('Nhập đầy đủ tên bài dạy và môn học!');
+
+        if (!appData.lessonPlansData) appData.lessonPlansData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file KHBD lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const planObj = { 
+            teacher, subject, title, week, link: finalLink,
+            allowedEditors: idx !== '' ? (appData.lessonPlansData[idx].allowedEditors || []) : []
+        };
+
+        if (idx !== '') appData.lessonPlansData[idx] = planObj;
+        else appData.lessonPlansData.push(planObj);
+
+        saveDataToCloud();
+        closeModal('lessonPlanModal');
+    }
+
+    function deleteLessonPlan(i) {
+        if (confirm('Xóa Kế hoạch bài dạy này?')) {
+            appData.lessonPlansData.splice(i, 1);
             saveDataToCloud();
         }
     }
@@ -1027,6 +1273,22 @@
             if (item.category === 'STEM / STEAM') badgeClass = 'badge-warning';
             if (item.category === 'Ứng dụng AI trong giảng dạy') badgeClass = 'badge-success';
 
+            let canEdit = canUserEdit(item.author, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('topicsData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openTopicModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTopic(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
             tbody.innerHTML += `
                 <tr>
                     <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
@@ -1035,10 +1297,7 @@
                     <td><strong>${item.author}</strong></td>
                     <td style="color:var(--cyan-accent); font-weight:600;">${item.time}</td>
                     <td>${fileHtml}</td>
-                    <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openTopicModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTopic(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
@@ -1055,7 +1314,7 @@
             document.getElementById('inputTopicLink').value = appData.topicsData[i].link;
         } else {
             document.getElementById('inputTopicTitle').value = '';
-            document.getElementById('inputTopicAuthor').value = '';
+            document.getElementById('inputTopicAuthor').value = currentUser !== 'GUEST' ? currentUser : '';
             document.getElementById('inputTopicTime').value = '';
             document.getElementById('inputTopicLink').value = '';
         }
@@ -1082,7 +1341,11 @@
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
-        const topicObj = { title, category, author, time, link: finalLink };
+        const topicObj = { 
+            title, category, author, time, link: finalLink,
+            allowedEditors: idx !== '' ? (appData.topicsData[idx].allowedEditors || []) : []
+        };
+
         if (idx !== '') appData.topicsData[idx] = topicObj;
         else appData.topicsData.push(topicObj);
 
@@ -1094,6 +1357,44 @@
         if (confirm('Xóa chuyên đề này?')) {
             appData.topicsData.splice(i, 1);
             saveDataToCloud();
+        }
+    }
+
+    /* PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỞNG */
+    function openPermissionModal(sectionKey, index, itemTitle) {
+        document.getElementById('permSectionKey').value = sectionKey;
+        document.getElementById('permItemIndex').value = index;
+        document.getElementById('permItemTitle').innerText = 'Mục: ' + itemTitle;
+
+        const currentEditors = (appData[sectionKey] && appData[sectionKey][index]) ? (appData[sectionKey][index].allowedEditors || []) : [];
+        const container = document.getElementById('teacherCheckboxList');
+        container.innerHTML = '';
+
+        (appData.membersData || []).forEach(mem => {
+            const isChecked = currentEditors.includes(mem.name) ? 'checked' : '';
+            container.innerHTML += `
+                <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer;">
+                    <input type="checkbox" value="${mem.name}" ${isChecked} class="perm-teacher-cb" style="width:18px; height:18px;">
+                    <span style="font-weight:600; color:#fff;">${mem.name}</span>
+                    <span style="font-size:0.8rem; color:var(--text-muted);">(${mem.role})</span>
+                </label>
+            `;
+        });
+
+        document.getElementById('permissionModal').style.display = 'flex';
+    }
+
+    function savePermissions() {
+        const sectionKey = document.getElementById('permSectionKey').value;
+        const index = document.getElementById('permItemIndex').value;
+        
+        const selectedTeachers = Array.from(document.querySelectorAll('.perm-teacher-cb:checked')).map(cb => cb.value);
+        
+        if (appData[sectionKey] && appData[sectionKey][index]) {
+            appData[sectionKey][index].allowedEditors = selectedTeachers;
+            saveDataToCloud();
+            alert('Đã cập nhật phân quyền cho giáo viên!');
+            closeModal('permissionModal');
         }
     }
 
@@ -1113,6 +1414,7 @@
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
+        else if (dataKey === 'lessonPlansData') tbodyId = 'lessonPlanTableBody';
         else if (dataKey === 'topicsData') tbodyId = 'topicTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
