@@ -305,7 +305,7 @@
 <body>
 
 <div class="container" id="appContainer">
-    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
+    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI TOPBAR -->
     <div class="admin-bar">
         <div class="admin-bar-group">
             <span class="role-badge" id="roleBadge"><i class="fa-solid fa-user-shield"></i> <span id="roleText">Chế độ Xem / Tải File</span></span>
@@ -419,7 +419,7 @@
         </div>
     </section>
 
-    <!-- MỤC MỚI: KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN -->
+    <!-- KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -450,7 +450,7 @@
         </div>
     </section>
 
-    <!-- CHUYÊN ĐỀ CHUYÊN MÔN -->
+    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN (CHO PHÉP TẤT CẢ GIÁO VIÊN TỰ DO NHẬP & SỬA) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -458,8 +458,9 @@
                 <button class="edit-title-btn" onclick="editSectionTitle('title_topics')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
+                <input type="text" class="filter-input" id="filterTopic" placeholder="🔍 Lọc GV / Môn / Khối..." onkeyup="renderTopics()">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('topicsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold admin-btn" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
+                <button class="btn btn-gold btn-sm" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -467,10 +468,11 @@
                 <thead>
                     <tr>
                         <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'topicTableBody')"></th>
+                        <th>Tên Giáo Viên</th>
+                        <th>Môn</th>
+                        <th>Khối</th>
                         <th>Tên Chuyên Đề</th>
                         <th>Loại Chuyên Đề</th>
-                        <th>Người Thực Hiện / Phụ Trách</th>
-                        <th>Thời Gian / Lớp Áp Dụng</th>
                         <th>Tài Liệu / File Đính Kèm</th>
                         <th>Thao Tác</th>
                     </tr>
@@ -626,6 +628,51 @@
     </section>
 </div>
 
+<!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN -->
+<div class="modal" id="topicModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn</h3>
+        <input type="hidden" id="editTopicIndex">
+        
+        <div class="form-group"><label>1. Tên Giáo Viên Phụ Trách / Báo Cáo</label>
+            <select id="inputTopicTeacher" class="form-control"></select>
+        </div>
+        <div class="form-group"><label>2. Môn Học</label>
+            <select id="inputTopicSubject" class="form-control">
+                <option value="Sinh học">Sinh học</option>
+                <option value="Công nghệ">Công nghệ</option>
+                <option value="Sinh & CN">Sinh & CN</option>
+            </select>
+        </div>
+        <div class="form-group"><label>3. Khối Lớp Áp Dụng</label>
+            <select id="inputTopicGrade" class="form-control">
+                <option value="Khối 10">Khối 10</option>
+                <option value="Khối 11">Khối 11</option>
+                <option value="Khối 12">Khối 12</option>
+                <option value="Toàn khối">Toàn khối</option>
+            </select>
+        </div>
+        <div class="form-group"><label>4. Tên Chuyên Đề</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Thiết kế bài học STEM - Chế tạo Kính hiển vi"></div>
+        <div class="form-group"><label>5. Loại Chuyên Đề</label>
+            <select id="inputTopicCategory" class="form-control">
+                <option value="Nghiên cứu bài học">Nghiên cứu bài học</option>
+                <option value="STEM / STEAM">STEM / STEAM</option>
+                <option value="Ứng dụng AI trong giảng dạy">Ứng dụng AI trong giảng dạy</option>
+                <option value="Chuyên đề khác">Chuyên đề khác</option>
+            </select>
+        </div>
+        
+        <div class="form-group"><label>6. TÀI LIỆU CHUYÊN ĐỀ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL KẾ HOẠCH BÀI DẠY -->
 <div class="modal" id="lessonPlanModal">
     <div class="modal-content">
@@ -710,34 +757,6 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('profileModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveProfile()">Lưu Hồ Sơ</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN -->
-<div class="modal" id="topicModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn</h3>
-        <input type="hidden" id="editTopicIndex">
-        <div class="form-group"><label>1. Tên Chuyên Đề / Bài Học</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Dạy học STEM - Chế tạo Kính hiển vi đơn giản"></div>
-        <div class="form-group"><label>2. Loại Chuyên Đề</label>
-            <select id="inputTopicCategory" class="form-control">
-                <option value="Nghiên cứu bài học">Nghiên cứu bài học</option>
-                <option value="STEM / STEAM">STEM / STEAM</option>
-                <option value="Ứng dụng AI trong giảng dạy">Ứng dụng AI trong giảng dạy</option>
-                <option value="Chuyên đề khác">Chuyên đề khác</option>
-            </select>
-        </div>
-        <div class="form-group"><label>3. Người Thực Hiện / Phụ Trách</label><input type="text" id="inputTopicAuthor" class="form-control" placeholder="Ví dụ: Cô Duyên, Thầy Can"></div>
-        <div class="form-group"><label>4. Thời Gian / Lớp Áp Dụng</label><input type="text" id="inputTopicTime" class="form-control" placeholder="Ví dụ: Học kỳ 1 - Lớp 11A1"></div>
-        
-        <div class="form-group"><label>5. TÀI LIỆU CHUYÊN ĐỀ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
         </div>
     </div>
 </div>
@@ -1260,11 +1279,15 @@
         }
     }
 
-    /* RENDER CHUYÊN ĐỀ CHUYÊN MÔN */
+    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN (GIÁO VIÊN TỰ DO THÊM VÀ SỬA CHUYÊN ĐỀ CỦA MÌNH) */
     function renderTopics() {
+        const filterVal = (document.getElementById('filterTopic')?.value || '').toLowerCase();
         const tbody = document.getElementById('topicTableBody');
         tbody.innerHTML = '';
         (appData.topicsData || []).forEach((item, i) => {
+            const itemTeacher = item.teacher || item.author || 'Chưa cập nhật';
+            if (filterVal && !itemTeacher.toLowerCase().includes(filterVal) && !(item.subject || '').toLowerCase().includes(filterVal) && !(item.grade || '').toLowerCase().includes(filterVal) && !item.title.toLowerCase().includes(filterVal)) return;
+
             let fileHtml = item.link && item.link.startsWith('http')
                 ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
                 : (item.link || 'Chưa đính kèm');
@@ -1273,7 +1296,8 @@
             if (item.category === 'STEM / STEAM') badgeClass = 'badge-warning';
             if (item.category === 'Ứng dụng AI trong giảng dạy') badgeClass = 'badge-success';
 
-            let canEdit = canUserEdit(item.author, item.allowedEditors);
+            // Cho phép Giáo viên là tác giả hoặc thuộc danh sách cấp quyền được chỉnh sửa/xóa
+            let canEdit = canUserEdit(itemTeacher, item.allowedEditors);
             let actionBtns = '';
 
             if (isCurrentAdmin()) {
@@ -1292,10 +1316,11 @@
             tbody.innerHTML += `
                 <tr>
                     <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td><strong style="color:var(--accent-gold);">${item.title}</strong></td>
+                    <td><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
+                    <td><span class="badge badge-cyan">${item.subject || 'Sinh học'}</span></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.grade || 'Khối 11'}</td>
+                    <td><strong style="color:#fff;">${item.title}</strong></td>
                     <td><span class="badge ${badgeClass}">${item.category}</span></td>
-                    <td><strong>${item.author}</strong></td>
-                    <td style="color:var(--cyan-accent); font-weight:600;">${item.time}</td>
                     <td>${fileHtml}</td>
                     <td>${actionBtns}</td>
                 </tr>
@@ -1306,16 +1331,23 @@
     function openTopicModal(i = null) {
         document.getElementById('editTopicIndex').value = i !== null ? i : '';
         document.getElementById('inputTopicFile').value = '';
+
+        const teacherSelect = document.getElementById('inputTopicTeacher');
+        teacherSelect.innerHTML = '';
+        (appData.membersData || []).forEach(mem => {
+            teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
+        });
+
         if (i !== null && appData.topicsData) {
+            teacherSelect.value = appData.topicsData[i].teacher || appData.topicsData[i].author || '';
+            document.getElementById('inputTopicSubject').value = appData.topicsData[i].subject || 'Sinh học';
+            document.getElementById('inputTopicGrade').value = appData.topicsData[i].grade || 'Khối 11';
             document.getElementById('inputTopicTitle').value = appData.topicsData[i].title;
             document.getElementById('inputTopicCategory').value = appData.topicsData[i].category;
-            document.getElementById('inputTopicAuthor').value = appData.topicsData[i].author;
-            document.getElementById('inputTopicTime').value = appData.topicsData[i].time;
             document.getElementById('inputTopicLink').value = appData.topicsData[i].link;
         } else {
+            if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
             document.getElementById('inputTopicTitle').value = '';
-            document.getElementById('inputTopicAuthor').value = currentUser !== 'GUEST' ? currentUser : '';
-            document.getElementById('inputTopicTime').value = '';
             document.getElementById('inputTopicLink').value = '';
         }
         document.getElementById('topicModal').style.display = 'flex';
@@ -1323,10 +1355,11 @@
 
     async function saveTopic() {
         const idx = document.getElementById('editTopicIndex').value;
+        const teacher = document.getElementById('inputTopicTeacher').value;
+        const subject = document.getElementById('inputTopicSubject').value;
+        const grade = document.getElementById('inputTopicGrade').value;
         const title = document.getElementById('inputTopicTitle').value;
         const category = document.getElementById('inputTopicCategory').value;
-        const author = document.getElementById('inputTopicAuthor').value;
-        const time = document.getElementById('inputTopicTime').value;
         const fileInput = document.getElementById('inputTopicFile');
         const linkInput = document.getElementById('inputTopicLink').value;
 
@@ -1342,7 +1375,8 @@
         }
 
         const topicObj = { 
-            title, category, author, time, link: finalLink,
+            teacher, subject, grade, title, category, link: finalLink,
+            author: idx !== '' ? (appData.topicsData[idx].author || teacher) : teacher,
             allowedEditors: idx !== '' ? (appData.topicsData[idx].allowedEditors || []) : []
         };
 
@@ -1360,7 +1394,7 @@
         }
     }
 
-    /* PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỞNG */
+    /* PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỜNG */
     function openPermissionModal(sectionKey, index, itemTitle) {
         document.getElementById('permSectionKey').value = sectionKey;
         document.getElementById('permItemIndex').value = index;
