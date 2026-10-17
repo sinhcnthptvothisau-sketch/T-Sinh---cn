@@ -326,7 +326,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Đảm bảo ô chứa td chứa badge cũng không bị bó ép ngắt câu */
         .nowrap-cell {
             white-space: nowrap !important;
         }
@@ -335,6 +334,7 @@
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .badge-cyan { background: rgba(56, 189, 248, 0.15); color: var(--cyan-accent); border: 1px solid rgba(56, 189, 248, 0.3); }
         .badge-purple { background: rgba(167, 139, 250, 0.15); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.3); }
+        .badge-allto { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%); color: var(--accent-gold-bright); border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
 
         /* THANH TAB LỌC BÀI KTĐG */
         .eval-tabs-bar {
@@ -599,7 +599,7 @@
         </div>
     </section>
 
-    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN (BAO GỒM KIỂM TRA ĐÁNH GIÁ VỚI 4 MỤC NHỎ) -->
+    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN (BAO GỒM KIỂM TRA ĐÁNH GIÁ VỚI 4 MỤC NHỎ, TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -666,7 +666,7 @@
             </div>
         </div>
 
-        <!-- 3. KIỂM TRA ĐÁNH GIÁ (CHIA 4 MỤC NHỎ CHUYÊN SÂU KÈM LỌC TAB) -->
+        <!-- 3. KIỂM TRA ĐÁNH GIÁ (BỔ SUNG TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -786,7 +786,7 @@
     </section>
 </div>
 
-<!-- MODAL KIỂM TRA ĐÁNH GIÁ (CHIA 4 MỤC NHỎ) -->
+<!-- MODAL KIỂM TRA ĐÁNH GIÁ (CÓ TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
 <div class="modal" id="evaluationModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
@@ -800,11 +800,18 @@
                 <option value="Đề đã kiểm tra xong">Đề đã kiểm tra xong</option>
             </select>
         </div>
-        <div class="form-group"><label>2. Giáo Viên Phụ Trách / Ra Đề</label>
+
+        <!-- BỔ SUNG TÙY CHỌN CẢ TỔ -->
+        <div class="form-group"><label>2. Giáo Viên Phụ Trách / Ra Đề (Có lựa chọn CẢ TỔ)</label>
             <select id="inputEvalTeacher" class="form-control"></select>
         </div>
-        <div class="form-group"><label>3. Môn & Khối Lớp</label>
+
+        <!-- BỔ SUNG TÙY CHỌN CẢ 3 KHỐI -->
+        <div class="form-group"><label>3. Môn & Khối Lớp (Có lựa chọn CẢ 3 KHỐI)</label>
             <select id="inputEvalSubject" class="form-control">
+                <option value="CẢ 3 KHỐI (10, 11, 12)">🌟 CẢ 3 KHỐI (Khối 10, 11 & 12)</option>
+                <option value="Sinh học - CẢ 3 KHỐI">🌿 Sinh học - CẢ 3 KHỐI</option>
+                <option value="Công nghệ - CẢ 3 KHỐI">⚙️ Công nghệ - CẢ 3 KHỐI</option>
                 <option value="Sinh học 10">Sinh học 10</option>
                 <option value="Sinh học 11">Sinh học 11</option>
                 <option value="Sinh học 12">Sinh học 12</option>
@@ -813,8 +820,9 @@
                 <option value="Công nghệ 12">Công nghệ 12</option>
             </select>
         </div>
+
         <div class="form-group"><label>4. Tên Tài Liệu / Nội Dung Kiểm Tra</label>
-            <input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Đề & Ma trận Giữa Kỳ I - Sinh 11">
+            <input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Kế hoạch KTĐG Giữa Kỳ I - Tổ Sinh & CN">
         </div>
         <div class="form-group"><label>5. Học Kỳ / Thời Gian Áp Dụng</label>
             <select id="inputEvalType" class="form-control">
@@ -824,6 +832,7 @@
                 <option value="Kiểm tra Cuối kỳ II">Kiểm tra Cuối kỳ II</option>
                 <option value="Kiểm tra Thường xuyên">Kiểm tra Thường xuyên</option>
                 <option value="Đề thi thử THPT Quốc gia">Đề thi thử THPT Quốc gia</option>
+                <option value="Toàn năm học">Toàn năm học</option>
             </select>
         </div>
         
@@ -863,7 +872,7 @@
                 <option value="Khối 10">Khối 10</option>
                 <option value="Khối 11">Khối 11</option>
                 <option value="Khối 12">Khối 12</option>
-                <option value="Toàn khối">Toàn khối</option>
+                <option value="Toàn khối (10, 11, 12)">Toàn khối (10, 11, 12)</option>
             </select>
         </div>
         <div class="form-group"><label>4. Tên Chuyên Đề</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Thiết kế bài học STEM - Chế tạo Kính hiển vi"></div>
@@ -911,7 +920,7 @@
     </div>
 </div>
 
-<!-- MODAL PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỞNG -->
+<!-- MODAL PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỜNG -->
 <div class="modal" id="permissionModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Cho Giáo Viên Sửa Mục</h3>
@@ -1238,7 +1247,7 @@
     function canUserEdit(itemAuthor, allowedEditors = []) {
         if (isCurrentAdmin()) return true;
         if (currentUser !== 'GUEST') {
-            if (itemAuthor === currentUser) return true;
+            if (itemAuthor === 'CẢ TỔ' || itemAuthor === currentUser) return true;
             if (Array.isArray(allowedEditors) && allowedEditors.includes(currentUser)) return true;
         }
         return false;
@@ -1577,7 +1586,7 @@
         }
     }
 
-    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN (TOÀN BỘ BADGE GÓI GỌN 1 DÒNG) */
+    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN */
     function renderTopics() {
         const filterVal = (document.getElementById('filterTopic')?.value || '').toLowerCase();
         const tbody = document.getElementById('topicTableBody');
@@ -1691,7 +1700,7 @@
         }
     }
 
-    /* RENDER MỤC KIỂM TRA ĐÁNH GIÁ (CHIA 4 MỤC NHỎ - MỌI BADGE TRÊN 1 DÒNG) */
+    /* RENDER MỤC KIỂM TRA ĐÁNH GIÁ (BỔ SUNG TÙY CHỌN CẢ TỔ VÀ CẢ 3 KHỐI) */
     function filterEvalTab(tabCategory, btnElement) {
         activeEvalTab = tabCategory;
         const buttons = document.querySelectorAll('.eval-tab-btn');
@@ -1704,14 +1713,16 @@
         const filterVal = (document.getElementById('filterEvaluation')?.value || '').toLowerCase();
         const tbody = document.getElementById('evaluationTableBody');
         tbody.innerHTML = '';
+
         (appData.evaluationsData || []).forEach((item, i) => {
             const itemTeacher = item.teacher || item.author || 'Chưa cập nhật';
             const itemSubSection = item.subSection || 'Ngân hàng câu hỏi';
+            const itemSubject = item.subject || 'Sinh học 11';
 
             if (activeEvalTab !== 'ALL' && itemSubSection !== activeEvalTab) return;
 
             if (filterVal && !itemTeacher.toLowerCase().includes(filterVal) 
-                && !(item.subject || '').toLowerCase().includes(filterVal) 
+                && !itemSubject.toLowerCase().includes(filterVal) 
                 && !item.title.toLowerCase().includes(filterVal) 
                 && !(item.type || '').toLowerCase().includes(filterVal)
                 && !itemSubSection.toLowerCase().includes(filterVal)) return;
@@ -1719,6 +1730,17 @@
             let fileHtml = item.link && item.link.startsWith('http')
                 ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
                 : (item.link || 'Chưa đính kèm');
+
+            // XỬ LÝ BADGE DÀNH CHO CẢ TỔ VÀ CẢ 3 KHỐI
+            let teacherBadgeHtml = `<strong style="color:var(--accent-gold);">${itemTeacher}</strong>`;
+            if (itemTeacher === 'CẢ TỔ') {
+                teacherBadgeHtml = `<span class="badge badge-allto"><i class="fa-solid fa-users-gear me-1"></i> CẢ TỔ THỰC HIỆN</span>`;
+            }
+
+            let subjectBadgeHtml = `<span class="badge badge-cyan">${itemSubject}</span>`;
+            if (itemSubject.includes('CẢ 3 KHỐI')) {
+                subjectBadgeHtml = `<span class="badge badge-allto"><i class="fa-solid fa-layer-group me-1"></i> ${itemSubject}</span>`;
+            }
 
             let subBadgeClass = 'badge-purple';
             if (itemSubSection === 'Kế hoạch') subBadgeClass = 'badge-cyan';
@@ -1748,9 +1770,9 @@
             tbody.innerHTML += `
                 <tr>
                     <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
+                    <td data-label="Giáo viên" class="nowrap-cell">${teacherBadgeHtml}</td>
                     <td data-label="Phần nhỏ KTĐG" class="nowrap-cell"><span class="badge ${subBadgeClass}">${itemSubSection}</span></td>
-                    <td data-label="Môn & Khối" class="nowrap-cell"><span class="badge badge-cyan">${item.subject || 'Sinh học 11'}</span></td>
+                    <td data-label="Môn & Khối" class="nowrap-cell">${subjectBadgeHtml}</td>
                     <td data-label="Tên tài liệu"><strong style="color:#fff;">${item.title}</strong></td>
                     <td data-label="Học kỳ / Thời gian" class="nowrap-cell"><span class="badge ${typeBadgeClass}">${item.type || 'Giữa kỳ'}</span></td>
                     <td data-label="File/Link">${fileHtml}</td>
@@ -1765,21 +1787,23 @@
         document.getElementById('inputEvalFile').value = '';
 
         const teacherSelect = document.getElementById('inputEvalTeacher');
-        teacherSelect.innerHTML = '';
+        teacherSelect.innerHTML = `<option value="CẢ TỔ">🌟 CẢ TỔ (Tất cả Giáo viên thực hiện)</option>`;
         (appData.membersData || []).forEach(mem => {
             teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
         });
 
         if (i !== null && appData.evaluationsData) {
             document.getElementById('inputEvalSubSection').value = appData.evaluationsData[i].subSection || 'Ngân hàng câu hỏi';
-            teacherSelect.value = appData.evaluationsData[i].teacher || appData.evaluationsData[i].author || '';
+            teacherSelect.value = appData.evaluationsData[i].teacher || appData.evaluationsData[i].author || 'CẢ TỔ';
             document.getElementById('inputEvalSubject').value = appData.evaluationsData[i].subject || 'Sinh học 11';
             document.getElementById('inputEvalTitle').value = appData.evaluationsData[i].title;
             document.getElementById('inputEvalType').value = appData.evaluationsData[i].type || 'Kiểm tra Giữa kỳ I';
             document.getElementById('inputEvalLink').value = appData.evaluationsData[i].link;
         } else {
             if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
+            else teacherSelect.value = 'CẢ TỔ';
             document.getElementById('inputEvalSubSection').value = activeEvalTab !== 'ALL' ? activeEvalTab : 'Kế hoạch';
+            document.getElementById('inputEvalSubject').value = 'CẢ 3 KHỐI (10, 11, 12)';
             document.getElementById('inputEvalTitle').value = '';
             document.getElementById('inputEvalLink').value = '';
         }
@@ -1983,7 +2007,7 @@
         });
     }
 
-    /* RENDER CÁC NHIỆM VỤ THI ĐỦA, DẠY LỚP (TẤT CẢ TỪNG DÒNG BADGE) */
+    /* RENDER CÁC NHIỆM VỤ THI ĐỦA, DẠY LỚP */
     function renderTasks() {
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
