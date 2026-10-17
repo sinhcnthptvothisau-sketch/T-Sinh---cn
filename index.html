@@ -546,38 +546,7 @@
         </div>
     </section>
 
-    <!-- MỤC MỚI: KIỂM TRA ĐÁNH GIÁ (TESTING & EVALUATION) -->
-    <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-file-pen"></i> <span id="title_evaluations">Kiểm Tra Đánh Giá</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_evaluations')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
-                <input type="text" class="filter-input" id="filterEvaluation" placeholder="🔍 Lọc GV / Đề / Môn..." onkeyup="renderEvaluations()">
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('evaluationsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold btn-sm" onclick="openEvaluationModal()"><i class="fa-solid fa-plus"></i> Thêm Đề Kiểm Tra / Ma Trận</button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'evaluationTableBody')"></th>
-                        <th>Giáo Viên Ra Đề / Phụ Trách</th>
-                        <th>Môn & Khối Lớp</th>
-                        <th>Tên Ma Trận / Đề Kiểm Tra / Đánh Giá</th>
-                        <th>Học Kỳ / Thời Gian</th>
-                        <th>File Đề Thi & Đáp Án / Link</th>
-                        <th>Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="evaluationTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
+    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN (BAO GỒM KIỂM TRA ĐÁNH GIÁ NẰM BÊN TRONG) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -586,7 +555,7 @@
             </h2>
         </div>
 
-        <!-- DẠY LỚP & CHỦ NHIỆM -->
+        <!-- 1. DẠY LỚP & CHỦ NHIỆM -->
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.3rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -615,7 +584,7 @@
             </div>
         </div>
 
-        <!-- BỒI DƯỠNG HSG -->
+        <!-- 2. BỒI DƯỠNG HSG -->
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -644,7 +613,37 @@
             </div>
         </div>
 
-        <!-- ĐĂNG KÝ THI ĐỦA -->
+        <!-- 3. KIỂM TRA ĐÁNH GIÁ (NẰM TRONG NHIỆM VỤ TỔ CHUYÊN MÔN) -->
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-file-pen"></i> Kiểm Tra Đánh Giá
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                    <input type="text" class="filter-input" id="filterEvaluation" placeholder="🔍 Lọc GV / Môn / Đề..." onkeyup="renderEvaluations()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('evaluationsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm" onclick="openEvaluationModal()"><i class="fa-solid fa-plus"></i> Thêm Kiểm Tra / Ma Trận</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'evaluationTableBody')"></th>
+                            <th>Giáo viên phụ trách / ra đề</th>
+                            <th>Môn & Khối lớp</th>
+                            <th>Tên ma trận / Đề kiểm tra</th>
+                            <th>Học kỳ / Thời gian</th>
+                            <th>File / Link đính kèm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evaluationTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. ĐĂNG KÝ THI ĐỦA -->
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -723,13 +722,13 @@
     </section>
 </div>
 
-<!-- MODAL KIỂM TRA ĐÁNH GIÁ (MỤC MỚI) -->
+<!-- MODAL KIỂM TRA ĐÁNH GIÁ (TRONG NHIỆM VỤ CHUYÊN MÔN) -->
 <div class="modal" id="evaluationModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
         <input type="hidden" id="editEvaluationIndex">
         
-        <div class="form-group"><label>1. Tên Giáo Viên Ra Đề / Phụ Trách</label>
+        <div class="form-group"><label>1. Giáo Viên Phụ Trách / Ra Đề</label>
             <select id="inputEvalTeacher" class="form-control"></select>
         </div>
         <div class="form-group"><label>2. Môn & Khối Lớp</label>
@@ -742,10 +741,10 @@
                 <option value="Công nghệ 12">Công nghệ 12</option>
             </select>
         </div>
-        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra / Đánh Giá</label>
+        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra</label>
             <input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Đề & Ma trận Giữa Kỳ I - Sinh 11">
         </div>
-        <div class="form-group"><label>4. Phân Loại / Học Kỳ / Thời Gian Áp Dụng</label>
+        <div class="form-group"><label>4. Học Kỳ / Thời Gian Áp Dụng</label>
             <select id="inputEvalType" class="form-control">
                 <option value="Kiểm tra Giữa kỳ I">Kiểm tra Giữa kỳ I</option>
                 <option value="Kiểm tra Cuối kỳ I">Kiểm tra Cuối kỳ I</option>
@@ -756,7 +755,7 @@
             </select>
         </div>
         
-        <div class="form-group"><label>5. FILE ĐỀ THI & ĐÁP ÁN (Lựa chọn 1: Tải File Word/PDF từ máy)</label>
+        <div class="form-group"><label>5. FILE / LINK ĐÍNH KÈM (Lựa chọn 1: Tải File Word/PDF từ máy)</label>
             <input type="file" id="inputEvalFile" class="form-control">
         </div>
         <div class="file-divider">- HOẶC -</div>
@@ -840,7 +839,7 @@
     </div>
 </div>
 
-<!-- MODAL PHÂN QUYỀN MỤC -->
+<!-- MODAL PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỞNG -->
 <div class="modal" id="permissionModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Cho Giáo Viên Sửa Mục</h3>
@@ -1057,7 +1056,6 @@
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
             title_lesson_plans: 'Kế Hoạch Bài Dạy Của Giáo Viên',
             title_topics: 'Chuyên Đề Chuyên Môn',
-            title_evaluations: 'Kiểm Tra Đánh Giá',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
@@ -1620,7 +1618,7 @@
         }
     }
 
-    /* RENDER MỤC MỚI: KIỂM TRA ĐÁNH GIÁ (TESTING & EVALUATION) */
+    /* RENDER MỤC: KIỂM TRA ĐÁNH GIÁ (TRONG NHIỆM VỤ TỔ CHUYÊN MÔN) */
     function renderEvaluations() {
         const filterVal = (document.getElementById('filterEvaluation')?.value || '').toLowerCase();
         const tbody = document.getElementById('evaluationTableBody');
@@ -1656,7 +1654,7 @@
             tbody.innerHTML += `
                 <tr>
                     <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
+                    <td data-label="Giáo viên ra đề"><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
                     <td data-label="Môn & Khối"><span class="badge badge-cyan">${item.subject || 'Sinh học 11'}</span></td>
                     <td data-label="Tên Ma Trận / Đề"><strong style="color:#fff;">${item.title}</strong></td>
                     <td data-label="Học kỳ / Thời gian"><span class="badge ${badgeClass}">${item.type || 'Giữa kỳ'}</span></td>
