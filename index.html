@@ -546,6 +546,37 @@
         </div>
     </section>
 
+    <!-- MỤC MỚI: KIỂM TRA ĐÁNH GIÁ (TESTING & EVALUATION) -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-file-pen"></i> <span id="title_evaluations">Kiểm Tra Đánh Giá</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_evaluations')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
+                <input type="text" class="filter-input" id="filterEvaluation" placeholder="🔍 Lọc GV / Đề / Môn..." onkeyup="renderEvaluations()">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('evaluationsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold btn-sm" onclick="openEvaluationModal()"><i class="fa-solid fa-plus"></i> Thêm Đề Kiểm Tra / Ma Trận</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'evaluationTableBody')"></th>
+                        <th>Giáo Viên Ra Đề / Phụ Trách</th>
+                        <th>Môn & Khối Lớp</th>
+                        <th>Tên Ma Trận / Đề Kiểm Tra / Đánh Giá</th>
+                        <th>Học Kỳ / Thời Gian</th>
+                        <th>File Đề Thi & Đáp Án / Link</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="evaluationTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
     <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
@@ -690,6 +721,54 @@
             </table>
         </div>
     </section>
+</div>
+
+<!-- MODAL KIỂM TRA ĐÁNH GIÁ (MỤC MỚI) -->
+<div class="modal" id="evaluationModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
+        <input type="hidden" id="editEvaluationIndex">
+        
+        <div class="form-group"><label>1. Tên Giáo Viên Ra Đề / Phụ Trách</label>
+            <select id="inputEvalTeacher" class="form-control"></select>
+        </div>
+        <div class="form-group"><label>2. Môn & Khối Lớp</label>
+            <select id="inputEvalSubject" class="form-control">
+                <option value="Sinh học 10">Sinh học 10</option>
+                <option value="Sinh học 11">Sinh học 11</option>
+                <option value="Sinh học 12">Sinh học 12</option>
+                <option value="Công nghệ 10">Công nghệ 10</option>
+                <option value="Công nghệ 11">Công nghệ 11</option>
+                <option value="Công nghệ 12">Công nghệ 12</option>
+            </select>
+        </div>
+        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra / Đánh Giá</label>
+            <input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Đề & Ma trận Giữa Kỳ I - Sinh 11">
+        </div>
+        <div class="form-group"><label>4. Phân Loại / Học Kỳ / Thời Gian Áp Dụng</label>
+            <select id="inputEvalType" class="form-control">
+                <option value="Kiểm tra Giữa kỳ I">Kiểm tra Giữa kỳ I</option>
+                <option value="Kiểm tra Cuối kỳ I">Kiểm tra Cuối kỳ I</option>
+                <option value="Kiểm tra Giữa kỳ II">Kiểm tra Giữa kỳ II</option>
+                <option value="Kiểm tra Cuối kỳ II">Kiểm tra Cuối kỳ II</option>
+                <option value="Kiểm tra Thường xuyên">Kiểm tra Thường xuyên</option>
+                <option value="Đề thi thử THPT Quốc gia">Đề thi thử THPT Quốc gia</option>
+            </select>
+        </div>
+        
+        <div class="form-group"><label>5. FILE ĐỀ THI & ĐÁP ÁN (Lựa chọn 1: Tải File Word/PDF từ máy)</label>
+            <input type="file" id="inputEvalFile" class="form-control">
+        </div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Cloud Đề Thi</label>
+            <input type="text" id="inputEvalLink" class="form-control" placeholder="https://drive.google.com/...">
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('evaluationModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveEvaluation()">Lưu Đề Kiểm Tra</button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN -->
@@ -978,6 +1057,7 @@
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
             title_lesson_plans: 'Kế Hoạch Bài Dạy Của Giáo Viên',
             title_topics: 'Chuyên Đề Chuyên Môn',
+            title_evaluations: 'Kiểm Tra Đánh Giá',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
@@ -993,6 +1073,7 @@
         ],
         lessonPlansData: [],
         topicsData: [],
+        evaluationsData: [],
         imagesData: [],
         resourcesData: [],
         docsData: [],
@@ -1173,7 +1254,6 @@
         if (toggleInput) toggleInput.checked = false;
         document.getElementById('appContainer').classList.remove('admin-active');
         
-        // Tự động bật chế độ mobile nếu chiều rộng màn hình nhỏ hơn 768px
         if (window.innerWidth <= 768) {
             isMobileView = true;
         }
@@ -1186,6 +1266,7 @@
         renderProfiles();
         renderLessonPlans();
         renderTopics();
+        renderEvaluations();
         renderSectionTitles();
         renderMembers();
         renderImages();
@@ -1425,7 +1506,7 @@
         }
     }
 
-    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN (CHO PHÉP MỌI GIÁO VIÊN TỰ NHẬP VÀ CHỈNH SỬA) */
+    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN */
     function renderTopics() {
         const filterVal = (document.getElementById('filterTopic')?.value || '').toLowerCase();
         const tbody = document.getElementById('topicTableBody');
@@ -1539,6 +1620,117 @@
         }
     }
 
+    /* RENDER MỤC MỚI: KIỂM TRA ĐÁNH GIÁ (TESTING & EVALUATION) */
+    function renderEvaluations() {
+        const filterVal = (document.getElementById('filterEvaluation')?.value || '').toLowerCase();
+        const tbody = document.getElementById('evaluationTableBody');
+        tbody.innerHTML = '';
+        (appData.evaluationsData || []).forEach((item, i) => {
+            const itemTeacher = item.teacher || item.author || 'Chưa cập nhật';
+            if (filterVal && !itemTeacher.toLowerCase().includes(filterVal) && !(item.subject || '').toLowerCase().includes(filterVal) && !item.title.toLowerCase().includes(filterVal) && !(item.type || '').toLowerCase().includes(filterVal)) return;
+
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Đề & Đáp Án</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            let badgeClass = 'badge-cyan';
+            if (item.type && item.type.includes('Cuối kỳ')) badgeClass = 'badge-warning';
+            if (item.type && item.type.includes('THPT Quốc gia')) badgeClass = 'badge-success';
+
+            let canEdit = canUserEdit(itemTeacher, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('evaluationsData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openEvaluationModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteEvaluation(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
+                    <td data-label="Môn & Khối"><span class="badge badge-cyan">${item.subject || 'Sinh học 11'}</span></td>
+                    <td data-label="Tên Ma Trận / Đề"><strong style="color:#fff;">${item.title}</strong></td>
+                    <td data-label="Học kỳ / Thời gian"><span class="badge ${badgeClass}">${item.type || 'Giữa kỳ'}</span></td>
+                    <td data-label="File/Link">${fileHtml}</td>
+                    <td data-label="Thao tác">${actionBtns}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function openEvaluationModal(i = null) {
+        document.getElementById('editEvaluationIndex').value = i !== null ? i : '';
+        document.getElementById('inputEvalFile').value = '';
+
+        const teacherSelect = document.getElementById('inputEvalTeacher');
+        teacherSelect.innerHTML = '';
+        (appData.membersData || []).forEach(mem => {
+            teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
+        });
+
+        if (i !== null && appData.evaluationsData) {
+            teacherSelect.value = appData.evaluationsData[i].teacher || appData.evaluationsData[i].author || '';
+            document.getElementById('inputEvalSubject').value = appData.evaluationsData[i].subject || 'Sinh học 11';
+            document.getElementById('inputEvalTitle').value = appData.evaluationsData[i].title;
+            document.getElementById('inputEvalType').value = appData.evaluationsData[i].type || 'Kiểm tra Giữa kỳ I';
+            document.getElementById('inputEvalLink').value = appData.evaluationsData[i].link;
+        } else {
+            if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
+            document.getElementById('inputEvalTitle').value = '';
+            document.getElementById('inputEvalLink').value = '';
+        }
+        document.getElementById('evaluationModal').style.display = 'flex';
+    }
+
+    async function saveEvaluation() {
+        const idx = document.getElementById('editEvaluationIndex').value;
+        const teacher = document.getElementById('inputEvalTeacher').value;
+        const subject = document.getElementById('inputEvalSubject').value;
+        const title = document.getElementById('inputEvalTitle').value;
+        const type = document.getElementById('inputEvalType').value;
+        const fileInput = document.getElementById('inputEvalFile');
+        const linkInput = document.getElementById('inputEvalLink').value;
+
+        if (!title) return alert('Nhập tên đề kiểm tra / ma trận!');
+
+        if (!appData.evaluationsData) appData.evaluationsData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file đề thi & đáp án lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const evalObj = { 
+            teacher, subject, title, type, link: finalLink,
+            author: idx !== '' ? (appData.evaluationsData[idx].author || teacher) : teacher,
+            allowedEditors: idx !== '' ? (appData.evaluationsData[idx].allowedEditors || []) : []
+        };
+
+        if (idx !== '') appData.evaluationsData[idx] = evalObj;
+        else appData.evaluationsData.push(evalObj);
+
+        saveDataToCloud();
+        closeModal('evaluationModal');
+    }
+
+    function deleteEvaluation(i) {
+        if (confirm('Xóa đề kiểm tra / ma trận này?')) {
+            appData.evaluationsData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
     /* PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỞNG */
     function openPermissionModal(sectionKey, index, itemTitle) {
         document.getElementById('permSectionKey').value = sectionKey;
@@ -1595,6 +1787,7 @@
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
         else if (dataKey === 'lessonPlansData') tbodyId = 'lessonPlanTableBody';
         else if (dataKey === 'topicsData') tbodyId = 'topicTableBody';
+        else if (dataKey === 'evaluationsData') tbodyId = 'evaluationTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
         else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
