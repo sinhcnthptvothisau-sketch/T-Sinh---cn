@@ -310,7 +310,6 @@
         .custom-table tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .custom-table tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
 
-        /* BẮT BUỘC TẤT CẢ BADGES GÓI GỌN 1 DÒNG KHÔNG XUỐNG HÀNG */
         .badge, .single-line-badge {
             padding: 0.3rem 0.7rem;
             border-radius: 20px;
@@ -326,9 +325,7 @@
             text-overflow: ellipsis;
         }
 
-        .nowrap-cell {
-            white-space: nowrap !important;
-        }
+        .nowrap-cell { white-space: nowrap !important; }
 
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
@@ -336,7 +333,6 @@
         .badge-purple { background: rgba(167, 139, 250, 0.15); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.3); }
         .badge-allto { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%); color: var(--accent-gold-bright); border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
 
-        /* THANH TAB LỌC BÀI KTĐG */
         .eval-tabs-bar {
             display: flex;
             gap: 0.5rem;
@@ -363,7 +359,6 @@
             border-color: var(--cyan-accent);
         }
 
-        /* CHẾ ĐỘ THẺ CARD BÀI VIẾT TRÊN ĐIỆN THOẠI (MOBILE CARD VIEW) */
         .mobile-view .custom-table { display: block; min-width: 100%; }
         .mobile-view .custom-table thead { display: none; }
         .mobile-view .custom-table tbody { display: flex; flex-direction: column; gap: 0.8rem; }
@@ -536,6 +531,36 @@
         </div>
     </section>
 
+    <!-- MỤC MỚI: BIÊN BẢN HỌP TỔ (NHÓM) CHUYÊN MÔN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-clipboard-list"></i> <span id="title_meeting_minutes">Biên Bản Họp Tổ (Nhóm) Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_meeting_minutes')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
+                <input type="text" class="filter-input" id="filterMeeting" placeholder="🔍 Tìm thời gian, nội dung họp..." onkeyup="renderMeetings()">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('meetingsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold btn-sm" onclick="openMeetingModal()"><i class="fa-solid fa-plus"></i> Thêm Biên Bản Họp</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'meetingTableBody')"></th>
+                        <th>Thời Gian Họp</th>
+                        <th>Thành Phần Tham Dự</th>
+                        <th>Nội Dung / Kết Luận Họp</th>
+                        <th>File / Link Biên Bản</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="meetingTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
     <!-- KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
@@ -567,7 +592,7 @@
         </div>
     </section>
 
-    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN (CHO PHÉP MỌI GIÁO VIÊN TỰ NHẬP) -->
+    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -599,7 +624,7 @@
         </div>
     </section>
 
-    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN (BAO GỒM KIỂM TRA ĐÁNH GIÁ VỚI 4 MỤC NHỎ, TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
+    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -666,7 +691,7 @@
             </div>
         </div>
 
-        <!-- 3. KIỂM TRA ĐÁNH GIÁ (BỔ SUNG TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
+        <!-- 3. KIỂM TRA ĐÁNH GIÁ -->
         <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -679,7 +704,6 @@
                 </div>
             </div>
 
-            <!-- TAB LỌC 4 PHẦN NHỎ -->
             <div class="eval-tabs-bar">
                 <button class="eval-tab-btn active" onclick="filterEvalTab('ALL', this)"><i class="fa-solid fa-border-all me-1"></i> Tất Cả</button>
                 <button class="eval-tab-btn" onclick="filterEvalTab('Kế hoạch', this)"><i class="fa-solid fa-calendar-check me-1"></i> Kế hoạch</button>
@@ -786,7 +810,45 @@
     </section>
 </div>
 
-<!-- MODAL KIỂM TRA ĐÁNH GIÁ (CÓ TÙY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
+<!-- MODAL BIÊN BẢN HỌP TỔ (NHÓM) CHUYÊN MÔN -->
+<div class="modal" id="meetingModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
+        <input type="hidden" id="editMeetingIndex">
+        
+        <div class="form-group"><label>1. Thời Gian Họp (Ngày / Tuần / Học kỳ)</label>
+            <input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 - Ngày 20/10/2026 (Tuần 8, HK1)">
+        </div>
+
+        <div class="form-group"><label>2. Thành Phần Tham Dự / Chủ Trì - Thư Ký</label>
+            <input type="text" id="inputMeetingMembers" class="form-control" placeholder="Ví dụ: CẢ TỔ (Chủ trì: Can, Thư ký: Duyên, Vắng: Không)">
+            <div style="display:flex; gap:0.4rem; margin-top:0.3rem;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="setQuickMembers('Tất cả thành viên Tổ Sinh - CN')">+ Tất cả tổ</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setQuickMembers('Nhóm Sinh học')">+ Nhóm Sinh</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="setQuickMembers('Nhóm Công nghệ')">+ Nhóm Công nghệ</button>
+            </div>
+        </div>
+
+        <div class="form-group"><label>3. Nội Dung Trích Yếu / Nghị Quyết / Kết Luận Họp</label>
+            <textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="Nhập tóm tắt nội dung cuộc họp, đánh giá chuyên môn, thống nhất kế hoạch tuần tiếp theo..."></textarea>
+        </div>
+        
+        <div class="form-group"><label>4. FILE BIÊN BẢN (Lựa chọn 1: Tải File Word/PDF Scan từ máy)</label>
+            <input type="file" id="inputMeetingFile" class="form-control">
+        </div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Docs / Google Drive Biên Bản</label>
+            <input type="text" id="inputMeetingLink" class="form-control" placeholder="https://docs.google.com/...">
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản Họp</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL KIỂM TRA ĐÁNH GIÁ -->
 <div class="modal" id="evaluationModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
@@ -801,12 +863,10 @@
             </select>
         </div>
 
-        <!-- BỔ SUNG TÙY CHỌN CẢ TỔ -->
         <div class="form-group"><label>2. Giáo Viên Phụ Trách / Ra Đề (Có lựa chọn CẢ TỔ)</label>
             <select id="inputEvalTeacher" class="form-control"></select>
         </div>
 
-        <!-- BỔ SUNG TÙY CHỌN CẢ 3 KHỐI -->
         <div class="form-group"><label>3. Môn & Khối Lớp (Có lựa chọn CẢ 3 KHỐI)</label>
             <select id="inputEvalSubject" class="form-control">
                 <option value="CẢ 3 KHỐI (10, 11, 12)">🌟 CẢ 3 KHỐI (Khối 10, 11 & 12)</option>
@@ -1125,9 +1185,9 @@
     const ADMIN_PASSWORD = "123456";
 
     let currentUser = localStorage.getItem('currentUser') || 'GUEST';
-    let isPhoneUnlocked = false; // Trạng thái mở khóa SĐT
-    let isMobileView = localStorage.getItem('isMobileView') === 'true'; // Trạng thái xem mobile
-    let activeEvalTab = 'ALL'; // Tab lọc cho Kiểm Tra Đánh Giá
+    let isPhoneUnlocked = false; 
+    let isMobileView = localStorage.getItem('isMobileView') === 'true'; 
+    let activeEvalTab = 'ALL'; 
 
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
@@ -1136,6 +1196,7 @@
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
             title_profile: 'Hồ Sơ Tổ Chuyên Môn',
             title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
+            title_meeting_minutes: 'Biên Bản Họp Tổ (Nhóm) Chuyên Môn',
             title_lesson_plans: 'Kế Hoạch Bài Dạy Của Giáo Viên',
             title_topics: 'Chuyên Đề Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
@@ -1151,6 +1212,7 @@
             { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
             { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
+        meetingsData: [],
         lessonPlansData: [],
         topicsData: [],
         evaluationsData: [],
@@ -1344,6 +1406,7 @@
         renderHeader();
         renderIntro();
         renderProfiles();
+        renderMeetings();
         renderLessonPlans();
         renderTopics();
         renderEvaluations();
@@ -1378,6 +1441,109 @@
         appData.introText = text;
         saveDataToCloud();
         closeModal('introModal');
+    }
+
+    /* RENDER MỤC BIÊN BẢN HỌP TỔ CHUYÊN MÔN */
+    function renderMeetings() {
+        const filterVal = (document.getElementById('filterMeeting')?.value || '').toLowerCase();
+        const tbody = document.getElementById('meetingTableBody');
+        tbody.innerHTML = '';
+
+        (appData.meetingsData || []).forEach((item, i) => {
+            if (filterVal && !item.time.toLowerCase().includes(filterVal) && !item.members.toLowerCase().includes(filterVal) && !item.content.toLowerCase().includes(filterVal)) return;
+
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Biên Bản</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            let canEdit = canUserEdit(item.author, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('meetingsData', ${i}, 'Biên bản ${item.time}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openMeetingModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteMeeting(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td data-label="Thời gian" class="nowrap-cell"><strong style="color:var(--accent-gold);"><i class="fa-solid fa-clock me-1"></i> ${item.time}</strong></td>
+                    <td data-label="Thành phần"><span class="badge badge-purple">${item.members}</span></td>
+                    <td data-label="Nội dung họp"><div style="max-height:100px; overflow-y:auto; line-height:1.4;">${item.content}</div></td>
+                    <td data-label="File/Link">${fileHtml}</td>
+                    <td data-label="Thao tác">${actionBtns}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function openMeetingModal(i = null) {
+        document.getElementById('editMeetingIndex').value = i !== null ? i : '';
+        document.getElementById('inputMeetingFile').value = '';
+
+        if (i !== null && appData.meetingsData) {
+            document.getElementById('inputMeetingTime').value = appData.meetingsData[i].time;
+            document.getElementById('inputMeetingMembers').value = appData.meetingsData[i].members;
+            document.getElementById('inputMeetingContent').value = appData.meetingsData[i].content;
+            document.getElementById('inputMeetingLink').value = appData.meetingsData[i].link;
+        } else {
+            document.getElementById('inputMeetingTime').value = '';
+            document.getElementById('inputMeetingMembers').value = 'Tất cả thành viên Tổ Sinh - CN';
+            document.getElementById('inputMeetingContent').value = '';
+            document.getElementById('inputMeetingLink').value = '';
+        }
+        document.getElementById('meetingModal').style.display = 'flex';
+    }
+
+    function setQuickMembers(val) {
+        document.getElementById('inputMeetingMembers').value = val;
+    }
+
+    async function saveMeeting() {
+        const idx = document.getElementById('editMeetingIndex').value;
+        const time = document.getElementById('inputMeetingTime').value;
+        const members = document.getElementById('inputMeetingMembers').value;
+        const content = document.getElementById('inputMeetingContent').value;
+        const fileInput = document.getElementById('inputMeetingFile');
+        const linkInput = document.getElementById('inputMeetingLink').value;
+
+        if (!time || !content) return alert('Nhập đầy đủ thời gian và nội dung cuộc họp!');
+
+        if (!appData.meetingsData) appData.meetingsData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file biên bản họp lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const meetingObj = { 
+            time, members, content, link: finalLink, 
+            author: idx !== '' ? appData.meetingsData[idx].author : currentUser,
+            allowedEditors: idx !== '' ? (appData.meetingsData[idx].allowedEditors || []) : []
+        };
+
+        if (idx !== '') appData.meetingsData[idx] = meetingObj;
+        else appData.meetingsData.push(meetingObj);
+
+        saveDataToCloud();
+        closeModal('meetingModal');
+    }
+
+    function deleteMeeting(i) {
+        if (confirm('Xóa biên bản họp này?')) {
+            appData.meetingsData.splice(i, 1);
+            saveDataToCloud();
+        }
     }
 
     /* HỒ SƠ TỔ CHUYÊN MÔN */
@@ -1700,7 +1866,7 @@
         }
     }
 
-    /* RENDER MỤC KIỂM TRA ĐÁNH GIÁ (BỔ SUNG TÙY CHỌN CẢ TỔ VÀ CẢ 3 KHỐI) */
+    /* RENDER MỤC KIỂM TRA ĐÁNH GIÁ */
     function filterEvalTab(tabCategory, btnElement) {
         activeEvalTab = tabCategory;
         const buttons = document.querySelectorAll('.eval-tab-btn');
@@ -1731,7 +1897,6 @@
                 ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
                 : (item.link || 'Chưa đính kèm');
 
-            // XỬ LÝ BADGE DÀNH CHO CẢ TỔ VÀ CẢ 3 KHỐI
             let teacherBadgeHtml = `<strong style="color:var(--accent-gold);">${itemTeacher}</strong>`;
             if (itemTeacher === 'CẢ TỔ') {
                 teacherBadgeHtml = `<span class="badge badge-allto"><i class="fa-solid fa-users-gear me-1"></i> CẢ TỔ THỰC HIỆN</span>`;
@@ -1905,6 +2070,7 @@
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
+        else if (dataKey === 'meetingsData') tbodyId = 'meetingTableBody';
         else if (dataKey === 'lessonPlansData') tbodyId = 'lessonPlanTableBody';
         else if (dataKey === 'topicsData') tbodyId = 'topicTableBody';
         else if (dataKey === 'evaluationsData') tbodyId = 'evaluationTableBody';
@@ -2007,7 +2173,6 @@
         });
     }
 
-    /* RENDER CÁC NHIỆM VỤ THI ĐỦA, DẠY LỚP */
     function renderTasks() {
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
