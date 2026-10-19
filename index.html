@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Tổ Chuyên Môn - Sinh & CN</title>
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,8 +28,6 @@
             --cyan-accent: #38bdf8;
             --danger-color: #ef4444;
             --success-color: #10b981;
-            --orange-accent: #f97316;
-            --purple-accent: #a855f7;
         }
 
         [data-theme="ocean"] {
@@ -46,141 +44,206 @@
             --border-glow: rgba(255, 255, 255, 0.15);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
             background: var(--bg-gradient);
             color: var(--text-light);
             min-height: 100vh;
-            padding: 1rem 0.5rem;
+            padding: 2rem 1rem;
             display: flex;
             justify-content: center;
             align-items: flex-start;
             transition: background 0.5s ease;
         }
 
-        @media (min-width: 768px) { body { padding: 2rem 1rem; } }
-
         .container {
-            max-width: 1150px;
+            max-width: 1100px;
             width: 100%;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
-        /* BAR PHÂN QUYỀN TRÊN 1 HÀNG */
         .admin-bar {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glow);
             border-radius: 20px;
-            padding: 0.6rem 1rem;
+            padding: 0.6rem 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 0.8rem;
             white-space: nowrap;
             overflow-x: auto;
-            scrollbar-width: none;
         }
-        .admin-bar::-webkit-scrollbar { display: none; }
 
-        .admin-bar-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+        .admin-bar-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
 
         .role-badge {
-            font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 20px;
-            background: rgba(56, 189, 248, 0.15); color: var(--cyan-accent); border: 1px solid rgba(56, 189, 248, 0.3);
-            display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--cyan-accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
         .admin-active .role-badge {
-            background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border-color: rgba(251, 191, 36, 0.3);
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border-color: rgba(251, 191, 36, 0.3);
         }
 
-        .sync-status { font-size: 0.75rem; color: var(--success-color); display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
+        .sync-status {
+            font-size: 0.78rem;
+            color: var(--success-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
 
         .theme-select {
-            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid var(--border-glow);
-            padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.78rem; outline: none; cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border-glow);
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            outline: none;
+            cursor: pointer;
         }
         .theme-select option { background: #0f172a; color: white; }
 
-        .switch { position: relative; display: inline-block; width: 38px; height: 20px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #475569; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-gold); }
-        input:checked + .slider:before { transform: translateX(18px); background-color: #0f172a; }
-
-        .mobile-toggle-btn {
-            background: rgba(56, 189, 248, 0.2); border: 1px solid var(--cyan-accent); color: var(--cyan-accent);
-            padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #475569; transition: .4s; border-radius: 34px;
         }
-        .mobile-toggle-btn.active { background: var(--cyan-accent); color: #0f172a; }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-gold); }
+        input:checked + .slider:before { transform: translateX(20px); background-color: #0f172a; }
 
         .header-card {
-            background: var(--card-gradient-1); backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glow); border-radius: 20px; padding: 1.8rem 1rem;
-            text-align: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); position: relative;
+            background: var(--card-gradient-1);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
         }
-
-        .school-name { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
 
         .department-name {
-            font-size: 2rem; font-weight: 800; color: var(--accent-gold-bright); text-transform: uppercase;
-            text-shadow: 0 0 15px var(--accent-gold-glow); margin: 0.3rem 0;
-        }
-
-        @media (min-width: 768px) {
-            .department-name { font-size: 2.8rem; }
-            .header-card { padding: 2.5rem 2rem; border-radius: 24px; }
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent-gold-bright);
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--accent-gold-glow);
+            margin-bottom: 0.5rem;
         }
 
         .academic-year {
-            display: inline-block; background: rgba(251, 191, 36, 0.15); border: 1px solid var(--border-gold-glow);
-            color: var(--accent-gold); padding: 0.3rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.85rem; white-space: nowrap;
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid var(--border-gold-glow);
+            color: var(--accent-gold);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .card-box {
-            background: var(--card-gradient-2); backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glow); border-radius: 20px; padding: 1.2rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; gap: 1.2rem;
+            background: var(--card-gradient-2);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        @media (min-width: 768px) { .card-box { padding: 2rem; border-radius: 24px; gap: 1.5rem; } }
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-        .card-header-flex { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
-
-        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--accent-gold-bright); display: flex; align-items: center; gap: 0.6rem; }
-        @media (min-width: 768px) { .section-title { font-size: 1.4rem; } }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-gold-bright);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
         .sub-section-title {
-            font-size: 1rem; font-weight: 700; color: var(--cyan-accent); display: flex; align-items: center; gap: 0.5rem;
-            margin-top: 0.3rem; padding-bottom: 0.4rem; border-bottom: 1px dashed rgba(56, 189, 248, 0.3);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cyan-accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3);
         }
 
-        .edit-title-btn { background: none; border: none; color: var(--cyan-accent); cursor: pointer; font-size: 0.9rem; margin-left: 0.3rem; display: none; }
+        .edit-title-btn {
+            background: none; border: none; color: var(--cyan-accent); cursor: pointer;
+            font-size: 1rem; margin-left: 0.5rem; display: none;
+        }
 
         .filter-input {
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white;
-            padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; outline: none; width: 100%; max-width: 220px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            outline: none;
+            width: 180px;
         }
 
         .intro-text-box {
-            line-height: 1.6; font-size: 0.95rem; color: var(--text-light); background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--border-glow); padding: 1rem; border-radius: 14px;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border-glow);
+            padding: 1.2rem;
+            border-radius: 16px;
         }
 
         .admin-btn, .admin-col { display: none !important; }
-        .admin-active .edit-title-btn, .admin-active .admin-btn { display: inline-flex !important; }
+        .admin-active .edit-title-btn,
+        .admin-active .admin-btn { display: inline-flex !important; }
         .admin-active .admin-col { display: table-cell !important; }
 
         .btn {
-            padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; text-decoration: none;
-            font-size: 0.85rem; min-height: 38px; justify-content: center; white-space: nowrap;
+            padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; text-decoration: none;
         }
         .btn-gold { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #0f172a; }
         .btn-gold:hover { transform: translateY(-2px); background: linear-gradient(135deg, #ffe600 0%, #f59e0b 100%); }
@@ -188,111 +251,54 @@
         .btn-outline:hover { background: rgba(255, 255, 255, 0.2); }
         .btn-download { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
         .btn-download:hover { background: rgba(16, 185, 129, 0.45); color: #ffffff; }
-        .btn-export { background: rgba(249, 115, 22, 0.25); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.5); }
-        .btn-export:hover { background: rgba(249, 115, 22, 0.45); color: #ffffff; }
-        .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; border-radius: 8px; min-height: 32px; }
+        .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; border-radius: 8px; }
         .btn-danger { background: var(--danger-color); color: white; }
         .btn-edit { background: var(--cyan-accent); color: #0f172a; }
         .btn-perm { background: rgba(167, 139, 250, 0.3); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.5); }
 
-        .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; min-width: 650px; }
+        .table-responsive { overflow-x: auto; }
+        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
         .custom-table th {
-            padding: 0.8rem; text-align: left; font-size: 0.8rem; text-transform: uppercase;
-            color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.1); white-space: nowrap;
+            padding: 1rem; text-align: left; font-size: 0.85rem; text-transform: uppercase;
+            color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .custom-table td { padding: 0.8rem; background: rgba(255, 255, 255, 0.02); font-size: 0.9rem; }
+        .custom-table td { padding: 1rem; background: rgba(255, 255, 255, 0.02); font-size: 0.95rem; }
         .custom-table tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .custom-table tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
 
-        .badge, .single-line-badge {
-            padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-            white-space: nowrap !important; display: inline-flex !important; align-items: center; justify-content: center;
-            max-width: max-content; word-break: keep-all !important; overflow: hidden; text-overflow: ellipsis;
-        }
-
-        .nowrap-cell { white-space: nowrap !important; }
-
+        .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .badge-cyan { background: rgba(56, 189, 248, 0.15); color: var(--cyan-accent); border: 1px solid rgba(56, 189, 248, 0.3); }
-        .badge-purple { background: rgba(167, 139, 250, 0.15); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.3); }
-        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-        .badge-orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
 
-        /* MỤC CHẤM CÔNG GIÁO VIÊN DASHBOARD STYLES */
-        .attendance-stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 0.5rem;
+        .resource-grid, .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
         }
-        .stat-card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem;
-        }
-        .stat-card .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold-bright); }
-        .stat-card .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-
-        .eval-tabs-bar { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.4rem; scrollbar-width: none; }
-        .eval-tabs-bar::-webkit-scrollbar { display: none; }
-        .eval-tab-btn {
-            background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-muted);
-            padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;
-        }
-        .eval-tab-btn.active, .eval-tab-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--cyan-accent); border-color: var(--cyan-accent); }
-
-        /* CHẾ ĐỘ THẺ CARD BÀI VIẾT TRÊN ĐIỆN THOẠI (MOBILE CARD VIEW) */
-        .mobile-view .custom-table { display: block; min-width: 100%; }
-        .mobile-view .custom-table thead { display: none; }
-        .mobile-view .custom-table tbody { display: flex; flex-direction: column; gap: 0.8rem; }
-        .mobile-view .custom-table tr {
-            display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 1rem; gap: 0.5rem;
-        }
-        .mobile-view .custom-table td {
-            display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0;
-            background: transparent !important; border: none !important; font-size: 0.88rem;
-        }
-        .mobile-view .custom-table td::before {
-            content: attr(data-label); font-weight: 700; color: var(--text-muted); font-size: 0.8rem; margin-right: 0.5rem; white-space: nowrap;
-        }
-        .mobile-view .custom-table tr td:first-child, .mobile-view .custom-table tr td:last-child { border-radius: 0; }
-
-        .resource-grid, .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
         .resource-card, .gallery-card {
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px; padding: 0.9rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem;
+            border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem;
         }
-        .resource-type { font-size: 0.72rem; font-weight: 700; color: var(--cyan-accent); text-transform: uppercase; white-space: nowrap; }
-        .gallery-img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; }
+        .resource-type { font-size: 0.75rem; font-weight: 700; color: var(--cyan-accent); text-transform: uppercase; }
+        .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-content {
-            background: #1e1b4b; border: 1px solid var(--border-glow); padding: 1.5rem;
-            border-radius: 20px; width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 1rem;
-            max-height: 85vh; overflow-y: auto;
+            background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
+            border-radius: 20px; width: 90%; max-width: 550px; display: flex; flex-direction: column; gap: 1rem;
+            max-height: 90vh; overflow-y: auto;
         }
-        .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
-        .form-group label { font-size: 0.82rem; color: var(--text-muted); }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label { font-size: 0.85rem; color: var(--text-muted); }
         .form-control {
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.7rem; border-radius: 10px; color: white; outline: none; font-size: 0.9rem;
+            padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
-        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.2rem 0; }
+        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
-
-        /* STYLES CHO BÁO CÁO IN CHẤM CÔNG */
-        @media print {
-            body { background: white !important; color: black !important; padding: 0 !important; }
-            .admin-bar, .modal, .btn, .edit-title-btn, .mobile-toggle-btn, .filter-input, .eval-tabs-bar { display: none !important; }
-            .container { max-width: 100% !important; gap: 1rem !important; }
-            .card-box { background: white !important; color: black !important; border: 1px solid #ccc !important; box-shadow: none !important; padding: 1rem !important; }
-            .custom-table th, .custom-table td { color: black !important; background: white !important; border-bottom: 1px solid #ddd !important; }
-            .section-title, .department-name { color: black !important; text-shadow: none !important; }
-            .badge { border: 1px solid #888 !important; color: black !important; background: #eee !important; }
-        }
     </style>
 </head>
 <body>
@@ -302,28 +308,25 @@
     <div class="admin-bar">
         <div class="admin-bar-group">
             <span class="role-badge" id="roleBadge"><i class="fa-solid fa-user-shield"></i> <span id="roleText">Chế độ Xem / Tải File</span></span>
-            <button class="mobile-toggle-btn" id="mobileToggleBtn" onclick="toggleMobileView()">
-                <i class="fa-solid fa-mobile-screen"></i> <span id="mobileToggleText">Xem Mobile</span>
-            </button>
             <div class="sync-status" id="syncStatus">
                 <i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối...
             </div>
         </div>
 
         <div class="admin-bar-group">
-            <span style="font-size:0.75rem; color:var(--text-muted);">Đăng nhập GV:</span>
+            <span style="font-size:0.78rem; color:var(--text-muted);">Đăng nhập GV:</span>
             <select id="userSelect" class="theme-select" onchange="changeCurrentUser(this.value)">
                 <option value="GUEST">Khách / Giáo viên chung</option>
             </select>
 
             <select id="themeSelect" class="theme-select" onchange="changeTheme(this.value)">
-                <option value="default">Tím Dạ Tước</option>
-                <option value="ocean">Xanh Biển Sâu</option>
-                <option value="black">Đen Huyền Bí</option>
+                <option value="default">Giao diện: Tím Dạ Tước</option>
+                <option value="ocean">Giao diện: Xanh Biển Sâu</option>
+                <option value="black">Giao diện: Đen Huyền Bí</option>
             </select>
 
             <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 0.6rem;">
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Tổ trưởng:</span>
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Tổ trưởng:</span>
                 <label class="switch">
                     <input type="checkbox" id="adminToggle" onchange="toggleAdminMode()">
                     <span class="slider"></span>
@@ -334,7 +337,7 @@
 
     <!-- HEADER CARD -->
     <header class="header-card">
-        <button class="btn btn-outline btn-sm admin-btn" style="position: absolute; right: 10px; top: 10px;" onclick="openHeaderModal()">
+        <button class="btn btn-outline btn-sm admin-btn" style="position: absolute; right: 15px; top: 15px;" onclick="openHeaderModal()">
             <i class="fa-solid fa-pen"></i> Sửa Header
         </button>
         <div class="school-name" id="displaySchool">TRƯỜNG THPT VÕ THỊ SÁU</div>
@@ -342,7 +345,7 @@
         <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
     </header>
 
-    <!-- MỤC GIỚI THIỆU TỔ CHUYÊN MÔN -->
+    <!-- 1. MỤC GIỚI THIỆU TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -356,59 +359,32 @@
         </div>
     </section>
 
-    <!-- MỤC CHẤM CÔNG GIÁO VIÊN (MỤC MỚI - TỔ TRƯỜNG QUẢN LÝ) -->
+    <!-- 2. MỤC HỒ SƠ THÀNH VIÊN (NHÂN SỰ ĐƯỢC CHUYỂN NẰM NGAY DƯỚI PHẦN GIỚI THIỆU) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">Chấm Công Giáo Viên Tổ Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-                <select id="filterAttendanceMonth" class="filter-input" onchange="renderAttendance()">
-                    <option value="ALL">Tất cả thời gian</option>
-                </select>
-                <input type="text" class="filter-input" id="filterAttendanceTeacher" placeholder="🔍 Lọc Giáo viên..." onkeyup="renderAttendance()">
-                <button class="btn btn-export btn-sm" onclick="exportAttendanceCSV()"><i class="fa-solid fa-file-excel"></i> Xuất CSV/Excel</button>
-                <button class="btn btn-download btn-sm" onclick="printAttendanceReport()"><i class="fa-solid fa-print"></i> In / Xuất PDF</button>
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('attendanceData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> + Chấm Công GV</button>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button class="btn btn-outline btn-sm" onclick="unlockPhoneNumbers()" title="Bấm để xem SĐT"><i class="fa-solid fa-key"></i> Xem SĐT</button>
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
             </div>
         </div>
-
-        <!-- THỐNG KÊ DASHBOARD CHẤM CÔNG -->
-        <div class="attendance-stats-grid">
-            <div class="stat-card" style="border-left: 4px solid var(--danger-color);">
-                <div class="stat-value" id="statTotalViolations">0</div>
-                <div class="stat-label"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger-color);"></i> Tổng Lượt Vi Phạm</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid var(--orange-accent);">
-                <div class="stat-value" id="statLateDocs">0</div>
-                <div class="stat-label"><i class="fa-solid fa-clock-rotate-left" style="color:var(--orange-accent);"></i> Nộp Hồ Sơ Chậm</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid var(--accent-gold);">
-                <div class="stat-value" id="statLateTimes">0</div>
-                <div class="stat-label"><i class="fa-solid fa-user-clock" style="color:var(--accent-gold);"></i> Đi Trễ Tiết / Họp</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid var(--purple-accent);">
-                <div class="stat-value" id="statExamErrors">0</div>
-                <div class="stat-label"><i class="fa-solid fa-file-circle-xmark" style="color:var(--purple-accent);"></i> Sai Đề / Gác Thi</div>
-            </div>
-        </div>
-
         <div class="table-responsive">
-            <table class="custom-table" id="attendanceTable">
+            <table class="custom-table">
                 <thead>
                     <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'attendanceTableBody')"></th>
-                        <th>Ngày / Thời gian</th>
-                        <th>Giáo viên được chấm</th>
-                        <th>Nội dung ghi nhận / Vi phạm</th>
-                        <th>Chi tiết / Ghi chú</th>
-                        <th>Người ghi nhận</th>
-                        <th class="admin-col">Thao tác</th>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
+                        <th>Họ Và Tên</th>
+                        <th>Chức Vụ</th>
+                        <th>Nhiệm Vụ</th>
+                        <th>Liên Hệ / Zalo</th>
+                        <th class="admin-col">Thao Tác</th>
                     </tr>
                 </thead>
-                <tbody id="attendanceTableBody"></tbody>
+                <tbody id="memberTableBody"></tbody>
             </table>
         </div>
     </section>
@@ -420,7 +396,7 @@
                 <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; gap:0.5rem; align-items:center;">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('profilesData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                 <button class="btn btn-gold admin-btn" onclick="openProfileModal()"><i class="fa-solid fa-plus"></i> Thêm Hồ Sơ Tổ</button>
             </div>
@@ -443,77 +419,84 @@
         </div>
     </section>
 
-    <!-- HỒ SƠ THÀNH VIÊN -->
+    <!-- MỤC KẾ HOẠCH BÀI DẠY VÀ KẾ HOẠCH CÁ NHÂN GIÁO VIÊN (ĐÃ CHIA THÀNH 2 MỤC NHỎ) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
+                <i class="fa-solid fa-file-signature"></i> <span id="title_plans">Kế Hoạch Của Giáo Viên</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_plans')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                <button class="btn btn-outline btn-sm" id="btnUnlockPhone" onclick="unlockPhoneNumbers()">
-                    <i class="fa-solid fa-lock" id="iconLockPhone"></i> <span id="textLockPhone">Mở Khóa SĐT (Pass: 123456)</span>
-                </button>
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
+        </div>
+
+        <!-- MỤC NHỎ 1: KẾ HOẠCH BÀI DẠY -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-chalkboard"></i> 1. Kế Hoạch Bài Dạy (Giáo Án / Tiết Dạy)
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc Bài dạy / GV..." onkeyup="renderLessonPlans()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('lessonPlansData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal('BAI_DAY')"><i class="fa-solid fa-plus"></i> Nộp Bài Dạy</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'lessonPlanTableBody')"></th>
+                            <th>Tên Giáo Viên</th>
+                            <th>Môn Học & Khối Lớp</th>
+                            <th>Tên Bài Dạy / Tiết PPCT</th>
+                            <th>Tuần Áp Dụng</th>
+                            <th>File / Link Đính Kèm</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lessonPlanTableBody"></tbody>
+                </table>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
-                        <th>Họ Và Tên</th>
-                        <th>Chức Vụ</th>
-                        <th>Nhiệm Vụ</th>
-                        <th>Liên Hệ / Zalo</th>
-                        <th class="admin-col">Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="memberTableBody"></tbody>
-            </table>
+
+        <!-- MỤC NHỎ 2: KẾ HOẠCH CÁ NHÂN -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-user-pen"></i> 2. Kế Hoạch Cá Nhân (Năm học / Tháng / Bồi dưỡng)
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterPersonalPlan" placeholder="🔍 Lọc KH cá nhân / GV..." onkeyup="renderPersonalPlans()">
+                    <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('personalPlansData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                    <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal('CA_NHAN')"><i class="fa-solid fa-plus"></i> Thêm KH Cá Nhân</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'personalPlanTableBody')"></th>
+                            <th>Tên Giáo Viên</th>
+                            <th>Loại Kế Hoạch</th>
+                            <th>Tên Kế Hoạch Cá Nhân</th>
+                            <th>Thời Gian / Năm Học</th>
+                            <th>File / Link Đính Kèm</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personalPlanTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </section>
 
-    <!-- KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN -->
-    <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-file-signature"></i> <span id="title_lesson_plans">Kế Hoạch Bài Dạy Của Giáo Viên</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_lesson_plans')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
-                <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc Bài dạy / Giáo viên..." onkeyup="renderLessonPlans()">
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('lessonPlansData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal()"><i class="fa-solid fa-plus"></i> Nộp / Thêm Bài Dạy</button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'lessonPlanTableBody')"></th>
-                        <th>Tên Tác Giả / Giáo Viên</th>
-                        <th>Môn Học & Khối Lớp</th>
-                        <th>Tên Bài Dạy / Tiết Theo PPCT</th>
-                        <th>Tuần / Tuần Áp Dụng</th>
-                        <th>File Bài Dạy / Link Đính Kèm</th>
-                        <th>Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="lessonPlanTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN (CHO PHÉP MỌI GIÁO VIÊN TỰ NHẬP) -->
+    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
                 <i class="fa-solid fa-book-open-reader"></i> <span id="title_topics">Chuyên Đề Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_topics')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
+            <div style="display:flex; gap:0.5rem; align-items:center;">
                 <input type="text" class="filter-input" id="filterTopic" placeholder="🔍 Lọc GV / Môn / Khối..." onkeyup="renderTopics()">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('topicsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                 <button class="btn btn-gold btn-sm" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
@@ -542,28 +525,28 @@
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-file-contract"></i> <span id="title_meeting">Biên Bản Họp Tổ (Nhóm) Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_meeting')"><i class="fa-solid fa-pen"></i></button>
+                <i class="fa-solid fa-clipboard-list"></i> <span id="title_meetings">Biên Bản Họp Tổ (Nhóm) Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_meetings')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; width:100%; justify-content:flex-end;">
-                <input type="text" class="filter-input" id="filterMeeting" placeholder="🔍 Lọc Ngày / Nội dung..." onkeyup="renderMeetingMinutes()">
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <input type="text" class="filter-input" id="filterMeeting" placeholder="🔍 Lọc Nội dung / Thời gian..." onkeyup="renderMeetings()">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('meetingMinutesData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold btn-sm" onclick="openMeetingModal()"><i class="fa-solid fa-plus"></i> + Thêm Biên Bản Họp</button>
+                <button class="btn btn-gold btn-sm" onclick="openMeetingModal()"><i class="fa-solid fa-plus"></i> Thêm Biên Bản Họp</button>
             </div>
         </div>
         <div class="table-responsive">
             <table class="custom-table">
                 <thead>
                     <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'meetingMinutesTableBody')"></th>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'meetingTableBody')"></th>
                         <th>Thời Gian Họp</th>
                         <th>Thành Phần Tham Dự</th>
-                        <th>Nội Dung Chỉnh / Nghị Quyết</th>
-                        <th>File / Link Biên Bản</th>
+                        <th>Nội Dung / Trích Yếu Biên Bản</th>
+                        <th>File / Link Đính Kèm</th>
                         <th>Thao Tác</th>
                     </tr>
                 </thead>
-                <tbody id="meetingMinutesTableBody"></tbody>
+                <tbody id="meetingTableBody"></tbody>
             </table>
         </div>
     </section>
@@ -577,13 +560,13 @@
             </h2>
         </div>
 
-        <!-- 1. DẠY LỚP & CHỦ NHIỆM -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.3rem;">
+        <!-- DẠY LỚP & CHỦ NHIỆM -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
                 </div>
-                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterTeach" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
                     <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('teachingTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('day_lop')"><i class="fa-solid fa-plus"></i> Thêm Phân Công</button>
@@ -606,13 +589,13 @@
             </div>
         </div>
 
-        <!-- 2. BỒI DƯỠNG HSG -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
+        <!-- BỒI DƯỠNG HSG -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
                 </div>
-                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
                     <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('hsgTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openHsgModal()"><i class="fa-solid fa-plus"></i> Thêm Phân Công HSG</button>
@@ -635,54 +618,43 @@
             </div>
         </div>
 
-        <!-- 3. KIỂM TRA ĐÁNH GIÁ (CÓ TỦY CHỌN CẢ TỔ VÀ CẢ 3 KHỐI) -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
+        <!-- KIỂM TRA ĐÁNH GIÁ (CÓ CẢ TỔ & CẢ 3 KHỐI) -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-file-pen"></i> Kiểm Tra Đánh Giá
                 </div>
-                <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                    <input type="text" class="filter-input" id="filterEvaluation" placeholder="🔍 Lọc GV / Môn / Đề..." onkeyup="renderEvaluations()">
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="text" class="filter-input" id="filterEval" placeholder="🔍 Lọc GV / Môn / Đề..." onkeyup="renderTasks()">
                     <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('evaluationsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                    <button class="btn btn-gold btn-sm" onclick="openEvaluationModal()"><i class="fa-solid fa-plus"></i> Thêm Mới Tài Liệu KTĐG</button>
+                    <button class="btn btn-gold btn-sm" onclick="openEvalModal()"><i class="fa-solid fa-plus"></i> Thêm KT Đánh Giá</button>
                 </div>
             </div>
-
-            <!-- TAB LỌC 4 PHẦN NHỎ -->
-            <div class="eval-tabs-bar">
-                <button class="eval-tab-btn active" onclick="filterEvalTab('ALL', this)"><i class="fa-solid fa-border-all me-1"></i> Tất Cả</button>
-                <button class="eval-tab-btn" onclick="filterEvalTab('Kế hoạch', this)"><i class="fa-solid fa-calendar-check me-1"></i> Kế hoạch</button>
-                <button class="eval-tab-btn" onclick="filterEvalTab('Ngân hàng câu hỏi', this)"><i class="fa-solid fa-database me-1"></i> Ngân hàng câu hỏi</button>
-                <button class="eval-tab-btn" onclick="filterEvalTab('Ma trận - đặc tả', this)"><i class="fa-solid fa-table-cells me-1"></i> Ma trận - đặc tả</button>
-                <button class="eval-tab-btn" onclick="filterEvalTab('Đề đã kiểm tra xong', this)"><i class="fa-solid fa-square-check me-1"></i> Đề đã kiểm tra xong</button>
-            </div>
-
             <div class="table-responsive">
                 <table class="custom-table">
                     <thead>
                         <tr>
-                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'evaluationTableBody')"></th>
-                            <th>Giáo viên phụ trách</th>
-                            <th>Phần nhỏ KTĐG</th>
-                            <th>Môn & Khối lớp</th>
-                            <th>Tên tài liệu / Nội dung</th>
-                            <th>Học kỳ / Thời gian</th>
-                            <th>File / Link đính kèm</th>
+                            <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'evalTableBody')"></th>
+                            <th>Giáo Viên Phụ Trách</th>
+                            <th>Môn & Khối Lớp</th>
+                            <th>Tên Ma Trận / Đề Kiểm Tra</th>
+                            <th>Học Kỳ / Thời Gian</th>
+                            <th>File Đề / Đáp Án</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody id="evaluationTableBody"></tbody>
+                    <tbody id="evalTableBody"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 4. ĐĂNG KÝ THI ĐỦA -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
+        <!-- ĐĂNG KÝ THI ĐỦA -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
                     <i class="fa-solid fa-trophy"></i> Đăng Ký Phong Trào Thi Đua
                 </div>
-                <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <div style="display:flex; gap:0.5rem;">
                     <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('competitionTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                     <button class="btn btn-gold btn-sm admin-btn" onclick="openTaskModal('thi_dua')"><i class="fa-solid fa-plus"></i> Thêm Đăng Ký Thi Đua</button>
                 </div>
@@ -702,6 +674,76 @@
                     <tbody id="competitionTaskTableBody"></tbody>
                 </table>
             </div>
+        </div>
+    </section>
+
+    <!-- MỤC CHẤM CÔNG GIÁO VIÊN (TỔ TRƯỜNG PHỤ TRÁCH - CÓ XUẤT CSV/PRINT PDF) -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-calendar-check"></i> <span id="title_attendance">Chấm Công Giáo Viên (Tổ Trưởng Chấm)</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <button class="btn btn-download btn-sm" onclick="exportAttendanceCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="printAttendanceReport()"><i class="fa-solid fa-print"></i> In / Xuất PDF</button>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> + Chấm Công GV</button>
+            </div>
+        </div>
+
+        <!-- THỐNG KÊ NHANH -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.8rem; border-radius: 14px; text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 800; color: #f87171;" id="statTotalViolations">0</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Tổng số ghi nhận</div>
+            </div>
+            <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); padding: 0.8rem; border-radius: 14px; text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-gold);" id="statLateDoc">0</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Nộp hồ sơ chậm</div>
+            </div>
+            <div style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.8rem; border-radius: 14px; text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--cyan-accent);" id="statLateArrive">0</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Đi trễ</div>
+            </div>
+            <div style="background: rgba(167, 139, 250, 0.15); border: 1px solid rgba(167, 139, 250, 0.3); padding: 0.8rem; border-radius: 14px; text-align: center;">
+                <div style="font-size: 1.5rem; font-weight: 800; color: #c084fc;" id="statExamError">0</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Sai sót Đề / Gác thi</div>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-top:0.5rem;">
+            <div style="font-weight:600; font-size:0.9rem; color:var(--cyan-accent);"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Theo Dõi & Chấm Công</div>
+            <div style="display:flex; gap:0.5rem;">
+                <select id="filterAttMonth" class="theme-select" onchange="renderAttendance()">
+                    <option value="ALL">Tất cả tháng</option>
+                    <option value="09">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12">Tháng 12</option>
+                    <option value="01">Tháng 1</option>
+                    <option value="02">Tháng 2</option>
+                    <option value="03">Tháng 3</option>
+                    <option value="04">Tháng 4</option>
+                    <option value="05">Tháng 5</option>
+                </select>
+                <input type="text" class="filter-input" id="filterAttTeacher" placeholder="🔍 Lọc Giáo viên..." onkeyup="renderAttendance()">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table" id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'attendanceTableBody')"></th>
+                        <th>Ngày / Thời Gian</th>
+                        <th>Tên Giáo Viên</th>
+                        <th>Nội Dung Ghi Nhận / Vi Phạm</th>
+                        <th>Ghi Chú Chi Tiết</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTableBody"></tbody>
+            </table>
         </div>
     </section>
 
@@ -758,129 +800,117 @@
 <!-- MODAL CHẤM CÔNG GIÁO VIÊN -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Chấm Công / Ghi Nhận Vi Phạm Giáo Viên</h3>
-        <input type="hidden" id="editAttendanceIndex">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-calendar-check me-2"></i> Chấm Công / Ghi Nhận Giáo Viên</h3>
+        <input type="hidden" id="editAttIndex">
         
         <div class="form-group"><label>1. Chọn Giáo Viên</label>
-            <select id="inputAttendanceTeacher" class="form-control"></select>
+            <select id="inputAttTeacher" class="form-control"></select>
         </div>
         <div class="form-group"><label>2. Ngày Ghi Nhận</label>
-            <input type="date" id="inputAttendanceDate" class="form-control">
+            <input type="date" id="inputAttDate" class="form-control">
         </div>
         <div class="form-group"><label>3. Nội Dung Chấm / Ghi Nhận Vi Phạm</label>
-            <select id="inputAttendanceType" class="form-control">
+            <select id="inputAttType" class="form-control">
                 <option value="Nộp hồ sơ chậm">1. Nộp hồ sơ chậm</option>
-                <option value="Đi trễ">2. Đi trễ (Tiết dạy/Họp/Coi thi)</option>
+                <option value="Đi trễ">2. Đi trễ</option>
                 <option value="Ra đề có sai sót">3. Ra đề có sai sót</option>
                 <option value="Sai sót trong gác KT định kỳ">4. Sai sót trong gác KT định kỳ</option>
-                <option value="Khác">5. Khác (Ghi chú chi tiết)</option>
+                <option value="Khác">5. Khác (Ghi chú cụ thể bên dưới)</option>
             </select>
         </div>
-        <div class="form-group"><label>4. Chi Tiết Lỗi / Ghi Chú Cụ Thể</label>
-            <textarea id="inputAttendanceNote" class="form-control" rows="3" placeholder="Ví dụ: Nộp KHBD tuần 12 trễ 2 ngày / Đề kiểm tra học kỳ sai đáp án câu 15..."></textarea>
+        <div class="form-group"><label>4. Ghi Chú Cụ Thể (Lý do, tiết học, đợt kiểm tra...)</label>
+            <textarea id="inputAttNote" class="form-control" rows="3" placeholder="Ví dụ: Nộp KHBD tuần 12 trễ 2 ngày..."></textarea>
         </div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveAttendance()">Lưu Nhập Chấm Công</button>
+            <button class="btn btn-gold" onclick="saveAttendance()">Lưu Chấm Công</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL BIÊN BẢN HỌP TỔ CHUYÊN MÔN -->
+<!-- MODAL KẾ HOẠCH BÀI DẠY / CÁ NHÂN -->
+<div class="modal" id="lessonPlanModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);" id="planModalTitle"><i class="fa-solid fa-file-signature me-2"></i> Kế Hoạch Bài Dạy</h3>
+        <input type="hidden" id="editLessonPlanType">
+        <input type="hidden" id="editLessonPlanIndex">
+        
+        <div class="form-group"><label>1. Tên Tác Giả / Giáo Viên</label>
+            <select id="inputLessonPlanTeacher" class="form-control"></select>
+        </div>
+        <div class="form-group"><label id="labelPlanCol1">2. Môn Học & Khối Lớp</label><input type="text" id="inputLessonPlanSubject" class="form-control" placeholder="Ví dụ: Sinh học 11, Công nghệ 10"></div>
+        <div class="form-group"><label id="labelPlanCol2">3. Tên Bài Dạy / Tiết PPCT</label><input type="text" id="inputLessonPlanTitle" class="form-control" placeholder="Ví dụ: Bài 12: Quang hợp ở thực vật"></div>
+        <div class="form-group"><label id="labelPlanCol3">4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLessonPlanWeek" class="form-control" placeholder="Ví dụ: Tuần 15 (Học kỳ 1)"></div>
+        
+        <div class="form-group"><label>5. FILE TÀI LIỆU (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputLessonPlanFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputLessonPlanLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL BIÊN BẢN HỌP TỔ -->
 <div class="modal" id="meetingModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-contract me-2"></i> Biên Bản Họp Tổ Chuyên Môn</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
         <input type="hidden" id="editMeetingIndex">
         
-        <div class="form-group"><label>1. Thời Gian Họp (Ngày / Tuần / Học Kỳ)</label>
-            <input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 Ngày 15/10/2026 (Tuần 8)">
+        <div class="form-group"><label>1. Thời Gian Họp / Tuần / Học Kỳ</label><input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 Ngày 15/10/2026 (Tuần 8)"></div>
+        <div class="form-group"><label>2. Thành Phần Tham Dự / Chủ Trì - Thư Ký</label>
+            <input type="text" id="inputMeetingMembers" class="form-control" placeholder="Ví dụ: Cả tổ (Vắng 0) - Chủ trì: Thầy Can, Thư ký: Cô Duyên">
         </div>
-        <div class="form-group"><label>2. Thành Phần Tham Dự</label>
-            <select id="inputMeetingAttendeesType" class="form-control" onchange="checkMeetingCustomAttendees(this.value)">
-                <option value="Tất cả thành viên tổ Sinh - CN">Tất cả thành viên tổ Sinh - CN</option>
-                <option value="Nhóm Sinh học">Nhóm Sinh học</option>
-                <option value="Nhóm Công nghệ">Nhóm Công nghệ</option>
-                <option value="CUSTOM">Khác (Tự gõ tên thành phần...)</option>
-            </select>
-        </div>
-        <div class="form-group" id="groupMeetingCustomAttendees" style="display:none;"><label>Chi Tiết Thành Phần Vắng/Mặt</label>
-            <input type="text" id="inputMeetingCustomAttendees" class="form-control" placeholder="Ví dụ: Có mặt 5/5, Vắng 0">
-        </div>
-        <div class="form-group"><label>3. Nội Dung Chính / Nghị Quyết Họp Tổ</label>
-            <textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="- Đánh giá công tác tuần cũ...&#10;- Báo cáo tiến độ chuyên đề...&#10;- Triển khai kiểm tra giữa kỳ..."></textarea>
+        <div class="form-group"><label>3. Nội Dung Chính / Trích Yếu Biên Bản</label>
+            <textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="Ví dụ: Sinh hoạt chuyên môn tuần 8; Thống nhất đề kiểm tra giữa kỳ 1..."></textarea>
         </div>
         
-        <div class="form-group"><label>4. FILE BIÊN BẢN HỌP (Tải từ máy - Word/PDF)</label>
-            <input type="file" id="inputMeetingFile" class="form-control">
-        </div>
+        <div class="form-group"><label>4. FILE BIÊN BẢN (Lựa chọn 1: Tải File Word/PDF Scan)</label><input type="file" id="inputMeetingFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Dán Link Google Drive / Docs Biên Bản</label>
-            <input type="text" id="inputMeetingLink" class="form-control" placeholder="https://drive.google.com/...">
-        </div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputMeetingLink" class="form-control" placeholder="https://drive.google.com/..."></div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveMeetingMinutes()">Lưu Biên Bản Họp</button>
+            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL KIỂM TRA ĐÁNH GIÁ (CÓ TỦY CHỌN CẢ TỔ & CẢ 3 KHỐI) -->
-<div class="modal" id="evaluationModal">
+<!-- MODAL KIỂM TRA ĐÁNH GIÁ -->
+<div class="modal" id="evalModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
-        <input type="hidden" id="editEvaluationIndex">
+        <input type="hidden" id="editEvalIndex">
         
-        <div class="form-group"><label>1. Phần Nhỏ Kiểm Tra Đánh Giá</label>
-            <select id="inputEvalSubSection" class="form-control">
-                <option value="Kế hoạch">Kế hoạch</option>
-                <option value="Ngân hàng câu hỏi">Ngân hàng câu hỏi</option>
-                <option value="Ma trận - đặc tả">Ma trận - đặc tả</option>
-                <option value="Đề đã kiểm tra xong">Đề đã kiểm tra xong</option>
-            </select>
-        </div>
-        <div class="form-group"><label>2. Giáo Viên Phụ Trách / Ra Đề</label>
+        <div class="form-group"><label>1. Giáo Viên Phụ Trách / Ra Đề</label>
             <select id="inputEvalTeacher" class="form-control"></select>
         </div>
-        <div class="form-group"><label>3. Môn & Khối Lớp</label>
-            <select id="inputEvalSubject" class="form-control">
-                <option value="CẢ 3 KHỐI (10, 11, 12)">CẢ 3 KHỐI (10, 11, 12)</option>
+        <div class="form-group"><label>2. Môn Học & Khối Lớp</label>
+            <select id="inputEvalSubjectGrade" class="form-control">
+                <option value="Sinh học - Khối 10">Sinh học - Khối 10</option>
+                <option value="Sinh học - Khối 11">Sinh học - Khối 11</option>
+                <option value="Sinh học - Khối 12">Sinh học - Khối 12</option>
                 <option value="Sinh học - CẢ 3 KHỐI">Sinh học - CẢ 3 KHỐI</option>
+                <option value="Công nghệ - Khối 10">Công nghệ - Khối 10</option>
+                <option value="Công nghệ - Khối 11">Công nghệ - Khối 11</option>
+                <option value="Công nghệ - Khối 12">Công nghệ - Khối 12</option>
                 <option value="Công nghệ - CẢ 3 KHỐI">Công nghệ - CẢ 3 KHỐI</option>
-                <option value="Sinh học 10">Sinh học 10</option>
-                <option value="Sinh học 11">Sinh học 11</option>
-                <option value="Sinh học 12">Sinh học 12</option>
-                <option value="Công nghệ 10">Công nghệ 10</option>
-                <option value="Công nghệ 11">Công nghệ 11</option>
-                <option value="Công nghệ 12">Công nghệ 12</option>
+                <option value="Toàn bộ CẢ 3 KHỐI (10, 11, 12)">Toàn bộ CẢ 3 KHỐI (10, 11, 12)</option>
             </select>
         </div>
-        <div class="form-group"><label>4. Tên Tài Liệu / Nội Dung Kiểm Tra</label>
-            <input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Kế hoạch và Ma trận kiểm tra định kỳ năm học">
-        </div>
-        <div class="form-group"><label>5. Học Kỳ / Thời Gian Áp Dụng</label>
-            <select id="inputEvalType" class="form-control">
-                <option value="Kiểm tra Giữa kỳ I">Kiểm tra Giữa kỳ I</option>
-                <option value="Kiểm tra Cuối kỳ I">Kiểm tra Cuối kỳ I</option>
-                <option value="Kiểm tra Giữa kỳ II">Kiểm tra Giữa kỳ II</option>
-                <option value="Kiểm tra Cuối kỳ II">Kiểm tra Cuối kỳ II</option>
-                <option value="Kiểm tra Thường xuyên">Kiểm tra Thường xuyên</option>
-                <option value="Đề thi thử THPT Quốc gia">Đề thi thử THPT Quốc gia</option>
-            </select>
-        </div>
+        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra</label><input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Ma trận & Đề kiểm tra Giữa học kỳ 1"></div>
+        <div class="form-group"><label>4. Học Kỳ / Thời Gian Thực Hiện</label><input type="text" id="inputEvalTime" class="form-control" placeholder="Ví dụ: Học kỳ 1 - Tuần 9"></div>
         
-        <div class="form-group"><label>6. FILE / LINK ĐÍNH KÈM (Lựa chọn 1: Tải File Word/PDF từ máy)</label>
-            <input type="file" id="inputEvalFile" class="form-control">
-        </div>
+        <div class="form-group"><label>5. FILE ĐỀ & ĐÁP ÁN (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputEvalFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Cloud Đề Thi</label>
-            <input type="text" id="inputEvalLink" class="form-control" placeholder="https://drive.google.com/...">
-        </div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Drive Đề thi</label><input type="text" id="inputEvalLink" class="form-control" placeholder="https://drive.google.com/..."></div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('evaluationModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveEvaluation()">Lưu Tài Liệu KTĐG</button>
+            <button class="btn btn-outline" onclick="closeModal('evalModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveEval()">Lưu Đề Kiểm Tra</button>
         </div>
     </div>
 </div>
@@ -930,31 +960,7 @@
     </div>
 </div>
 
-<!-- MODAL KẾ HOẠCH BÀI DẠY -->
-<div class="modal" id="lessonPlanModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-signature me-2"></i> Kế Hoạch Bài Dạy / Giáo Án</h3>
-        <input type="hidden" id="editLessonPlanIndex">
-        
-        <div class="form-group"><label>1. Tên Tác Giả / Giáo Viên Đăng Bài</label>
-            <select id="inputLessonPlanTeacher" class="form-control"></select>
-        </div>
-        <div class="form-group"><label>2. Môn Học & Khối Lớp</label><input type="text" id="inputLessonPlanSubject" class="form-control" placeholder="Ví dụ: Sinh học 11, Công nghệ 10"></div>
-        <div class="form-group"><label>3. Tên Bài Dạy / Tên Tiết PPCT</label><input type="text" id="inputLessonPlanTitle" class="form-control" placeholder="Ví dụ: Bài 12: Quang hợp ở thực vật"></div>
-        <div class="form-group"><label>4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLessonPlanWeek" class="form-control" placeholder="Ví dụ: Tuần 15 (Học kỳ 1)"></div>
-        
-        <div class="form-group"><label>5. FILE KHBD (Lựa chọn 1: Tải File Word/PDF từ máy)</label><input type="file" id="inputLessonPlanFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputLessonPlanLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch Bài Dạy</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỜNG -->
+<!-- MODAL PHÂN QUYỀN MỤC -->
 <div class="modal" id="permissionModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Cho Giáo Viên Sửa Mục</h3>
@@ -1159,27 +1165,24 @@
     const ADMIN_PASSWORD = "123456";
 
     let currentUser = localStorage.getItem('currentUser') || 'GUEST';
-    let isPhoneUnlocked = false; 
-    let isMobileView = localStorage.getItem('isMobileView') === 'true'; 
-    let activeEvalTab = 'ALL'; 
+    let phoneUnlocked = false;
 
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_attendance: 'Chấm Công Giáo Viên Tổ Chuyên Môn',
             title_profile: 'Hồ Sơ Tổ Chuyên Môn',
-            title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
-            title_lesson_plans: 'Kế Hoạch Bài Dạy Của Giáo Viên',
+            title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)',
+            title_plans: 'Kế Hoạch Của Giáo Viên',
             title_topics: 'Chuyên Đề Chuyên Môn',
-            title_meeting: 'Biên Bản Họp Tổ (Nhóm) Chuyên Môn',
+            title_meetings: 'Biên Bản Họp Tổ (Nhóm) Chuyên Môn',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ',
-            title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
+            title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn',
+            title_attendance: 'Chấm Công Giáo Viên (Tổ Trưởng Chấm)'
         },
-        attendanceData: [],
         profilesData: [],
         membersData: [
             { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
@@ -1189,9 +1192,11 @@
             { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
         lessonPlansData: [],
+        personalPlansData: [],
         topicsData: [],
         meetingMinutesData: [],
         evaluationsData: [],
+        attendanceData: [],
         imagesData: [],
         resourcesData: [],
         docsData: [],
@@ -1206,7 +1211,6 @@
             appData = val;
             renderAll();
             updateUserDropdown();
-            updateAttendanceMonthFilter();
             document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối`;
         } else {
             saveDataToCloud();
@@ -1229,28 +1233,6 @@
         const storageRef = storage.ref('files_to_sinh_cn/' + fileName);
         const snapshot = await storageRef.put(file);
         return await snapshot.ref.getDownloadURL();
-    }
-
-    function toggleMobileView() {
-        isMobileView = !isMobileView;
-        localStorage.setItem('isMobileView', isMobileView);
-        applyMobileViewStyle();
-    }
-
-    function applyMobileViewStyle() {
-        const container = document.getElementById('appContainer');
-        const btn = document.getElementById('mobileToggleBtn');
-        const text = document.getElementById('mobileToggleText');
-
-        if (isMobileView) {
-            container.classList.add('mobile-view');
-            btn.classList.add('active');
-            text.innerText = 'Chế độ Mobile On';
-        } else {
-            container.classList.remove('mobile-view');
-            btn.classList.remove('active');
-            text.innerText = 'Xem Mobile';
-        }
     }
 
     function changeTheme(themeName) {
@@ -1287,51 +1269,24 @@
         if (isCurrentAdmin()) return true;
         if (currentUser !== 'GUEST') {
             if (itemAuthor === currentUser) return true;
-            if (Array.isArray(allowedEditors) && allowedEditors.includes(currentUser)) return true;
             if (itemAuthor === 'CẢ TỔ') return true;
+            if (Array.isArray(allowedEditors) && allowedEditors.includes(currentUser)) return true;
         }
         return false;
     }
 
     function unlockPhoneNumbers() {
-        if (isPhoneUnlocked) {
-            isPhoneUnlocked = false;
-            alert('Đã ẩn số điện thoại thành viên!');
-            renderMembers();
-            updatePhoneUnlockButton();
+        if (phoneUnlocked) {
+            alert('Số điện thoại đã được mở khóa hiển thị!');
             return;
         }
-
-        const pass = prompt('Nhập mật khẩu nội bộ để xem Số điện thoại thành viên (Pass: 123456):');
+        const pass = prompt('Nhập mật khẩu để mở khóa hiển thị Số Điện Thoại:');
         if (pass === ADMIN_PASSWORD) {
-            isPhoneUnlocked = true;
-            alert('Xác thực thành công! Đã hiển thị số điện thoại.');
+            phoneUnlocked = true;
             renderMembers();
-            updatePhoneUnlockButton();
+            alert('Xác thực thành công! Số điện thoại đã hiển thị.');
         } else if (pass !== null) {
-            alert('Mật khẩu không chính xác!');
-        }
-    }
-
-    function updatePhoneUnlockButton() {
-        const btn = document.getElementById('btnUnlockPhone');
-        const icon = document.getElementById('iconLockPhone');
-        const text = document.getElementById('textLockPhone');
-
-        if (!btn || !icon || !text) return;
-
-        if (isPhoneUnlocked || isCurrentAdmin()) {
-            btn.style.background = 'rgba(16, 185, 129, 0.2)';
-            btn.style.borderColor = 'rgba(16, 185, 129, 0.5)';
-            btn.style.color = '#34d399';
-            icon.className = 'fa-solid fa-unlock';
-            text.innerText = 'Đã Mở Khóa SĐT';
-        } else {
-            btn.style.background = 'rgba(255, 255, 255, 0.1)';
-            btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-            btn.style.color = '#ffffff';
-            icon.className = 'fa-solid fa-lock';
-            text.innerText = 'Mở Khóa SĐT (Pass: 123456)';
+            alert('Mật khẩu sai!');
         }
     }
 
@@ -1345,6 +1300,7 @@
             if (pass === ADMIN_PASSWORD) {
                 container.classList.add('admin-active');
                 roleText.innerText = 'Chế độ Tổ trưởng';
+                phoneUnlocked = true;
                 alert('Xác thực thành công!');
                 renderAll();
             } else {
@@ -1358,44 +1314,29 @@
             roleText.innerText = 'Chế độ Xem / Tải File';
             renderAll();
         }
-        updatePhoneUnlockButton();
-    }
-
-    function maskPhoneNumber(phone) {
-        if (!phone) return 'Chưa cập nhật';
-        if (isPhoneUnlocked || isCurrentAdmin()) {
-            return `<span style="color: var(--accent-gold); font-weight:700;" class="single-line-badge"><i class="fa-solid fa-phone me-1"></i> ${phone}</span>`;
-        }
-        return `<span style="color: var(--text-muted); opacity: 0.7;" class="single-line-badge"><i class="fa-solid fa-user-lock me-1"></i> ***.***.***</span>`;
     }
 
     window.onload = function() {
         const toggleInput = document.getElementById('adminToggle');
         if (toggleInput) toggleInput.checked = false;
         document.getElementById('appContainer').classList.remove('admin-active');
-        
-        if (window.innerWidth <= 768) {
-            isMobileView = true;
-        }
-        applyMobileViewStyle();
     };
 
     function renderAll() {
         renderHeader();
         renderIntro();
-        renderAttendance();
+        renderMembers();
         renderProfiles();
         renderLessonPlans();
+        renderPersonalPlans();
         renderTopics();
-        renderMeetingMinutes();
-        renderEvaluations();
+        renderMeetings();
+        renderAttendance();
         renderSectionTitles();
-        renderMembers();
         renderImages();
         renderResources();
         renderDocs();
         renderTasks();
-        applyMobileViewStyle();
     }
 
     function renderHeader() {
@@ -1422,292 +1363,27 @@
         closeModal('introModal');
     }
 
-    /* MỤC CHẤM CÔNG GIÁO VIÊN */
-    function updateAttendanceMonthFilter() {
-        const select = document.getElementById('filterAttendanceMonth');
-        if (!select) return;
-        const currentSelected = select.value;
-        select.innerHTML = `<option value="ALL">Tất cả thời gian</option>`;
-        
-        const months = new Set();
-        (appData.attendanceData || []).forEach(item => {
-            if (item.date && item.date.length >= 7) {
-                months.add(item.date.substring(0, 7)); 
-            }
-        });
-
-        Array.from(months).sort().reverse().forEach(m => {
-            select.innerHTML += `<option value="${m}">Tháng ${m.substring(5)}/${m.substring(0, 4)}</option>`;
-        });
-
-        select.value = currentSelected || 'ALL';
-    }
-
-    function renderAttendance() {
-        const monthFilter = document.getElementById('filterAttendanceMonth')?.value || 'ALL';
-        const teacherFilter = (document.getElementById('filterAttendanceTeacher')?.value || '').toLowerCase();
-        const tbody = document.getElementById('attendanceTableBody');
-        if (!tbody) return;
+    function renderMembers() {
+        const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
-
-        let totalViolations = 0;
-        let lateDocs = 0;
-        let lateTimes = 0;
-        let examErrors = 0;
-
-        (appData.attendanceData || []).forEach((item, i) => {
-            if (monthFilter !== 'ALL' && (!item.date || !item.date.startsWith(monthFilter))) return;
-            if (teacherFilter && !item.teacher.toLowerCase().includes(teacherFilter) && !item.type.toLowerCase().includes(teacherFilter)) return;
-
-            totalViolations++;
-            if (item.type === 'Nộp hồ sơ chậm') lateDocs++;
-            if (item.type === 'Đi trễ') lateTimes++;
-            if (item.type === 'Ra đề có sai sót' || item.type === 'Sai sót trong gác KT định kỳ') examErrors++;
-
-            let typeBadgeClass = 'badge-danger';
-            if (item.type === 'Nộp hồ sơ chậm') typeBadgeClass = 'badge-orange';
-            if (item.type === 'Đi trễ') typeBadgeClass = 'badge-warning';
-            if (item.type === 'Ra đề có sai sót' || item.type === 'Sai sót trong gác KT định kỳ') typeBadgeClass = 'badge-purple';
-
-            let actionBtns = '';
-            if (isCurrentAdmin()) {
-                actionBtns = `
-                    <button class="btn btn-edit btn-sm" onclick="openAttendanceModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteAttendance(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                `;
-            } else {
-                actionBtns = `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
-            }
-
+        (appData.membersData || []).forEach((mem, i) => {
+            let displayPhone = (phoneUnlocked || isCurrentAdmin()) ? mem.phone : '***.***.***';
             tbody.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Thời gian" class="nowrap-cell" style="color:var(--cyan-accent); font-weight:600;"><i class="fa-solid fa-calendar-day me-1"></i> ${item.date || 'Chưa chọn'}</td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
-                    <td data-label="Loại ghi nhận" class="nowrap-cell"><span class="badge ${typeBadgeClass}">${item.type}</span></td>
-                    <td data-label="Chi tiết">${item.note || 'Không có ghi chú'}</td>
-                    <td data-label="Người ghi nhận" style="font-size:0.8rem; color:var(--text-muted);">${item.recordedBy || 'Tổ trưởng'}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
-                </tr>
-            `;
-        });
-
-        document.getElementById('statTotalViolations').innerText = totalViolations;
-        document.getElementById('statLateDocs').innerText = lateDocs;
-        document.getElementById('statLateTimes').innerText = lateTimes;
-        document.getElementById('statExamErrors').innerText = examErrors;
-    }
-
-    function openAttendanceModal(i = null) {
-        document.getElementById('editAttendanceIndex').value = i !== null ? i : '';
-
-        const teacherSelect = document.getElementById('inputAttendanceTeacher');
-        teacherSelect.innerHTML = '';
-        (appData.membersData || []).forEach(mem => {
-            teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
-        });
-
-        if (i !== null && appData.attendanceData) {
-            teacherSelect.value = appData.attendanceData[i].teacher;
-            document.getElementById('inputAttendanceDate').value = appData.attendanceData[i].date || new Date().toISOString().split('T')[0];
-            document.getElementById('inputAttendanceType').value = appData.attendanceData[i].type;
-            document.getElementById('inputAttendanceNote').value = appData.attendanceData[i].note || '';
-        } else {
-            document.getElementById('inputAttendanceDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('inputAttendanceNote').value = '';
-        }
-
-        document.getElementById('attendanceModal').style.display = 'flex';
-    }
-
-    function saveAttendance() {
-        const idx = document.getElementById('editAttendanceIndex').value;
-        const teacher = document.getElementById('inputAttendanceTeacher').value;
-        const date = document.getElementById('inputAttendanceDate').value;
-        const type = document.getElementById('inputAttendanceType').value;
-        const note = document.getElementById('inputAttendanceNote').value;
-
-        if (!teacher || !date) return alert('Vui lòng chọn đầy đủ Giáo viên và Ngày!');
-
-        if (!appData.attendanceData) appData.attendanceData = [];
-
-        const attendanceObj = {
-            teacher, date, type, note,
-            recordedBy: currentUser !== 'GUEST' ? currentUser : 'Tổ trưởng'
-        };
-
-        if (idx !== '') appData.attendanceData[idx] = attendanceObj;
-        else appData.attendanceData.push(attendanceObj);
-
-        saveDataToCloud();
-        closeModal('attendanceModal');
-        updateAttendanceMonthFilter();
-    }
-
-    function deleteAttendance(i) {
-        if (confirm('Xóa bản ghi chấm công này?')) {
-            appData.attendanceData.splice(i, 1);
-            saveDataToCloud();
-            updateAttendanceMonthFilter();
-        }
-    }
-
-    function exportAttendanceCSV() {
-        if (!appData.attendanceData || appData.attendanceData.length === 0) {
-            return alert('Không có dữ liệu chấm công để xuất!');
-        }
-
-        let csvContent = "\uFEFF"; 
-        csvContent += "STT,Ngày Ghi Nhận,Giáo Viên,Nội Dung Vi Phạm,Ghi Chú Chi Tiết,Người Ghi Nhận\n";
-
-        appData.attendanceData.forEach((item, index) => {
-            const row = [
-                index + 1,
-                `"${item.date || ''}"`,
-                `"${item.teacher || ''}"`,
-                `"${item.type || ''}"`,
-                `"${(item.note || '').replace(/"/g, '""')}"`,
-                `"${item.recordedBy || ''}"`
-            ].join(",");
-            csvContent += row + "\n";
-        });
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `Bao_Cao_Cham_Cong_To_Sinh_CN_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    function printAttendanceReport() {
-        window.print();
-    }
-
-    /* MỤC BIÊN BẢN HỌP TỔ CHUYÊN MÔN */
-    function checkMeetingCustomAttendees(val) {
-        const group = document.getElementById('groupMeetingCustomAttendees');
-        if (val === 'CUSTOM') group.style.display = 'flex';
-        else group.style.display = 'none';
-    }
-
-    function renderMeetingMinutes() {
-        const filterVal = (document.getElementById('filterMeeting')?.value || '').toLowerCase();
-        const tbody = document.getElementById('meetingMinutesTableBody');
-        tbody.innerHTML = '';
-
-        (appData.meetingMinutesData || []).forEach((item, i) => {
-            if (filterVal && !item.time.toLowerCase().includes(filterVal) && !item.content.toLowerCase().includes(filterVal) && !item.attendees.toLowerCase().includes(filterVal)) return;
-
-            let fileHtml = item.link && item.link.startsWith('http')
-                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Biên Bản</a>`
-                : (item.link || 'Chưa đính kèm');
-
-            let canEdit = canUserEdit(item.author, item.allowedEditors);
-            let actionBtns = '';
-
-            if (isCurrentAdmin()) {
-                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('meetingMinutesData', ${i}, '${item.time}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
-            }
-
-            if (canEdit || isCurrentAdmin()) {
-                actionBtns += `
-                    <button class="btn btn-edit btn-sm" onclick="openMeetingModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteMeetingMinutes(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                `;
-            } else {
-                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
-            }
-
-            tbody.innerHTML += `
-                <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Thời gian" class="nowrap-cell"><strong style="color:var(--accent-gold);">${item.time}</strong></td>
-                    <td data-label="Thành phần" class="nowrap-cell"><span class="badge badge-purple">${item.attendees}</span></td>
-                    <td data-label="Nội dung chính" style="white-space: pre-line;">${item.content}</td>
-                    <td data-label="File/Link">${fileHtml}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${mem.name}</strong></td>
+                    <td>${mem.role}</td>
+                    <td>${mem.duty}</td>
+                    <td><span style="font-family:monospace; color:var(--cyan-accent); font-weight:700;">${displayPhone}</span></td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openMemberModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteMember(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
                 </tr>
             `;
         });
     }
 
-    function openMeetingModal(i = null) {
-        document.getElementById('editMeetingIndex').value = i !== null ? i : '';
-        document.getElementById('inputMeetingFile').value = '';
-
-        if (i !== null && appData.meetingMinutesData) {
-            document.getElementById('inputMeetingTime').value = appData.meetingMinutesData[i].time;
-            const att = appData.meetingMinutesData[i].attendees;
-            const select = document.getElementById('inputMeetingAttendeesType');
-            if (['Tất cả thành viên tổ Sinh - CN', 'Nhóm Sinh học', 'Nhóm Công nghệ'].includes(att)) {
-                select.value = att;
-                checkMeetingCustomAttendees(att);
-            } else {
-                select.value = 'CUSTOM';
-                checkMeetingCustomAttendees('CUSTOM');
-                document.getElementById('inputMeetingCustomAttendees').value = att;
-            }
-            document.getElementById('inputMeetingContent').value = appData.meetingMinutesData[i].content;
-            document.getElementById('inputMeetingLink').value = appData.meetingMinutesData[i].link || '';
-        } else {
-            document.getElementById('inputMeetingTime').value = '';
-            document.getElementById('inputMeetingAttendeesType').value = 'Tất cả thành viên tổ Sinh - CN';
-            checkMeetingCustomAttendees('Tất cả thành viên tổ Sinh - CN');
-            document.getElementById('inputMeetingCustomAttendees').value = '';
-            document.getElementById('inputMeetingContent').value = '';
-            document.getElementById('inputMeetingLink').value = '';
-        }
-
-        document.getElementById('meetingModal').style.display = 'flex';
-    }
-
-    async function saveMeetingMinutes() {
-        const idx = document.getElementById('editMeetingIndex').value;
-        const time = document.getElementById('inputMeetingTime').value;
-        const attType = document.getElementById('inputMeetingAttendeesType').value;
-        const customAtt = document.getElementById('inputMeetingCustomAttendees').value;
-        const content = document.getElementById('inputMeetingContent').value;
-        const fileInput = document.getElementById('inputMeetingFile');
-        const linkInput = document.getElementById('inputMeetingLink').value;
-
-        if (!time || !content) return alert('Nhập đầy đủ Thời gian và Nội dung họp!');
-
-        let attendees = attType === 'CUSTOM' ? customAtt : attType;
-        if (!attendees) attendees = 'Thành viên tổ';
-
-        if (!appData.meetingMinutesData) appData.meetingMinutesData = [];
-        let finalLink = linkInput || '';
-
-        if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file biên bản lên Firebase Storage...');
-            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
-            catch(e) { return alert('Lỗi tải file: ' + e.message); }
-        }
-
-        const meetingObj = { 
-            time, attendees, content, link: finalLink,
-            author: idx !== '' ? (appData.meetingMinutesData[idx].author || currentUser) : currentUser,
-            allowedEditors: idx !== '' ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
-        };
-
-        if (idx !== '') appData.meetingMinutesData[idx] = meetingObj;
-        else appData.meetingMinutesData.push(meetingObj);
-
-        saveDataToCloud();
-        closeModal('meetingModal');
-    }
-
-    function deleteMeetingMinutes(i) {
-        if (confirm('Xóa biên bản họp này?')) {
-            appData.meetingMinutesData.splice(i, 1);
-            saveDataToCloud();
-        }
-    }
-
-    /* HỒ SƠ TỔ CHUYÊN MÔN */
     function renderProfiles() {
         const tbody = document.getElementById('profileTableBody');
         tbody.innerHTML = '';
@@ -1734,13 +1410,13 @@
 
             tbody.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Tên Hồ sơ"><strong style="color:var(--accent-gold);">${item.title}</strong></td>
-                    <td data-label="Phân loại" class="nowrap-cell"><span class="badge badge-warning">${item.category}</span></td>
-                    <td data-label="Năm học" style="color:var(--cyan-accent); font-weight:600;" class="nowrap-cell">${item.year}</td>
-                    <td data-label="Ghi chú">${item.note}</td>
-                    <td data-label="File/Link">${fileHtml}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.title}</strong></td>
+                    <td><span class="badge badge-warning">${item.category}</span></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.year}</td>
+                    <td>${item.note}</td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
@@ -1804,7 +1480,7 @@
         }
     }
 
-    /* MỤC KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN */
+    /* MỤC NHỎ 1: KẾ HOẠCH BÀI DẠY */
     function renderLessonPlans() {
         const filterVal = (document.getElementById('filterLessonPlan')?.value || '').toLowerCase();
         const tbody = document.getElementById('lessonPlanTableBody');
@@ -1826,8 +1502,8 @@
 
             if (canEdit || isCurrentAdmin()) {
                 actionBtns += `
-                    <button class="btn btn-edit btn-sm" onclick="openLessonPlanModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteLessonPlan(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    <button class="btn btn-edit btn-sm" onclick="openLessonPlanModal('BAI_DAY', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteLessonPlan('BAI_DAY', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                 `;
             } else {
                 actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
@@ -1835,21 +1511,82 @@
 
             tbody.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
-                    <td data-label="Môn & Khối" class="nowrap-cell"><span class="badge badge-cyan">${item.subject}</span></td>
-                    <td data-label="Tên Bài Dạy"><strong style="color:#fff;">${item.title}</strong></td>
-                    <td data-label="Tuần dạy" style="color:var(--cyan-accent); font-weight:600;" class="nowrap-cell">${item.week}</td>
-                    <td data-label="File/Link">${fileHtml}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td><span class="badge badge-cyan">${item.subject}</span></td>
+                    <td><strong style="color:#fff;">${item.title}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.week}</td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
     }
 
-    function openLessonPlanModal(i = null) {
+    /* MỤC NHỎ 2: KẾ HOẠCH CÁ NHÂN */
+    function renderPersonalPlans() {
+        const filterVal = (document.getElementById('filterPersonalPlan')?.value || '').toLowerCase();
+        const tbody = document.getElementById('personalPlanTableBody');
+        tbody.innerHTML = '';
+
+        (appData.personalPlansData || []).forEach((item, i) => {
+            if (filterVal && !item.title.toLowerCase().includes(filterVal) && !item.teacher.toLowerCase().includes(filterVal) && !item.subject.toLowerCase().includes(filterVal)) return;
+
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải KH Cá Nhân</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            let canEdit = canUserEdit(item.teacher, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('personalPlansData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openLessonPlanModal('CA_NHAN', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteLessonPlan('CA_NHAN', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td><span class="badge badge-warning">${item.subject}</span></td>
+                    <td><strong style="color:#fff;">${item.title}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.week}</td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function openLessonPlanModal(type = 'BAI_DAY', i = null) {
+        document.getElementById('editLessonPlanType').value = type;
         document.getElementById('editLessonPlanIndex').value = i !== null ? i : '';
         document.getElementById('inputLessonPlanFile').value = '';
+
+        const titleHeader = document.getElementById('planModalTitle');
+        const labelCol1 = document.getElementById('labelPlanCol1');
+        const labelCol2 = document.getElementById('labelPlanCol2');
+        const labelCol3 = document.getElementById('labelPlanCol3');
+
+        if (type === 'BAI_DAY') {
+            titleHeader.innerHTML = `<i class="fa-solid fa-chalkboard me-2"></i> Kế Hoạch Bài Dạy (Giáo Án)`;
+            labelCol1.innerText = '2. Môn Học & Khối Lớp';
+            labelCol2.innerText = '3. Tên Bài Dạy / Tiết PPCT';
+            labelCol3.innerText = '4. Tuần Dạy Áp Dụng';
+        } else {
+            titleHeader.innerHTML = `<i class="fa-solid fa-user-pen me-2"></i> Kế Hoạch Cá Nhân`;
+            labelCol1.innerText = '2. Loại Kế Hoạch (Kế hoạch năm / Tháng / Bồi dưỡng)';
+            labelCol2.innerText = '3. Tên Kế Hoạch Cá Nhân';
+            labelCol3.innerText = '4. Thời Gian / Năm Học';
+        }
 
         const teacherSelect = document.getElementById('inputLessonPlanTeacher');
         teacherSelect.innerHTML = '';
@@ -1857,12 +1594,14 @@
             teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
         });
 
-        if (i !== null && appData.lessonPlansData) {
-            teacherSelect.value = appData.lessonPlansData[i].teacher;
-            document.getElementById('inputLessonPlanSubject').value = appData.lessonPlansData[i].subject;
-            document.getElementById('inputLessonPlanTitle').value = appData.lessonPlansData[i].title;
-            document.getElementById('inputLessonPlanWeek').value = appData.lessonPlansData[i].week;
-            document.getElementById('inputLessonPlanLink').value = appData.lessonPlansData[i].link;
+        const targetData = type === 'BAI_DAY' ? appData.lessonPlansData : appData.personalPlansData;
+
+        if (i !== null && targetData) {
+            teacherSelect.value = targetData[i].teacher;
+            document.getElementById('inputLessonPlanSubject').value = targetData[i].subject;
+            document.getElementById('inputLessonPlanTitle').value = targetData[i].title;
+            document.getElementById('inputLessonPlanWeek').value = targetData[i].week;
+            document.getElementById('inputLessonPlanLink').value = targetData[i].link;
         } else {
             if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
             document.getElementById('inputLessonPlanSubject').value = '';
@@ -1875,6 +1614,7 @@
     }
 
     async function saveLessonPlan() {
+        const type = document.getElementById('editLessonPlanType').value;
         const idx = document.getElementById('editLessonPlanIndex').value;
         const teacher = document.getElementById('inputLessonPlanTeacher').value;
         const subject = document.getElementById('inputLessonPlanSubject').value;
@@ -1883,37 +1623,39 @@
         const fileInput = document.getElementById('inputLessonPlanFile');
         const linkInput = document.getElementById('inputLessonPlanLink').value;
 
-        if (!title || !subject) return alert('Nhập đầy đủ tên bài dạy và môn học!');
+        if (!title || !subject) return alert('Nhập đầy đủ tên kế hoạch và phân loại!');
 
-        if (!appData.lessonPlansData) appData.lessonPlansData = [];
+        const dataKey = type === 'BAI_DAY' ? 'lessonPlansData' : 'personalPlansData';
+        if (!appData[dataKey]) appData[dataKey] = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file KHBD lên Firebase Storage...');
+            alert('Đang tải file kế hoạch lên Firebase Storage...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
         const planObj = { 
             teacher, subject, title, week, link: finalLink,
-            allowedEditors: idx !== '' ? (appData.lessonPlansData[idx].allowedEditors || []) : []
+            allowedEditors: idx !== '' ? (appData[dataKey][idx].allowedEditors || []) : []
         };
 
-        if (idx !== '') appData.lessonPlansData[idx] = planObj;
-        else appData.lessonPlansData.push(planObj);
+        if (idx !== '') appData[dataKey][idx] = planObj;
+        else appData[dataKey].push(planObj);
 
         saveDataToCloud();
         closeModal('lessonPlanModal');
     }
 
-    function deleteLessonPlan(i) {
-        if (confirm('Xóa Kế hoạch bài dạy này?')) {
-            appData.lessonPlansData.splice(i, 1);
+    function deleteLessonPlan(type, i) {
+        if (confirm('Xóa Kế hoạch này?')) {
+            const dataKey = type === 'BAI_DAY' ? 'lessonPlansData' : 'personalPlansData';
+            appData[dataKey].splice(i, 1);
             saveDataToCloud();
         }
     }
 
-    /* RENDER MỤC CHUYÊN ĐỀ CHUYÊN MÔN */
+    /* MỤC CHUYÊN ĐỀ CHUYÊN MÔN */
     function renderTopics() {
         const filterVal = (document.getElementById('filterTopic')?.value || '').toLowerCase();
         const tbody = document.getElementById('topicTableBody');
@@ -1948,14 +1690,14 @@
 
             tbody.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
-                    <td data-label="Môn" class="nowrap-cell"><span class="badge badge-cyan">${item.subject || 'Sinh học'}</span></td>
-                    <td data-label="Khối" class="nowrap-cell"><span class="badge badge-purple">${item.grade || 'Khối 11'}</span></td>
-                    <td data-label="Chuyên đề"><strong style="color:#fff;">${item.title}</strong></td>
-                    <td data-label="Loại chuyên đề" class="nowrap-cell"><span class="badge ${badgeClass}">${item.category}</span></td>
-                    <td data-label="Tài liệu">${fileHtml}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
+                    <td><span class="badge badge-cyan">${item.subject || 'Sinh học'}</span></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.grade || 'Khối 11'}</td>
+                    <td><strong style="color:#fff;">${item.title}</strong></td>
+                    <td><span class="badge ${badgeClass}">${item.category}</span></td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
@@ -2027,128 +1769,356 @@
         }
     }
 
-    /* RENDER MỤC KIỂM TRA ĐÁNH GIÁ (CÓ CẢ TỔ VÀ CẢ 3 KHỐI) */
-    function filterEvalTab(tabCategory, btnElement) {
-        activeEvalTab = tabCategory;
-        const buttons = document.querySelectorAll('.eval-tab-btn');
-        buttons.forEach(b => b.classList.remove('active'));
-        if (btnElement) btnElement.classList.add('active');
-        renderEvaluations();
-    }
-
-    function renderEvaluations() {
-        const filterVal = (document.getElementById('filterEvaluation')?.value || '').toLowerCase();
-        const tbody = document.getElementById('evaluationTableBody');
+    /* MỤC BIÊN BẢN HỌP TỔ CHUYÊN MÔN */
+    function renderMeetings() {
+        const filterVal = (document.getElementById('filterMeeting')?.value || '').toLowerCase();
+        const tbody = document.getElementById('meetingTableBody');
         tbody.innerHTML = '';
-        (appData.evaluationsData || []).forEach((item, i) => {
-            const itemTeacher = item.teacher || item.author || 'Chưa cập nhật';
-            const itemSubSection = item.subSection || 'Ngân hàng câu hỏi';
 
-            if (activeEvalTab !== 'ALL' && itemSubSection !== activeEvalTab) return;
-
-            if (filterVal && !itemTeacher.toLowerCase().includes(filterVal) 
-                && !(item.subject || '').toLowerCase().includes(filterVal) 
-                && !item.title.toLowerCase().includes(filterVal) 
-                && !(item.type || '').toLowerCase().includes(filterVal)
-                && !itemSubSection.toLowerCase().includes(filterVal)) return;
+        (appData.meetingMinutesData || []).forEach((item, i) => {
+            if (filterVal && !item.time.toLowerCase().includes(filterVal) && !item.content.toLowerCase().includes(filterVal) && !item.members.toLowerCase().includes(filterVal)) return;
 
             let fileHtml = item.link && item.link.startsWith('http')
-                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Biên Bản</a>`
                 : (item.link || 'Chưa đính kèm');
 
-            let subBadgeClass = 'badge-purple';
-            if (itemSubSection === 'Kế hoạch') subBadgeClass = 'badge-cyan';
-            if (itemSubSection === 'Ma trận - đặc tả') subBadgeClass = 'badge-warning';
-            if (itemSubSection === 'Đề đã kiểm tra xong') subBadgeClass = 'badge-success';
-
-            let typeBadgeClass = 'badge-cyan';
-            if (item.type && item.type.includes('Cuối kỳ')) typeBadgeClass = 'badge-warning';
-            if (item.type && item.type.includes('THPT Quốc gia')) typeBadgeClass = 'badge-success';
-
-            let canEdit = canUserEdit(itemTeacher, item.allowedEditors);
+            let canEdit = canUserEdit(item.author, item.allowedEditors);
             let actionBtns = '';
 
             if (isCurrentAdmin()) {
-                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('evaluationsData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('meetingMinutesData', ${i}, '${item.time}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
             }
 
             if (canEdit || isCurrentAdmin()) {
                 actionBtns += `
-                    <button class="btn btn-edit btn-sm" onclick="openEvaluationModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteEvaluation(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    <button class="btn btn-edit btn-sm" onclick="openMeetingModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteMeeting(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                 `;
             } else {
                 actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
             }
 
-            let teacherDisplay = itemTeacher === 'CẢ TỔ' 
-                ? `<span class="badge badge-success"><i class="fa-solid fa-users me-1"></i> CẢ TỔ</span>` 
-                : `<strong style="color:var(--accent-gold);">${itemTeacher}</strong>`;
-
             tbody.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên">${teacherDisplay}</td>
-                    <td data-label="Phần nhỏ KTĐG" class="nowrap-cell"><span class="badge ${subBadgeClass}">${itemSubSection}</span></td>
-                    <td data-label="Môn & Khối" class="nowrap-cell"><span class="badge badge-cyan">${item.subject || 'Sinh học 11'}</span></td>
-                    <td data-label="Tên tài liệu"><strong style="color:#fff;">${item.title}</strong></td>
-                    <td data-label="Học kỳ / Thời gian" class="nowrap-cell"><span class="badge ${typeBadgeClass}">${item.type || 'Giữa kỳ'}</span></td>
-                    <td data-label="File/Link">${fileHtml}</td>
-                    <td data-label="Thao tác">${actionBtns}</td>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.time}</strong></td>
+                    <td style="font-size:0.85rem;">${item.members}</td>
+                    <td><strong style="color:#fff;">${item.content}</strong></td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
     }
 
-    function openEvaluationModal(i = null) {
-        document.getElementById('editEvaluationIndex').value = i !== null ? i : '';
+    function openMeetingModal(i = null) {
+        document.getElementById('editMeetingIndex').value = i !== null ? i : '';
+        document.getElementById('inputMeetingFile').value = '';
+
+        if (i !== null && appData.meetingMinutesData) {
+            document.getElementById('inputMeetingTime').value = appData.meetingMinutesData[i].time;
+            document.getElementById('inputMeetingMembers').value = appData.meetingMinutesData[i].members;
+            document.getElementById('inputMeetingContent').value = appData.meetingMinutesData[i].content;
+            document.getElementById('inputMeetingLink').value = appData.meetingMinutesData[i].link;
+        } else {
+            document.getElementById('inputMeetingTime').value = '';
+            document.getElementById('inputMeetingMembers').value = 'Tất cả thành viên tổ';
+            document.getElementById('inputMeetingContent').value = '';
+            document.getElementById('inputMeetingLink').value = '';
+        }
+
+        document.getElementById('meetingModal').style.display = 'flex';
+    }
+
+    async function saveMeeting() {
+        const idx = document.getElementById('editMeetingIndex').value;
+        const time = document.getElementById('inputMeetingTime').value;
+        const members = document.getElementById('inputMeetingMembers').value;
+        const content = document.getElementById('inputMeetingContent').value;
+        const fileInput = document.getElementById('inputMeetingFile');
+        const linkInput = document.getElementById('inputMeetingLink').value;
+
+        if (!time || !content) return alert('Nhập đầy đủ thời gian và nội dung họp!');
+
+        if (!appData.meetingMinutesData) appData.meetingMinutesData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file biên bản họp lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const meetingObj = { 
+            time, members, content, link: finalLink,
+            author: idx !== '' ? appData.meetingMinutesData[idx].author : currentUser,
+            allowedEditors: idx !== '' ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
+        };
+
+        if (idx !== '') appData.meetingMinutesData[idx] = meetingObj;
+        else appData.meetingMinutesData.push(meetingObj);
+
+        saveDataToCloud();
+        closeModal('meetingModal');
+    }
+
+    function deleteMeeting(i) {
+        if (confirm('Xóa biên bản họp này?')) {
+            appData.meetingMinutesData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
+    /* MỤC CHẤM CÔNG GIÁO VIÊN */
+    function renderAttendance() {
+        const monthFilter = document.getElementById('filterAttMonth').value;
+        const nameFilter = (document.getElementById('filterAttTeacher').value || '').toLowerCase();
+        const tbody = document.getElementById('attendanceTableBody');
+        tbody.innerHTML = '';
+
+        let statTotal = 0, statDoc = 0, statArrive = 0, statExam = 0;
+
+        (appData.attendanceData || []).forEach((item, i) => {
+            const itemMonth = item.date ? item.date.split('-')[1] : '';
+            if (monthFilter !== 'ALL' && itemMonth !== monthFilter) return;
+            if (nameFilter && !item.teacher.toLowerCase().includes(nameFilter)) return;
+
+            statTotal++;
+            if (item.type === 'Nộp hồ sơ chậm') statDoc++;
+            else if (item.type === 'Đi trễ') statArrive++;
+            else if (item.type === 'Ra đề có sai sót' || item.type === 'Sai sót trong gác KT định kỳ') statExam++;
+
+            let badgeClass = 'badge-warning';
+            if (item.type === 'Đi trễ') badgeClass = 'badge-cyan';
+            if (item.type === 'Ra đề có sai sót' || item.type === 'Sai sót trong gác KT định kỳ') badgeClass = 'badge-warning';
+
+            let actionBtns = '';
+            if (isCurrentAdmin()) {
+                actionBtns = `
+                    <button class="btn btn-edit btn-sm" onclick="openAttendanceModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteAttendance(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns = `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-eye"></i> Đã ghi nhận</span>`;
+            }
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.date}</td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td><span class="badge ${badgeClass}">${item.type}</span></td>
+                    <td>${item.note || '-'}</td>
+                    <td>${actionBtns}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('statTotalViolations').innerText = statTotal;
+        document.getElementById('statLateDoc').innerText = statDoc;
+        document.getElementById('statLateArrive').innerText = statArrive;
+        document.getElementById('statExamError').innerText = statExam;
+    }
+
+    function openAttendanceModal(i = null) {
+        document.getElementById('editAttIndex').value = i !== null ? i : '';
+
+        const teacherSelect = document.getElementById('inputAttTeacher');
+        teacherSelect.innerHTML = '';
+        (appData.membersData || []).forEach(mem => {
+            teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
+        });
+
+        if (i !== null && appData.attendanceData) {
+            teacherSelect.value = appData.attendanceData[i].teacher;
+            document.getElementById('inputAttDate').value = appData.attendanceData[i].date;
+            document.getElementById('inputAttType').value = appData.attendanceData[i].type;
+            document.getElementById('inputAttNote').value = appData.attendanceData[i].note;
+        } else {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inputAttDate').value = today;
+            document.getElementById('inputAttNote').value = '';
+        }
+
+        document.getElementById('attendanceModal').style.display = 'flex';
+    }
+
+    function saveAttendance() {
+        const idx = document.getElementById('editAttIndex').value;
+        const teacher = document.getElementById('inputAttTeacher').value;
+        const date = document.getElementById('inputAttDate').value;
+        const type = document.getElementById('inputAttType').value;
+        const note = document.getElementById('inputAttNote').value;
+
+        if (!teacher || !date) return alert('Nhập đầy đủ thông tin!');
+
+        if (!appData.attendanceData) appData.attendanceData = [];
+        const attObj = { teacher, date, type, note };
+
+        if (idx !== '') appData.attendanceData[idx] = attObj;
+        else appData.attendanceData.push(attObj);
+
+        saveDataToCloud();
+        closeModal('attendanceModal');
+    }
+
+    function deleteAttendance(i) {
+        if (confirm('Xóa ghi nhận chấm công này?')) {
+            appData.attendanceData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
+    /* XUẤT CSV CHO EXCEL (KHÔNG LỖI) */
+    function exportAttendanceCSV() {
+        if (!appData.attendanceData || appData.attendanceData.length === 0) {
+            return alert('Chưa có dữ liệu chấm công để xuất file Excel!');
+        }
+
+        let csvContent = "\uFEFF"; // UTF-8 BOM để Excel không lỗi font Việt
+        csvContent += "STT,Ngày Ghi Nhận,Tên Giáo Viên,Nội Dung Chấm/Vi Phạm,Ghi Chú Chi Tiết\n";
+
+        appData.attendanceData.forEach((item, index) => {
+            csvContent += `"${index + 1}","${item.date}","${item.teacher}","${item.type}","${item.note || ''}"\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Bang_Cham_Cong_To_Sinh_CN_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    /* IN / XUẤT BÁO CÁO PDF CHUẨN KHÔNG LỖI POPUP */
+    function printAttendanceReport() {
+        if (!appData.attendanceData || appData.attendanceData.length === 0) {
+            return alert('Chưa có dữ liệu chấm công!');
+        }
+
+        const printWindow = window.open('', '_blank');
+        let html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Báo Cáo Chấm Công - Tổ Sinh & CN</title>
+                <style>
+                    body { font-family: 'Times New Roman', serif; padding: 20px; line-height: 1.5; }
+                    h2, h3 { text-align: center; margin-bottom: 5px; text-transform: uppercase; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                    th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 14px; }
+                    th { background-color: #f2f2f2; }
+                    .header-info { text-align: center; font-weight: bold; margin-bottom: 20px; }
+                </style>
+            </head>
+            <body>
+                <div class="header-info">
+                    ${appData.headerData.school}<br>
+                    ${appData.headerData.dept}<br>
+                    ---***---
+                </div>
+                <h2>BÁO CÁO THEO DÕI VÀ CHẤM CÔNG GIÁO VIÊN</h2>
+                <p style="text-align:center;"><i>Cập nhật ngày: ${new Date().toLocaleDateString('vi-VN')}</i></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Ngày Ghi Nhận</th>
+                            <th>Tên Giáo Viên</th>
+                            <th>Nội Dung Ghi Nhận</th>
+                            <th>Ghi Chú Chi Tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        appData.attendanceData.forEach((item, idx) => {
+            html += `
+                <tr>
+                    <td style="text-align:center;">${idx + 1}</td>
+                    <td>${item.date}</td>
+                    <td><b>${item.teacher}</b></td>
+                    <td>${item.type}</td>
+                    <td>${item.note || '-'}</td>
+                </tr>
+            `;
+        });
+
+        html += `
+                    </tbody>
+                </table>
+                <div style="margin-top: 30px; display: flex; justify-content: space-between; text-align: center;">
+                    <div></div>
+                    <div>
+                        <i>..., Ngày ..... tháng ..... năm 20...</i><br>
+                        <b>TỔ TRƯỜNG CHUYÊN MÔN</b><br><br><br><br>
+                        <b>${appData.headerData.dept}</b>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+        }, 500);
+    }
+
+    /* MỤC KIỂM TRA ĐÁNH GIÁ */
+    function openEvalModal(i = null) {
+        document.getElementById('editEvalIndex').value = i !== null ? i : '';
         document.getElementById('inputEvalFile').value = '';
 
         const teacherSelect = document.getElementById('inputEvalTeacher');
-        teacherSelect.innerHTML = `<option value="CẢ TỔ">CẢ TỔ (Tất cả giáo viên)</option>`;
+        teacherSelect.innerHTML = `<option value="CẢ TỔ"><i class="fa-solid fa-users-gear"></i> CẢ TỔ (Thực hiện chung)</option>`;
         (appData.membersData || []).forEach(mem => {
             teacherSelect.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
         });
 
         if (i !== null && appData.evaluationsData) {
-            document.getElementById('inputEvalSubSection').value = appData.evaluationsData[i].subSection || 'Ngân hàng câu hỏi';
-            teacherSelect.value = appData.evaluationsData[i].teacher || appData.evaluationsData[i].author || 'CẢ TỔ';
-            document.getElementById('inputEvalSubject').value = appData.evaluationsData[i].subject || 'CẢ 3 KHỐI (10, 11, 12)';
+            teacherSelect.value = appData.evaluationsData[i].teacher;
+            document.getElementById('inputEvalSubjectGrade').value = appData.evaluationsData[i].subjectGrade;
             document.getElementById('inputEvalTitle').value = appData.evaluationsData[i].title;
-            document.getElementById('inputEvalType').value = appData.evaluationsData[i].type || 'Kiểm tra Giữa kỳ I';
+            document.getElementById('inputEvalTime').value = appData.evaluationsData[i].time;
             document.getElementById('inputEvalLink').value = appData.evaluationsData[i].link;
         } else {
             if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
-            document.getElementById('inputEvalSubSection').value = activeEvalTab !== 'ALL' ? activeEvalTab : 'Kế hoạch';
             document.getElementById('inputEvalTitle').value = '';
+            document.getElementById('inputEvalTime').value = '';
             document.getElementById('inputEvalLink').value = '';
         }
-        document.getElementById('evaluationModal').style.display = 'flex';
+
+        document.getElementById('evalModal').style.display = 'flex';
     }
 
-    async function saveEvaluation() {
-        const idx = document.getElementById('editEvaluationIndex').value;
-        const subSection = document.getElementById('inputEvalSubSection').value;
+    async function saveEval() {
+        const idx = document.getElementById('editEvalIndex').value;
         const teacher = document.getElementById('inputEvalTeacher').value;
-        const subject = document.getElementById('inputEvalSubject').value;
+        const subjectGrade = document.getElementById('inputEvalSubjectGrade').value;
         const title = document.getElementById('inputEvalTitle').value;
-        const type = document.getElementById('inputEvalType').value;
+        const time = document.getElementById('inputEvalTime').value;
         const fileInput = document.getElementById('inputEvalFile');
         const linkInput = document.getElementById('inputEvalLink').value;
 
-        if (!title) return alert('Nhập tên tài liệu / nội dung kiểm tra!');
+        if (!title) return alert('Nhập tên ma trận / đề kiểm tra!');
 
         if (!appData.evaluationsData) appData.evaluationsData = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file lên Firebase Storage...');
+            alert('Đang tải file đề thi lên Firebase Storage...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
         const evalObj = { 
-            subSection, teacher, subject, title, type, link: finalLink,
+            teacher, subjectGrade, title, time, link: finalLink,
             author: idx !== '' ? (appData.evaluationsData[idx].author || teacher) : teacher,
             allowedEditors: idx !== '' ? (appData.evaluationsData[idx].allowedEditors || []) : []
         };
@@ -2157,11 +2127,11 @@
         else appData.evaluationsData.push(evalObj);
 
         saveDataToCloud();
-        closeModal('evaluationModal');
+        closeModal('evalModal');
     }
 
-    function deleteEvaluation(i) {
-        if (confirm('Xóa tài liệu kiểm tra này?')) {
+    function deleteEval(i) {
+        if (confirm('Xóa đề kiểm tra này?')) {
             appData.evaluationsData.splice(i, 1);
             saveDataToCloud();
         }
@@ -2220,12 +2190,13 @@
     function deleteSelectedItems(dataKey) {
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
-        else if (dataKey === 'attendanceData') tbodyId = 'attendanceTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
         else if (dataKey === 'lessonPlansData') tbodyId = 'lessonPlanTableBody';
+        else if (dataKey === 'personalPlansData') tbodyId = 'personalPlanTableBody';
         else if (dataKey === 'topicsData') tbodyId = 'topicTableBody';
-        else if (dataKey === 'meetingMinutesData') tbodyId = 'meetingMinutesTableBody';
-        else if (dataKey === 'evaluationsData') tbodyId = 'evaluationTableBody';
+        else if (dataKey === 'meetingMinutesData') tbodyId = 'meetingTableBody';
+        else if (dataKey === 'evaluationsData') tbodyId = 'evalTableBody';
+        else if (dataKey === 'attendanceData') tbodyId = 'attendanceTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
         else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
@@ -2245,27 +2216,6 @@
             saveDataToCloud();
             alert('Đã xóa thành công các mục đã chọn!');
         }
-    }
-
-    function renderMembers() {
-        const tbody = document.getElementById('memberTableBody');
-        tbody.innerHTML = '';
-        (appData.membersData || []).forEach((mem, i) => {
-            tbody.innerHTML += `
-                <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Họ và Tên"><strong style="color:var(--accent-gold);">${mem.name}</strong></td>
-                    <td data-label="Chức vụ">${mem.role}</td>
-                    <td data-label="Nhiệm vụ">${mem.duty}</td>
-                    <td data-label="Liên hệ" class="nowrap-cell">${maskPhoneNumber(mem.phone)}</td>
-                    <td data-label="Thao tác" class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openMemberModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteMember(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </td>
-                </tr>
-            `;
-        });
-        updatePhoneUnlockButton();
     }
 
     function renderImages() {
@@ -2312,11 +2262,11 @@
         (appData.docsData || []).forEach((doc, i) => {
             tbody.innerHTML += `
                 <tr>
-                    <td data-label="Số/Ký hiệu" class="nowrap-cell"><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
-                    <td data-label="Trích yếu">${doc.summary}</td>
-                    <td data-label="Ngày ban hành" class="nowrap-cell">${doc.date}</td>
-                    <td data-label="File/Link"><a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a></td>
-                    <td data-label="Thao tác" class="admin-col">
+                    <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
+                    <td>${doc.summary}</td>
+                    <td>${doc.date}</td>
+                    <td><a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a></td>
+                    <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openDocModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteDoc(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
@@ -2325,7 +2275,6 @@
         });
     }
 
-    /* RENDER CÁC NHIỆM VỤ THI ĐỦA, DẠY LỚP */
     function renderTasks() {
         const filterTeach = (document.getElementById('filterTeach')?.value || '').toLowerCase();
         const tbodyTeach = document.getElementById('teachingTaskTableBody');
@@ -2335,12 +2284,12 @@
             const badgeClass = task.status === 'Hoàn thành' ? 'badge-success' : 'badge-warning';
             tbodyTeach.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên"><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
-                    <td data-label="Lớp" style="font-weight:600; color:var(--cyan-accent);" class="nowrap-cell">${task.title}</td>
-                    <td data-label="Nhiệm vụ">${task.detail}</td>
-                    <td data-label="Trạng thái" class="nowrap-cell"><span class="badge ${badgeClass}">${task.status}</span></td>
-                    <td data-label="Thao tác" class="admin-col">
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
+                    <td>${task.detail}</td>
+                    <td><span class="badge ${badgeClass}">${task.status}</span></td>
+                    <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openTaskModal('day_lop', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteTask('day_lop', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
@@ -2359,15 +2308,57 @@
 
             tbodyHsg.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Giáo viên BD"><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
-                    <td data-label="Môn" style="font-weight:600; color:var(--cyan-accent);" class="nowrap-cell">${item.subject}</td>
-                    <td data-label="Nội dung/KH">${item.plan}</td>
-                    <td data-label="Danh sách">${listHtml}</td>
-                    <td data-label="Thao tác" class="admin-col">
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${item.subject}</td>
+                    <td>${item.plan}</td>
+                    <td>${listHtml}</td>
+                    <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openHsgModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteHsg(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
+                </tr>
+            `;
+        });
+
+        const filterEval = (document.getElementById('filterEval')?.value || '').toLowerCase();
+        const tbodyEval = document.getElementById('evalTableBody');
+        tbodyEval.innerHTML = '';
+        (appData.evaluationsData || []).forEach((item, i) => {
+            if (filterEval && !item.teacher.toLowerCase().includes(filterEval) && !item.title.toLowerCase().includes(filterEval) && !item.subjectGrade.toLowerCase().includes(filterEval)) return;
+            let fileHtml = item.link && item.link.startsWith('http') 
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Đề & Đáp Án</a>`
+                : (item.link || 'Chưa cập nhật File');
+
+            let canEdit = canUserEdit(item.teacher, item.allowedEditors);
+            let actionBtns = '';
+
+            if (isCurrentAdmin()) {
+                actionBtns += `<button class="btn btn-perm btn-sm me-1" onclick="openPermissionModal('evaluationsData', ${i}, '${item.title}')"><i class="fa-solid fa-user-lock"></i> Quyền</button>`;
+            }
+
+            if (canEdit || isCurrentAdmin()) {
+                actionBtns += `
+                    <button class="btn btn-edit btn-sm" onclick="openEvalModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteEval(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                `;
+            } else {
+                actionBtns += `<span style="font-size:0.75rem; color:var(--text-muted);"><i class="fa-solid fa-lock"></i> Chỉ xem</span>`;
+            }
+
+            let teacherBadge = item.teacher === 'CẢ TỔ' 
+                ? `<span class="badge badge-warning"><i class="fa-solid fa-users-gear me-1"></i> CẢ TỔ</span>` 
+                : `<strong style="color:var(--accent-gold);">${item.teacher}</strong>`;
+
+            tbodyEval.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td>${teacherBadge}</td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${item.subjectGrade}</td>
+                    <td><strong>${item.title}</strong></td>
+                    <td>${item.time}</td>
+                    <td>${fileHtml}</td>
+                    <td>${actionBtns}</td>
                 </tr>
             `;
         });
@@ -2378,12 +2369,12 @@
             const badgeClass = (task.status === 'Hoàn thành' || task.status === 'Đạt chỉ tiêu') ? 'badge-success' : 'badge-warning';
             tbodyComp.innerHTML += `
                 <tr>
-                    <td class="admin-col checkbox-cell" data-label="Chọn"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td data-label="Cá nhân"><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
-                    <td data-label="Phong trào" style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
-                    <td data-label="Sản phẩm">${task.detail}</td>
-                    <td data-label="Trạng thái" class="nowrap-cell"><span class="badge ${badgeClass}">${task.status}</span></td>
-                    <td data-label="Thao tác" class="admin-col">
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${task.assignee}</strong></td>
+                    <td style="font-weight:600; color:var(--cyan-accent);">${task.title}</td>
+                    <td>${task.detail}</td>
+                    <td><span class="badge ${badgeClass}">${task.status}</span></td>
+                    <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openTaskModal('thi_dua', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteTask('thi_dua', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
