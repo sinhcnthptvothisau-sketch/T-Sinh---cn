@@ -61,6 +61,23 @@
             transition: background 0.5s ease;
         }
 
+        /* Chế độ xem trên điện thoại (Mobile Frame Mode) */
+        .mobile-frame-mode {
+            background: #020617 !important;
+        }
+        .mobile-frame-mode body {
+            background: #020617;
+        }
+        .mobile-frame-mode .container {
+            max-width: 420px !important;
+            border: 12px solid #1e293b;
+            border-radius: 40px;
+            padding: 1rem 0.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            background: var(--bg-gradient);
+            margin: 1rem auto;
+        }
+
         .container {
             max-width: 1100px;
             width: 100%;
@@ -68,6 +85,7 @@
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            transition: all 0.3s ease;
         }
 
         .admin-bar {
@@ -216,7 +234,7 @@
             border-radius: 20px;
             font-size: 0.85rem;
             outline: none;
-            width: 200px;
+            width: 180px;
         }
 
         .intro-text-box {
@@ -287,6 +305,7 @@
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
             padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
+        .form-control option { background: #1e1b4b; color: white; }
         .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.80rem; font-weight: 700; margin: 0.3rem 0; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
@@ -297,9 +316,14 @@
 <div class="container" id="appContainer">
     <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
     <div class="admin-bar">
-        <div>
-            <i class="fa-solid fa-user-shield me-2"></i>
-            <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
+        <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+            <div>
+                <i class="fa-solid fa-user-shield me-2"></i>
+                <span class="role-badge" id="roleBadge">Chế độ Xem / Tải File (Dành cho Giáo viên)</span>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="toggleMobileView()" id="mobileViewBtn">
+                <i class="fa-solid fa-mobile-screen-button"></i> Xem trên Điện Thoại
+            </button>
         </div>
 
         <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
@@ -566,6 +590,36 @@
         </div>
     </section>
 
+    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM (MỤC MỚI THÊM) -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-atom"></i> <span id="title_stem">Chuyên Đề STEM / STEAM</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_stem')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <input type="text" class="filter-input" id="filterStem" placeholder="🔍 Lọc GV / Tên đề tài..." onkeyup="renderStem()">
+                <button class="btn btn-gold btn-sm" onclick="openStemModal()"><i class="fa-solid fa-plus"></i> Đăng Ký Chuyên Đề</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Giáo Viên Đăng Ký</th>
+                        <th>Tên Chuyên Đề</th>
+                        <th>Lớp</th>
+                        <th>Ngày</th>
+                        <th>Thứ</th>
+                        <th>Tiết</th>
+                        <th>Thao Tác (GV trong tổ)</th>
+                    </tr>
+                </thead>
+                <tbody id="stemTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
     <!-- 7. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
@@ -699,6 +753,39 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveAttendance()">Lưu Ghi Nhận</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ĐĂNG KÝ CHUYÊN ĐỀ STEM / STEAM -->
+<div class="modal" id="stemModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-atom me-2"></i> Đăng Ký Chuyên Đề STEM / STEAM</h3>
+        <input type="hidden" id="editStemIndex">
+        
+        <div class="form-group"><label>1. Chọn Giáo viên trong tổ (Xác thực quyền GV)</label>
+            <select id="inputStemTeacher" class="form-control">
+                <option value="">-- Chọn tên giáo viên --</option>
+            </select>
+        </div>
+        <div class="form-group"><label>2. Tên chuyên đề STEM / STEAM</label><input type="text" id="inputStemTitle" class="form-control" placeholder="Ví dụ: Chế tạo mô hình ADN tái chế"></div>
+        <div class="form-group"><label>3. Lớp thực hiện</label><input type="text" id="inputStemClass" class="form-control" placeholder="Ví dụ: 10A1, 11A2..."></div>
+        <div class="form-group"><label>4. Ngày thực hiện</label><input type="date" id="inputStemDate" class="form-control"></div>
+        <div class="form-group"><label>5. Thứ</label>
+            <select id="inputStemDay" class="form-control">
+                <option value="Thứ Hai">Thứ Hai</option>
+                <option value="Thứ Ba">Thứ Ba</option>
+                <option value="Thứ Tư">Thứ Tư</option>
+                <option value="Thứ Năm">Thứ Năm</option>
+                <option value="Thứ Sáu">Thứ Sáu</option>
+                <option value="Thứ Bảy">Thứ Bảy</option>
+            </select>
+        </div>
+        <div class="form-group"><label>6. Tiết học</label><input type="text" id="inputStemPeriod" class="form-control" placeholder="Ví dụ: Tiết 3 - 4"></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('stemModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveStem()">Lưu Đăng Ký</button>
         </div>
     </div>
 </div>
@@ -853,6 +940,7 @@
             title_minutes: 'Biên Bản Họp Tổ',
             title_attendance: 'Ghi Nhận Tiến Độ Nhiệm Vụ (Chấm Công)',
             title_tasks: 'Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm',
+            title_stem: 'Chuyên Đề STEM / STEAM',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
             title_docs: 'Văn Bản Lưu Trữ'
@@ -867,6 +955,7 @@
             { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
         ],
         attendanceData: [],
+        stemData: [],
         imagesData: [],
         resourcesData: [],
         docsData: [],
@@ -915,13 +1004,26 @@
         document.getElementById('themeSelect').value = savedTheme;
     }
 
+    function toggleMobileView() {
+        const body = document.body;
+        const btn = document.getElementById('mobileViewBtn');
+        body.classList.toggle('mobile-frame-mode');
+        if (body.classList.contains('mobile-frame-mode')) {
+            btn.innerHTML = `<i class="fa-solid fa-desktop"></i> Xem Web`;
+            btn.style.color = 'var(--accent-gold)';
+        } else {
+            btn.innerHTML = `<i class="fa-solid fa-mobile-screen-button"></i> Xem trên Điện Thoại`;
+            btn.style.color = '';
+        }
+    }
+
     function toggleAdminMode() {
         const toggleInput = document.getElementById('adminToggle');
         const container = document.getElementById('appContainer');
         const roleBadge = document.getElementById('roleBadge');
         
         if (toggleInput.checked) {
-            const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa:');
+            const pass = prompt('Nhập mật khẩu Tổ trưởng để mở khóa toàn quyền:');
             if (pass === ADMIN_PASSWORD) {
                 container.classList.add('admin-active');
                 roleBadge.innerText = 'Chế độ Tổ trưởng (Toàn quyền Sửa / Thêm / Xóa)';
@@ -951,11 +1053,12 @@
         renderProfiles();
         renderMinutes();
         renderAttendance();
+        renderTasks();
+        renderStem();
         renderSectionTitles();
         renderImages();
         renderResources();
         renderDocs();
-        renderTasks();
     }
 
     function renderHeader() {
@@ -1202,6 +1305,125 @@
         if (confirm('Xóa bản ghi ghi nhận này?')) {
             appData.attendanceData.splice(i, 1);
             saveDataToCloud();
+        }
+    }
+
+    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM (CHỈ GIÁO VIÊN TRONG TỔ CHỈNH SỬA) ---
+    function renderStem() {
+        const filterStem = (document.getElementById('filterStem')?.value || '').toLowerCase();
+        const tbody = document.getElementById('stemTableBody');
+        tbody.innerHTML = '';
+        
+        // Cập nhật danh sách dropdown giáo viên trong modal STEM
+        const selectTeacher = document.getElementById('inputStemTeacher');
+        selectTeacher.innerHTML = '<option value="">-- Chọn tên giáo viên trong tổ --</option>';
+        (appData.membersData || []).forEach(m => {
+            selectTeacher.innerHTML += `<option value="${m.name}">${m.name} (${m.role})</option>`;
+        });
+
+        (appData.stemData || []).forEach((item, i) => {
+            if (filterStem && !item.teacher.toLowerCase().includes(filterStem) && !item.title.toLowerCase().includes(filterStem)) return;
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong style="color:var(--accent-gold);"><i class="fa-solid fa-user-tie me-1"></i> ${item.teacher}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.title}</td>
+                    <td>${item.className}</td>
+                    <td>${item.date}</td>
+                    <td><span class="badge badge-warning">${item.dayOfWeek}</span></td>
+                    <td>${item.period}</td>
+                    <td>
+                        <button class="btn btn-edit btn-sm" onclick="verifyAndEditStem(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="verifyAndDeleteStem(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function openStemModal(i = null) {
+        document.getElementById('editStemIndex').value = i !== null ? i : '';
+        if (i !== null && appData.stemData) {
+            document.getElementById('inputStemTeacher').value = appData.stemData[i].teacher;
+            document.getElementById('inputStemTitle').value = appData.stemData[i].title;
+            document.getElementById('inputStemClass').value = appData.stemData[i].className;
+            document.getElementById('inputStemDate').value = appData.stemData[i].date;
+            document.getElementById('inputStemDay').value = appData.stemData[i].dayOfWeek;
+            document.getElementById('inputStemPeriod').value = appData.stemData[i].period;
+        } else {
+            document.getElementById('inputStemTeacher').value = '';
+            document.getElementById('inputStemTitle').value = '';
+            document.getElementById('inputStemClass').value = '';
+            document.getElementById('inputStemDate').value = '';
+            document.getElementById('inputStemPeriod').value = '';
+        }
+        document.getElementById('stemModal').style.display = 'flex';
+    }
+
+    function saveStem() {
+        const idx = document.getElementById('editStemIndex').value;
+        const teacher = document.getElementById('inputStemTeacher').value;
+        const title = document.getElementById('inputStemTitle').value;
+        const className = document.getElementById('inputStemClass').value;
+        const date = document.getElementById('inputStemDate').value;
+        const dayOfWeek = document.getElementById('inputStemDay').value;
+        const period = document.getElementById('inputStemPeriod').value;
+
+        if (!teacher) return alert('Vui lòng chọn tên giáo viên trong tổ!');
+        if (!title || !className || !date) return alert('Vui lòng điền đầy đủ tên chuyên đề, lớp và ngày!');
+
+        // Kiểm tra xem giáo viên có thực sự thuộc tổ không
+        const isMember = (appData.membersData || []).some(m => m.name === teacher);
+        if (!isMember) {
+            return alert('Xác thực thất bại! Chỉ giáo viên có tên trong danh sách nhân sự của tổ mới được phép đăng ký/chỉnh sửa chuyên đề.');
+        }
+
+        if (!appData.stemData) appData.stemData = [];
+        const stemObj = { teacher, title, className, date, dayOfWeek, period };
+
+        if (idx !== '') {
+            // Kiểm tra quyền sở hữu khi sửa (hoặc Tổ trưởng mở khóa master)
+            const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+            if (!isAdmin && appData.stemData[idx].teacher !== teacher) {
+                const checkPass = prompt(`Chuyên đề này do giáo viên "${appData.stemData[idx].teacher}" đăng ký. Nhập đúng tên giáo viên đó hoặc mật khẩu Tổ trưởng để sửa:`);
+                if (checkPass !== teacher && checkPass !== ADMIN_PASSWORD) {
+                    return alert('Bạn không có quyền sửa chuyên đề của giáo viên khác!');
+                }
+            }
+            appData.stemData[idx] = stemObj;
+        } else {
+            appData.stemData.push(stemObj);
+        }
+
+        saveDataToCloud();
+        closeModal('stemModal');
+        alert('Đăng ký / Cập nhật chuyên đề STEM thành công!');
+    }
+
+    function verifyAndEditStem(i) {
+        const item = appData.stemData[i];
+        const teacherName = prompt(`Xác thực quyền: Nhập tên giáo viên "${item.teacher}" (hoặc mật khẩu Tổ trưởng) để chỉnh sửa chuyên đề này:`);
+        const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+        
+        if (isAdmin || teacherName === item.teacher || teacherName === ADMIN_PASSWORD) {
+            openStemModal(i);
+        } else {
+            alert('Xác thực không chính xác! Bạn chỉ có thể sửa chuyên đề do chính mình đăng ký.');
+        }
+    }
+
+    function verifyAndDeleteStem(i) {
+        const item = appData.stemData[i];
+        const teacherName = prompt(`Xác thực quyền: Nhập tên giáo viên "${item.teacher}" (hoặc mật khẩu Tổ trưởng) để xóa chuyên đề này:`);
+        const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+
+        if (isAdmin || teacherName === item.teacher || teacherName === ADMIN_PASSWORD) {
+            if (confirm('Bạn có chắc chắn muốn xóa chuyên đề STEM này không?')) {
+                appData.stemData.splice(i, 1);
+                saveDataToCloud();
+            }
+        } else {
+            alert('Xác thực không chính xác! Bạn không có quyền xóa chuyên đề này.');
         }
     }
 
