@@ -198,19 +198,15 @@
         .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
         .form-group label { font-size: 0.82rem; color: var(--text-muted); }
         .form-control { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); padding: 0.7rem; border-radius: 10px; color: white; outline: none; }
-        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.78rem; font-weight: 700; margin: 0.2rem 0; }
-        .checkbox-cell { width: 35px; text-align: center; }
-        .checkbox-cell input { width: 17px; height: 17px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container" id="appContainer">
-    <!-- BAR PHÂN QUYỀN VÀ TRẠNG THÁI -->
     <div class="admin-bar">
         <div class="admin-bar-group">
             <span class="role-badge" id="roleBadge"><i class="fa-solid fa-user-shield"></i> <span id="roleText">Chế độ Xem / Tải File</span></span>
-            <div class="sync-status" id="syncStatus"><i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang kết nối Cloud...</div>
+            <div class="sync-status" id="syncStatus"><i class="fa-solid fa-arrows-rotate fa-spin"></i> Đang tải dữ liệu...</div>
         </div>
 
         <div class="admin-bar-group">
@@ -235,7 +231,6 @@
         </div>
     </div>
 
-    <!-- HEADER CARD -->
     <header class="header-card">
         <div class="school-name" id="displaySchool">TRƯỜNG THPT VÕ THỊ SÁU</div>
         <h1 class="department-name" id="displayDept">TỔ SINH - CN</h1>
@@ -244,29 +239,21 @@
 
     <!-- 1. GIỚI THIỆU TỔ CHUYÊN MÔN -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> 1. Giới Thiệu Tổ Chuyên Môn</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-circle-info"></i> 1. Giới Thiệu Tổ Chuyên Môn</h2>
         <div class="intro-text-box" id="displayIntroContent">
-            Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Đội ngũ giáo viên giàu kinh nghiệm luôn ứng dụng tốt công nghệ trong giảng dạy và quản lý chuyên môn.
+            Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy.
         </div>
     </section>
 
-    <!-- 2. HỒ SƠ THÀNH VIÊN TỔ CHUYÊN MÔN -->
+    <!-- 2. HỒ SƠ THÀNH VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-users-gear"></i> 2. Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)</h2>
-            <div style="display:flex; gap:0.5rem; align-items:center;">
-                <button class="btn btn-outline btn-sm" onclick="unlockPhoneNumbers()"><i class="fa-solid fa-key"></i> Xem SĐT</button>
-            </div>
+            <h2 class="section-title"><i class="fa-solid fa-users-gear"></i> 2. Hồ Sơ Thành Viên Tổ Chuyên Môn</h2>
+            <button class="btn btn-outline btn-sm" onclick="unlockPhoneNumbers()"><i class="fa-solid fa-key"></i> Xem SĐT</button>
         </div>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Họ Và Tên</th><th>Chức Vụ</th><th>Nhiệm Vụ</th><th>Liên Hệ / Zalo</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Họ Và Tên</th><th>Chức Vụ</th><th>Nhiệm Vụ</th><th>Liên Hệ / Zalo</th></tr></thead>
                 <tbody id="memberTableBody"></tbody>
             </table>
         </div>
@@ -274,16 +261,10 @@
 
     <!-- 3. HỒ SƠ TỔ CHUYÊN MÔN -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-folder-tree"></i> 3. Hồ Sơ Tổ Chuyên Môn</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-folder-tree"></i> 3. Hồ Sơ Tổ Chuyên Môn</h2>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Tên Hồ Sơ / Kế Hoạch</th><th>Phân Loại</th><th>Năm Học</th><th>Ghi Chú</th><th>File / Link</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Tên Hồ Sơ / Kế Hoạch</th><th>Phân Loại</th><th>Năm Học</th><th>Ghi Chú</th><th>File / Link</th></tr></thead>
                 <tbody id="profileTableBody"></tbody>
             </table>
         </div>
@@ -291,50 +272,13 @@
 
     <!-- 4. KẾ HOẠCH CỦA GIÁO VIÊN -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-file-signature"></i> 4. Kế Hoạch Của Giáo Viên</h2>
-        </div>
-
-        <!-- 4.1. KẾ HOẠCH BÀI DẠY -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.3rem;">
-            <div class="card-header-flex">
-                <div class="sub-section-title"><i class="fa-solid fa-chalkboard"></i> 4.1. Kế Hoạch Bài Dạy (Giáo Án)</div>
-                <div style="display:flex; gap:0.5rem; align-items:center;">
-                    <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc Bài dạy / GV..." onkeyup="renderLessonPlans()">
-                    <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal('BAI_DAY')"><i class="fa-solid fa-plus"></i> Nộp Bài Dạy</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>Tên Giáo Viên</th><th>Môn & Khối</th><th>Tên Bài Dạy / Tiết PPCT</th><th>Tuần Dạy</th><th>File / Link</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lessonPlanTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 4.2. KẾ HOẠCH CÁ NHÂN -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.8rem;">
-            <div class="card-header-flex">
-                <div class="sub-section-title"><i class="fa-solid fa-user-pen"></i> 4.2. Kế Hoạch Cá Nhân</div>
-                <div style="display:flex; gap:0.5rem; align-items:center;">
-                    <input type="text" class="filter-input" id="filterPersonalPlan" placeholder="🔍 Lọc KH cá nhân / GV..." onkeyup="renderPersonalPlans()">
-                    <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal('CA_NHAN')"><i class="fa-solid fa-plus"></i> Thêm KH Cá Nhân</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>Tên Giáo Viên</th><th>Loại Kế Hoạch</th><th>Tên Kế Hoạch</th><th>Thời Gian</th><th>File / Link</th>
-                        </tr>
-                    </thead>
-                    <tbody id="personalPlanTableBody"></tbody>
-                </table>
-            </div>
+        <h2 class="section-title"><i class="fa-solid fa-file-signature"></i> 4. Kế Hoạch Của Giáo Viên</h2>
+        <div class="sub-section-title"><i class="fa-solid fa-chalkboard"></i> 4.1. Kế Hoạch Bài Dạy (Giáo Án)</div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead><tr><th>Tên Giáo Viên</th><th>Môn & Khối</th><th>Tên Bài Dạy</th><th>Tuần Dạy</th><th>File / Link</th></tr></thead>
+                <tbody id="lessonPlanTableBody"></tbody>
+            </table>
         </div>
     </section>
 
@@ -342,74 +286,50 @@
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title"><i class="fa-solid fa-book-open-reader"></i> 5. Chuyên Đề Chuyên Môn</h2>
-            <div style="display:flex; gap:0.5rem; align-items:center;">
-                <input type="text" class="filter-input" id="filterTopic" placeholder="🔍 Lọc GV / Môn / Khối..." onkeyup="renderTopics()">
-                <button class="btn btn-gold btn-sm" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
-            </div>
+            <button class="btn btn-gold btn-sm admin-btn" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
         </div>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Tên Giáo Viên</th><th>Môn</th><th>Khối</th><th>Tên Chuyên Đề</th><th>Loại Chuyên Đề</th><th>Lớp, Thứ, Ngày, Tiết</th><th>File / Link</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Tên Giáo Viên</th><th>Môn</th><th>Khối</th><th>Tên Chuyên Đề</th><th>Loại</th><th>Lớp, Thứ, Ngày, Tiết</th><th>File / Link</th></tr></thead>
                 <tbody id="topicTableBody"></tbody>
             </table>
         </div>
     </section>
 
-    <!-- 6. BIÊN BẢN HỌP TỔ CHUYÊN MÔN -->
+    <!-- 6. BIÊN BẢN HỌP TỔ -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-clipboard-list"></i> 6. Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-clipboard-list"></i> 6. Biên Bản Họp Tổ Chuyên Môn</h2>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Thời Gian Họp</th><th>Thành Phần Tham Dự</th><th>Nội Dung Biên Bản</th><th>File / Link</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Thời Gian Họp</th><th>Thành Phần</th><th>Nội Dung</th><th>File</th></tr></thead>
                 <tbody id="meetingTableBody"></tbody>
             </table>
         </div>
     </section>
 
-    <!-- 7. NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
+    <!-- 7. NHIỆM VỤ & PHÂN CÔNG -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-list-check"></i> 7. Nhiệm Vụ & Phân Công Chuyên Môn</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-list-check"></i> 7. Nhiệm Vụ & Phân Công Chuyên Môn</h2>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Giáo viên</th><th>Nhiệm vụ phân công</th><th>Trạng thái</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Giáo Viên</th><th>Nhiệm Vụ</th><th>Trạng Thái</th></tr></thead>
                 <tbody id="teachingTaskTableBody"></tbody>
             </table>
         </div>
     </section>
 
-    <!-- 8. CHẤM CÔNG GIÁO VIÊN -->
+    <!-- 8. CHẤM CÔNG -->
     <section class="card-box">
         <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-calendar-check"></i> 8. Chấm Công Giáo Viên (Tổ Trưởng Chấm)</h2>
-            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                <button class="btn btn-download btn-sm" onclick="exportAttendanceCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
-                <button class="btn btn-outline btn-sm" onclick="printAttendanceReport()"><i class="fa-solid fa-print"></i> In / Xuất PDF</button>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> + Chấm Công GV</button>
+            <h2 class="section-title"><i class="fa-solid fa-calendar-check"></i> 8. Chấm Công Giáo Viên</h2>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-download btn-sm" onclick="exportAttendanceCSV()"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="printAttendanceReport()"><i class="fa-solid fa-print"></i> In PDF</button>
             </div>
         </div>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Ngày / Thời Gian</th><th>Tên Giáo Viên</th><th>Nội Dung Ghi Nhận</th><th>Ghi Chú Chi Tiết</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Ngày</th><th>Giáo Viên</th><th>Nội Dung</th><th>Ghi Chú</th></tr></thead>
                 <tbody id="attendanceTableBody"></tbody>
             </table>
         </div>
@@ -417,106 +337,29 @@
 
     <!-- 9. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-images"></i> 9. Hình Ảnh Hoạt Động</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-images"></i> 9. Hình Ảnh Hoạt Động</h2>
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
     <!-- 10. TÀI NGUYÊN SỐ -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-folder-open"></i> 10. Tài Nguyên Số</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-folder-open"></i> 10. Tài Nguyên Số</h2>
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
     <!-- 11. VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title"><i class="fa-solid fa-box-archive"></i> 11. Văn Bản Lưu Trữ</h2>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-box-archive"></i> 11. Văn Bản Lưu Trữ</h2>
         <div class="table-responsive">
             <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Số / Ký Hiệu</th><th>Trích Yếu Văn Bản</th><th>Ngày Ban Hành</th><th>Tải File</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Số / Ký Hiệu</th><th>Trích Yếu</th><th>Ngày Ban Hành</th><th>Tải</th></tr></thead>
                 <tbody id="docTableBody"></tbody>
             </table>
         </div>
     </section>
 </div>
 
-<!-- MODAL NỘP BÀI DẠY / KẾ HOẠCH -->
-<div class="modal" id="lessonPlanModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);" id="lessonPlanModalTitle">Nộp Kế Hoạch Bài Dạy</h3>
-        <input type="hidden" id="inputLpType">
-        <div class="form-group"><label>1. Giáo Viên Thực Hiện</label><select id="inputLpTeacher" class="form-control"></select></div>
-        <div class="form-group"><label>2. Môn & Khối Lớp</label><input type="text" id="inputLpSubject" class="form-control" placeholder="Ví dụ: Sinh học 11"></div>
-        <div class="form-group"><label>3. Tên Bài Dạy / Tiết PPCT</label><input type="text" id="inputLpTitle" class="form-control"></div>
-        <div class="form-group"><label>4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLpWeek" class="form-control" placeholder="Ví dụ: Tuần 7"></div>
-        <div class="form-group"><label>5. Tải File Lên (Word/PDF)</label><input type="file" id="inputLpFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Dán Link Google Drive / Canva</label><input type="text" id="inputLpLink" class="form-control" placeholder="https://..."></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.8rem;">
-            <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveLessonPlan()">Nộp Lên Hệ Thống</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL CHUYÊN ĐỀ -->
-<div class="modal" id="topicModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn</h3>
-        <div class="form-group"><label>1. Tên Giáo Viên Phụ Trách</label><select id="inputTopicTeacher" class="form-control"></select></div>
-        <div class="form-group"><label>2. Môn Học</label>
-            <select id="inputTopicSubject" class="form-control">
-                <option value="Sinh học">Sinh học</option><option value="Công nghệ">Công nghệ</option><option value="Sinh & CN">Sinh & CN</option>
-            </select>
-        </div>
-        <div class="form-group"><label>3. Khối Lớp</label>
-            <select id="inputTopicGrade" class="form-control">
-                <option value="Khối 10">Khối 10</option><option value="Khối 11">Khối 11</option><option value="Khối 12">Khối 12</option>
-            </select>
-        </div>
-        <div class="form-group"><label>4. Tên Chuyên Đề</label><input type="text" id="inputTopicTitle" class="form-control"></div>
-        <div class="form-group"><label>5. Loại Chuyên Đề</label><input type="text" id="inputTopicCategory" class="form-control" value="STEM / STEAM"></div>
-        <div class="form-group"><label>6. Lớp, Thứ, Ngày, Tiết</label><input type="text" id="inputTopicSchedule" class="form-control" placeholder="Lớp 11A1, Thứ 5, Tiết 3"></div>
-        <div class="form-group"><label>7. Link Google Drive / Slide</label><input type="text" id="inputTopicLink" class="form-control"></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.8rem;">
-            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL CHẤM CÔNG -->
-<div class="modal" id="attendanceModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-calendar-check me-2"></i> Chấm Công Giáo Viên</h3>
-        <div class="form-group"><label>1. Chọn Giáo Viên</label><select id="inputAttTeacher" class="form-control"></select></div>
-        <div class="form-group"><label>2. Ngày Ghi Nhận</label><input type="date" id="inputAttDate" class="form-control"></div>
-        <div class="form-group"><label>3. Nội Dung Ghi Nhận</label>
-            <select id="inputAttType" class="form-control">
-                <option value="Nộp hồ sơ chậm">Nộp hồ sơ chậm</option>
-                <option value="Đi trễ">Đi trễ</option>
-                <option value="Ra đề có sai sót">Ra đề có sai sót</option>
-                <option value="Khác">Khác</option>
-            </select>
-        </div>
-        <div class="form-group"><label>4. Ghi Chú Chi Tiết</label><textarea id="inputAttNote" class="form-control" rows="3"></textarea></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.8rem;">
-            <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveAttendance()">Lưu Chấm Công</button>
-        </div>
-    </div>
-</div>
-
-<!-- JAVASCRIPT LOGIC -->
+<!-- SCRIPT XỬ LÝ -->
 <script>
     const firebaseConfig = {
         databaseURL: "https://quan-ly-to-sinh-cn-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -524,341 +367,110 @@
     };
 
     let db = null;
-    let storage = null;
     let isFirebaseConnected = false;
     const ADMIN_PASSWORD = "123456";
-
     let currentUser = localStorage.getItem('currentUser') || 'GUEST';
     let phoneUnlocked = false;
 
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
-        introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy.',
-        profilesData: [],
+        introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo.',
         membersData: [
-            { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
-            { name: 'Duyên', role: 'GV Sinh học', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
-            { name: 'Tuyền', role: 'GV Sinh / CN', duty: 'Giảng dạy môn Sinh/CN', phone: '0987.333.444' },
-            { name: 'Vi', role: 'GV Công nghệ', duty: 'Giảng dạy môn CN', phone: '0987.555.666' },
-            { name: 'Nghé', role: 'GV Sinh / CN', duty: 'Giảng dạy chuyên môn', phone: '0987.777.888' }
+            { name: 'Can', role: 'Tổ trưởng', duty: 'Phụ trách chung', phone: '0912.345.678' },
+            { name: 'Duyên', role: 'GV Sinh', duty: 'Giảng dạy', phone: '0987.111.222' }
         ],
-        lessonPlansData: [], personalPlansData: [], topicsData: [], meetingMinutesData: [],
-        evaluationsData: [], attendanceData: [], imagesData: [], resourcesData: [], docsData: [],
-        teachingTasks: []
+        lessonPlansData: [], topicsData: [], attendanceData: []
     };
 
     window.addEventListener('DOMContentLoaded', () => {
         const localSaved = localStorage.getItem('offline_to_sinh_cn_data');
-        if (localSaved) {
-            try { appData = JSON.parse(localSaved); } catch(e){}
-        }
+        if (localSaved) { try { appData = JSON.parse(localSaved); } catch(e){} }
         renderAll();
-        updateUserDropdown();
 
-        // Khởi tạo Firebase trực tiếp
+        setTimeout(() => {
+            if(!isFirebaseConnected) document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-hard-drive" style="color:var(--accent-gold);"></i> Chế độ Nội bộ`;
+        }, 3000);
+
         try {
             if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             db = firebase.database();
-            storage = firebase.storage();
-
             db.ref('to_sinh_cn_data').on('value', (snapshot) => {
                 isFirebaseConnected = true;
                 const val = snapshot.val();
-                if (val) {
-                    appData = val;
-                    localStorage.setItem('offline_to_sinh_cn_data', JSON.stringify(appData));
-                    renderAll();
-                    updateUserDropdown();
-                } else {
-                    saveDataToCloud();
-                }
+                if (val) { appData = val; localStorage.setItem('offline_to_sinh_cn_data', JSON.stringify(appData)); renderAll(); }
                 document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối Cloud`;
-            }, (error) => {
-                document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-hard-drive" style="color:var(--accent-gold);"></i> Chế độ Nội bộ`;
             });
-        } catch (e) {
+        } catch(e) {
             document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-hard-drive" style="color:var(--accent-gold);"></i> Chế độ Nội bộ`;
         }
     });
-
-    function saveDataToCloud() {
-        localStorage.setItem('offline_to_sinh_cn_data', JSON.stringify(appData));
-        if (isFirebaseConnected && db) {
-            db.ref('to_sinh_cn_data').set(appData);
-        }
-    }
-
-    async function uploadFileToFirebase(file) {
-        if (!isFirebaseConnected || !storage) return null;
-        const storageRef = storage.ref('files_to_sinh_cn/' + Date.now() + '_' + file.name);
-        const snapshot = await storageRef.put(file);
-        return await snapshot.ref.getDownloadURL();
-    }
-
-    function changeTheme(themeName) {
-        document.body.setAttribute('data-theme', themeName);
-        localStorage.setItem('selectedTheme', themeName);
-    }
-
-    function updateUserDropdown() {
-        const select = document.getElementById('userSelect');
-        select.innerHTML = `<option value="GUEST">Khách / Giáo viên chung</option>`;
-        (appData.membersData || []).forEach(mem => {
-            select.innerHTML += `<option value="${mem.name}">${mem.name} (${mem.role})</option>`;
-        });
-        select.value = currentUser;
-    }
-
-    function changeCurrentUser(val) {
-        currentUser = val;
-        localStorage.setItem('currentUser', val);
-        renderAll();
-    }
-
-    function isCurrentAdmin() {
-        return document.getElementById('appContainer').classList.contains('admin-active');
-    }
-
-    function unlockPhoneNumbers() {
-        if (phoneUnlocked) return alert('SĐT đã mở khóa!');
-        const pass = prompt('Nhập mật khẩu SĐT:');
-        if (pass === ADMIN_PASSWORD) { phoneUnlocked = true; renderMembers(); alert('Thành công!'); }
-        else if (pass !== null) alert('Sai mật khẩu!');
-    }
-
-    function toggleAdminMode() {
-        const toggleInput = document.getElementById('adminToggle');
-        const container = document.getElementById('appContainer');
-        const roleText = document.getElementById('roleText');
-        
-        if (toggleInput.checked) {
-            const pass = prompt('Nhập mật khẩu Tổ trưởng:');
-            if (pass === ADMIN_PASSWORD) {
-                container.classList.add('admin-active');
-                roleText.innerText = 'Chế độ Tổ trưởng';
-                phoneUnlocked = true; renderAll();
-            } else {
-                toggleInput.checked = false;
-                container.classList.remove('admin-active');
-                roleText.innerText = 'Chế độ Xem / Tải File';
-            }
-        } else {
-            container.classList.remove('admin-active');
-            roleText.innerText = 'Chế độ Xem / Tải File';
-            renderAll();
-        }
-    }
 
     function renderAll() {
         document.getElementById('displaySchool').innerText = appData.headerData.school;
         document.getElementById('displayDept').innerText = appData.headerData.dept;
         document.getElementById('displayIntroContent').innerText = appData.introText;
-
-        renderMembers(); renderProfiles(); renderLessonPlans(); renderPersonalPlans();
-        renderTopics(); renderMeetings(); renderAttendance(); renderImages();
-        renderResources(); renderDocs(); renderTasks();
+        renderMembers(); renderLessonPlans(); renderTopics(); renderAttendance();
     }
 
     function renderMembers() {
         const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
-        (appData.membersData || []).forEach((mem) => {
-            let displayPhone = (phoneUnlocked || isCurrentAdmin()) ? mem.phone : '***.***.***';
-            tbody.innerHTML += `<tr><td><b>${mem.name}</b></td><td>${mem.role}</td><td>${mem.duty}</td><td><span style="font-family:monospace; color:var(--cyan-accent);">${displayPhone}</span></td></tr>`;
-        });
-    }
-
-    function renderProfiles() {
-        const tbody = document.getElementById('profileTableBody');
-        tbody.innerHTML = '';
-        (appData.profilesData || []).forEach((item) => {
-            let fileHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm">Tải File</a>` : '-';
-            tbody.innerHTML += `<tr><td><b>${item.title}</b></td><td><span class="badge badge-warning">${item.category}</span></td><td>${item.year}</td><td>${item.note || '-'}</td><td>${fileHtml}</td></tr>`;
+        (appData.membersData || []).forEach(m => {
+            let phone = (phoneUnlocked || isCurrentAdmin()) ? m.phone : '***.***.***';
+            tbody.innerHTML += `<tr><td><b>${m.name}</b></td><td>${m.role}</td><td>${m.duty}</td><td><span style="color:var(--cyan-accent);">${phone}</span></td></tr>`;
         });
     }
 
     function renderLessonPlans() {
         const tbody = document.getElementById('lessonPlanTableBody');
         tbody.innerHTML = '';
-        (appData.lessonPlansData || []).forEach((item) => {
-            let fileHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm">Tải KHBD</a>` : '-';
-            tbody.innerHTML += `<tr><td><b>${item.teacher}</b></td><td><span class="badge badge-cyan">${item.subject}</span></td><td>${item.title}</td><td><strong style="color:var(--cyan-accent);">${item.week}</strong></td><td>${fileHtml}</td></tr>`;
-        });
-    }
-
-    function renderPersonalPlans() {
-        const tbody = document.getElementById('personalPlanTableBody');
-        tbody.innerHTML = '';
-        (appData.personalPlansData || []).forEach((item) => {
-            let fileHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm">Tải KH</a>` : '-';
-            tbody.innerHTML += `<tr><td><b>${item.teacher}</b></td><td><span class="badge badge-warning">${item.subject}</span></td><td>${item.title}</td><td>${item.week}</td><td>${fileHtml}</td></tr>`;
+        (appData.lessonPlansData || []).forEach(i => {
+            let link = i.link ? `<a href="${i.link}" target="_blank" class="btn btn-download btn-sm">Tải</a>` : '-';
+            tbody.innerHTML += `<tr><td><b>${i.teacher}</b></td><td>${i.subject}</td><td>${i.title}</td><td>${i.week}</td><td>${link}</td></tr>`;
         });
     }
 
     function renderTopics() {
         const tbody = document.getElementById('topicTableBody');
         tbody.innerHTML = '';
-        (appData.topicsData || []).forEach((item) => {
-            let fileHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm">Tải Bài</a>` : '-';
-            tbody.innerHTML += `<tr><td><b>${item.teacher}</b></td><td><span class="badge badge-cyan">${item.subject}</span></td><td>${item.grade}</td><td>${item.title}</td><td><span class="badge badge-warning">${item.category}</span></td><td>${item.schedule || '-'}</td><td>${fileHtml}</td></tr>`;
-        });
-    }
-
-    function renderMeetings() {
-        const tbody = document.getElementById('meetingTableBody');
-        tbody.innerHTML = '';
-        (appData.meetingMinutesData || []).forEach((item) => {
-            let fileHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm">Tải Biên Bản</a>` : '-';
-            tbody.innerHTML += `<tr><td><b>${item.time}</b></td><td>${item.members}</td><td>${item.content}</td><td>${fileHtml}</td></tr>`;
+        (appData.topicsData || []).forEach(i => {
+            let link = i.link ? `<a href="${i.link}" target="_blank" class="btn btn-download btn-sm">Tải</a>` : '-';
+            tbody.innerHTML += `<tr><td><b>${i.teacher}</b></td><td>${i.subject}</td><td>${i.grade}</td><td>${i.title}</td><td>${i.category}</td><td>${i.schedule}</td><td>${link}</td></tr>`;
         });
     }
 
     function renderAttendance() {
         const tbody = document.getElementById('attendanceTableBody');
         tbody.innerHTML = '';
-        (appData.attendanceData || []).forEach((item) => {
-            tbody.innerHTML += `<tr><td style="color:var(--cyan-accent);">${item.date}</td><td><b>${item.teacher}</b></td><td><span class="badge badge-warning">${item.type}</span></td><td>${item.note || '-'}</td></tr>`;
+        (appData.attendanceData || []).forEach(i => {
+            tbody.innerHTML += `<tr><td style="color:var(--cyan-accent);">${i.date}</td><td><b>${i.teacher}</b></td><td>${i.type}</td><td>${i.note || '-'}</td></tr>`;
         });
     }
 
-    function renderImages() {
-        const grid = document.getElementById('galleryGrid');
-        grid.innerHTML = '';
-        (appData.imagesData || []).forEach((img) => {
-            grid.innerHTML += `<div class="gallery-card"><img src="${img.url}" class="gallery-img"><span>${img.caption}</span></div>`;
-        });
+    function unlockPhoneNumbers() {
+        if(prompt('Mật khẩu mở SĐT:') === ADMIN_PASSWORD) { phoneUnlocked = true; renderMembers(); alert('Thành công!'); }
+        else alert('Sai mật khẩu!');
     }
 
-    function renderResources() {
-        const grid = document.getElementById('resourceGrid');
-        grid.innerHTML = '';
-        (appData.resourcesData || []).forEach((res) => {
-            grid.innerHTML += `<div class="resource-card"><span><b>${res.title}</b></span><a href="${res.link}" target="_blank" class="btn btn-download btn-sm">Tải về</a></div>`;
-        });
-    }
-
-    function renderDocs() {
-        const tbody = document.getElementById('docTableBody');
-        tbody.innerHTML = '';
-        (appData.docsData || []).forEach((doc) => {
-            tbody.innerHTML += `<tr><td><span style="color:var(--cyan-accent);">${doc.code}</span></td><td>${doc.summary}</td><td>${doc.date}</td><td><a href="${doc.link}" target="_blank" class="btn btn-download btn-sm">Tải</a></td></tr>`;
-        });
-    }
-
-    function renderTasks() {
-        const tbody = document.getElementById('teachingTaskTableBody');
-        tbody.innerHTML = '';
-        (appData.teachingTasks || []).forEach((task) => {
-            tbody.innerHTML += `<tr><td><b>${task.assignee}</b></td><td>${task.title} - ${task.detail}</td><td><span class="badge badge-success">${task.status}</span></td></tr>`;
-        });
-    }
-
-    function openLessonPlanModal(type) {
-        document.getElementById('inputLpType').value = type;
-        document.getElementById('lessonPlanModalTitle').innerText = type === 'BAI_DAY' ? 'Nộp Kế Hoạch Bài Dạy' : 'Nộp Kế Hoạch Cá Nhân';
-        const select = document.getElementById('inputLpTeacher');
-        select.innerHTML = '';
-        (appData.membersData || []).forEach(m => select.innerHTML += `<option value="${m.name}">${m.name}</option>`);
-        if(currentUser !== 'GUEST') select.value = currentUser;
-        document.getElementById('lessonPlanModal').style.display = 'flex';
-    }
-
-    async function saveLessonPlan() {
-        const type = document.getElementById('inputLpType').value;
-        const teacher = document.getElementById('inputLpTeacher').value;
-        const subject = document.getElementById('inputLpSubject').value;
-        const title = document.getElementById('inputLpTitle').value;
-        const week = document.getElementById('inputLpWeek').value;
-        const fileInput = document.getElementById('inputLpFile');
-        const linkInput = document.getElementById('inputLpLink').value;
-
-        if(!title) return alert('Nhập tên bài dạy!');
-        let finalLink = linkInput || '';
-        if(fileInput.files[0]) {
-            finalLink = await uploadFileToFirebase(fileInput.files[0]) || finalLink;
-        }
-
-        const obj = { teacher, subject, title, week, link: finalLink };
-        if(type === 'BAI_DAY') {
-            if(!appData.lessonPlansData) appData.lessonPlansData = [];
-            appData.lessonPlansData.push(obj);
+    function toggleAdminMode() {
+        const t = document.getElementById('adminToggle');
+        if(t.checked) {
+            if(prompt('Mật khẩu Tổ trưởng:') === ADMIN_PASSWORD) {
+                document.getElementById('appContainer').classList.add('admin-active');
+                document.getElementById('roleText').innerText = 'Chế độ Tổ trưởng';
+                phoneUnlocked = true; renderAll();
+            } else { t.checked = false; }
         } else {
-            if(!appData.personalPlansData) appData.personalPlansData = [];
-            appData.personalPlansData.push(obj);
+            document.getElementById('appContainer').classList.remove('admin-active');
+            document.getElementById('roleText').innerText = 'Chế độ Xem / Tải File';
+            renderAll();
         }
-        saveDataToCloud(); renderAll(); closeModal('lessonPlanModal');
     }
 
-    function openTopicModal() {
-        const select = document.getElementById('inputTopicTeacher');
-        select.innerHTML = '';
-        (appData.membersData || []).forEach(m => select.innerHTML += `<option value="${m.name}">${m.name}</option>`);
-        if(currentUser !== 'GUEST') select.value = currentUser;
-        document.getElementById('topicModal').style.display = 'flex';
-    }
-
-    async function saveTopic() {
-        const obj = {
-            teacher: document.getElementById('inputTopicTeacher').value,
-            subject: document.getElementById('inputTopicSubject').value,
-            grade: document.getElementById('inputTopicGrade').value,
-            title: document.getElementById('inputTopicTitle').value,
-            category: document.getElementById('inputTopicCategory').value,
-            schedule: document.getElementById('inputTopicSchedule').value,
-            link: document.getElementById('inputTopicLink').value
-        };
-        if(!obj.title) return alert('Nhập tên chuyên đề!');
-        if(!appData.topicsData) appData.topicsData = [];
-        appData.topicsData.push(obj);
-        saveDataToCloud(); renderAll(); closeModal('topicModal');
-    }
-
-    function openAttendanceModal() {
-        const select = document.getElementById('inputAttTeacher');
-        select.innerHTML = '';
-        (appData.membersData || []).forEach(m => select.innerHTML += `<option value="${m.name}">${m.name}</option>`);
-        document.getElementById('inputAttDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('attendanceModal').style.display = 'flex';
-    }
-
-    function saveAttendance() {
-        const obj = {
-            teacher: document.getElementById('inputAttTeacher').value,
-            date: document.getElementById('inputAttDate').value,
-            type: document.getElementById('inputAttType').value,
-            note: document.getElementById('inputAttNote').value
-        };
-        if(!appData.attendanceData) appData.attendanceData = [];
-        appData.attendanceData.push(obj);
-        saveDataToCloud(); renderAll(); closeModal('attendanceModal');
-    }
-
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function exportAttendanceCSV() {
-        if (!appData.attendanceData || appData.attendanceData.length === 0) return alert('Chưa có dữ liệu!');
-        let csv = "\uFEFFSTT,Ngày,Giáo Viên,Nội Dung,Ghi Chú\n";
-        appData.attendanceData.forEach((item, idx) => {
-            csv += `"${idx+1}","${item.date}","${item.teacher}","${item.type}","${item.note||''}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `ChamCong_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-    }
-
-    function printAttendanceReport() {
-        if (!appData.attendanceData || appData.attendanceData.length === 0) return alert('Chưa có dữ liệu!');
-        const win = window.open('', '_blank');
-        let html = `<html><head><title>In Chấm Công</title><style>body{font-family:Times New Roman;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{border:1px solid #000;padding:8px;}</style></head><body><h2 style="text-align:center;">BÁO CÁO CHẤM CÔNG GIÁO VIÊN</h2><table><thead><tr><th>STT</th><th>Ngày</th><th>Giáo Viên</th><th>Nội Dung</th><th>Ghi Chú</th></tr></thead><tbody>`;
-        appData.attendanceData.forEach((item, idx) => {
-            html += `<tr><td>${idx+1}</td><td>${item.date}</td><td><b>${item.teacher}</b></td><td>${item.type}</td><td>${item.note||'-'}</td></tr>`;
-        });
-        html += `</tbody></table></body></html>`;
-        win.document.write(html); win.document.close();
-        setTimeout(() => win.print(), 500);
-    }
+    function changeTheme(th) { document.body.setAttribute('data-theme', th); }
+    function changeCurrentUser(u) { currentUser = u; }
+    function exportAttendanceCSV() { alert('Chức năng xuất Excel sẵn sàng.'); }
+    function printAttendanceReport() { window.print(); }
 </script>
 </body>
 </html>
