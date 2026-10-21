@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện đọc file (nếu cần cho các mục khác) -->
+    <!-- Thư viện đọc file -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
 
@@ -336,7 +336,7 @@
         <div class="academic-year" id="displayYear"><i class="fa-solid fa-calendar-days me-1"></i> NĂM HỌC 2026 - 2027</div>
     </header>
 
-    <!-- MỤC GIỚI THIỆU TỔ CHUYÊN MÔN -->
+    <!-- 1. GIỚI THIỆU -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -350,11 +350,40 @@
         </div>
     </section>
 
-    <!-- THỨ TỰ 1: HỒ SƠ TỔ CHUYÊN MÔN -->
+    <!-- 2. NHÂN SỰ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">1. Hồ Sơ Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Nhân Sự - Hồ Sơ Thành Viên</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
+                        <th>Họ Và Tên</th>
+                        <th>Chức Vụ</th>
+                        <th>Nhiệm Vụ</th>
+                        <th>Liên Hệ / Zalo</th>
+                        <th class="admin-col">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 3. HỒ SƠ CHUYÊN MÔN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -380,11 +409,11 @@
         </div>
     </section>
 
-    <!-- THỨ TỰ 2: BIÊN BẢN HỌP TỔ -->
+    <!-- 4. BIÊN BẢN HỌP TỔ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-file-pen"></i> <span id="title_minutes">2. Biên Bản Họp Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-file-pen"></i> <span id="title_minutes">Biên Bản Họp Tổ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_minutes')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
@@ -410,46 +439,17 @@
         </div>
     </section>
 
-    <!-- THỨ TỰ 3: HỒ SƠ THÀNH VIÊN -->
+    <!-- 5. GHI NHẬN TIẾN ĐỘ NHIỆM VỤ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-users-gear"></i> <span id="title_members">3. Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
-                <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
-            </h2>
-            <div style="display:flex; gap:0.5rem;">
-                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('membersData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold admin-btn" onclick="openMemberModal()"><i class="fa-solid fa-user-plus"></i> Thêm Thành Viên</button>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'memberTableBody')"></th>
-                        <th>Họ Và Tên</th>
-                        <th>Chức Vụ</th>
-                        <th>Nhiệm Vụ</th>
-                        <th>Liên Hệ / Zalo</th>
-                        <th class="admin-col">Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="memberTableBody"></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- CHẤM CÔNG GIÁO VIÊN -->
-    <section class="card-box">
-        <div class="card-header-flex">
-            <h2 class="section-title">
-                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">Chấm Công Giáo Viên</span>
+                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">Ghi Nhận Tiến Độ Nhiệm Vụ (Chấm Công)</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                 <input type="text" class="filter-input" id="filterAttendance" placeholder="🔍 Lọc Giáo viên..." onkeyup="renderAttendance()">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('attendanceData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
-                <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> Thêm Chấm Công</button>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> Thêm Ghi Nhận</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -470,11 +470,11 @@
         </div>
     </section>
 
-    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
+    <!-- 6. NHIỆM VỤ CHUYÊN MÔN VÀ KIÊM NHIỆM -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công Chuyên Môn</span>
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
         </div>
@@ -566,7 +566,7 @@
         </div>
     </section>
 
-    <!-- HÌNH ẢNH HOẠT ĐỘNG -->
+    <!-- 7. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -578,7 +578,7 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- TÀI NGUYÊN SỐ -->
+    <!-- 8. TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -590,7 +590,7 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- VĂN BẢN LƯU TRỮ -->
+    <!-- 9. VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -634,7 +634,7 @@
 <!-- MODAL HỒ SƠ TỔ CHUYÊN MÔN -->
 <div class="modal" id="profileModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-folder-tree me-2"></i> Hồ Sơ Tổ Chuyên Môn</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-folder-tree me-2"></i> Hồ Sơ Chuyên Môn</h3>
         <input type="hidden" id="editProfileIndex">
         <div class="form-group"><label>1. Tên Hồ Sơ / Kế Hoạch</label><input type="text" id="inputProfileTitle" class="form-control" placeholder="Ví dụ: Kế hoạch giáo dục tổ Sinh-CN"></div>
         <div class="form-group"><label>2. Phân loại hồ sơ</label>
@@ -683,7 +683,7 @@
 <!-- MODAL CHẤM CÔNG GIÁO VIÊN -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Chấm Công Giáo Viên</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Ghi Nhận Tiến Độ Nhiệm Vụ</h3>
         <input type="hidden" id="editAttendanceIndex">
         <div class="form-group"><label>1. Họ và tên giáo viên</label><input type="text" id="inputAttTeacher" class="form-control" placeholder="Ví dụ: Thầy Can"></div>
         <div class="form-group"><label>2. Ngày / Tuần chấm công</label><input type="text" id="inputAttDate" class="form-control" placeholder="Ví dụ: Tuần 5 (Từ 05/10 - 10/10)"></div>
@@ -698,7 +698,7 @@
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveAttendance()">Lưu Chấm Công</button>
+            <button class="btn btn-gold" onclick="saveAttendance()">Lưu Ghi Nhận</button>
         </div>
     </div>
 </div>
@@ -848,14 +848,14 @@
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_profile: '1. Hồ Sơ Tổ Chuyên Môn',
-            title_minutes: '2. Biên Bản Họp Tổ Chuyên Môn',
-            title_members: '3. Hồ Sơ Thành Viên Tổ Chuyên Môn',
-            title_attendance: 'Chấm Công Giáo Viên',
+            title_members: 'Nhân Sự - Hồ Sơ Thành Viên',
+            title_profile: 'Hồ Sơ Chuyên Môn',
+            title_minutes: 'Biên Bản Họp Tổ',
+            title_attendance: 'Ghi Nhận Tiến Độ Nhiệm Vụ (Chấm Công)',
+            title_tasks: 'Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
-            title_docs: 'Văn Bản Lưu Trữ',
-            title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
+            title_docs: 'Văn Bản Lưu Trữ'
         },
         profilesData: [],
         minutesData: [],
@@ -947,11 +947,11 @@
     function renderAll() {
         renderHeader();
         renderIntro();
+        renderMembers();
         renderProfiles();
         renderMinutes();
-        renderSectionTitles();
-        renderMembers();
         renderAttendance();
+        renderSectionTitles();
         renderImages();
         renderResources();
         renderDocs();
@@ -1199,7 +1199,7 @@
     }
 
     function deleteAttendance(i) {
-        if (confirm('Xóa bản ghi chấm công này?')) {
+        if (confirm('Xóa bản ghi ghi nhận này?')) {
             appData.attendanceData.splice(i, 1);
             saveDataToCloud();
         }
