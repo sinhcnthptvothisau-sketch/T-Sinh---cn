@@ -1842,37 +1842,64 @@
         document.getElementById('meetingModal').style.display = 'flex';
     }
 
-    async function saveMeeting() {
-        const idx = document.getElementById('editMeetingIndex').value;
-        const time = document.getElementById('inputMeetingTime').value;
-        const members = document.getElementById('inputMeetingMembers').value;
-        const content = document.getElementById('inputMeetingContent').value;
-        const fileInput = document.getElementById('inputMeetingFile');
-        const linkInput = document.getElementById('inputMeetingLink').value;
+  async function saveMeeting() {
+    const idx = document.getElementById('editMeetingIndex').value;
+    const time = document.getElementById('inputMeetingTime').value;
+    const members = document.getElementById('inputMeetingMembers').value;
+    const content = document.getElementById('inputMeetingContent').value;
+    const fileInput = document.getElementById('inputMeetingFile');
+    const linkInput = document.getElementById('inputMeetingLink').value;
 
-        if (!time || !content) return alert('Nhập thông tin họp!');
-
-        if (!appData.meetingMinutesData) appData.meetingMinutesData = [];
-        let finalLink = linkInput || '';
-
-        if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file biên bản...');
-            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
-            catch(e) { return alert('Lỗi tải file: ' + e.message); }
-        }
-
-        const meetingObj = { 
-            time, members, content, link: finalLink,
-            author: idx !== '' ? appData.meetingMinutesData[idx].author : currentUser,
-            allowedEditors: idx !== '' ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
-        };
-
-        if (idx !== '') appData.meetingMinutesData[idx] = meetingObj;
-        else appData.meetingMinutesData.push(meetingObj);
-
-        saveDataToCloud();
-        closeModal('meetingModal');
+    // 1. Ràng buộc nhập đủ dữ liệu cơ bản
+    if (!time || !content) {
+        return alert('Vui lòng nhập đầy đủ Thời gian và Nội dung họp!');
     }
+
+    // 2. Đảm bảo mảng lưu dữ liệu luôn tồn tại
+    if (!appData.meetingMinutesData) {
+        appData.meetingMinutesData = [];
+    }
+
+    let finalLink = linkInput || '';
+
+    // 3. Xử lý tải File đính kèm an toàn
+    if (fileInput.files && fileInput.files[0]) {
+        alert('Đang tải file biên bản lên Firebase Storage...');
+        try { 
+            finalLink = await uploadFileToFirebase(fileInput.files[0]); 
+        } catch(e) { 
+            return alert('Lỗi tải file lên Firebase Storage: ' + e.message); 
+        }
+    }
+
+    // 4. Khởi tạo đối tượng lưu trữ
+    const meetingObj = { 
+        time, 
+        members, 
+        content, 
+        link: finalLink,
+        author: (idx !== '' && appData.meetingMinutesData[idx]) ? appData.meetingMinutesData[idx].author : currentUser,
+        allowedEditors: (idx !== '' && appData.meetingMinutesData[idx]) ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
+    };
+
+    // 5. Kiểm tra kỹ idx: Nếu là Sửa thì thay thế, nếu là Thêm Mới thì PUSH thêm vào cuối mảng
+    if (idx !== '' && !isNaN(idx) && appData.meetingMinutesData[parseInt(idx)]) {
+        appData.meetingMinutesData[parseInt(idx)] = meetingObj;
+    } else {
+        appData.meetingMinutesData.push(meetingObj);
+    }
+
+    // 6. Xóa từ khóa lọc để không bị ẩn bài vừa lưu
+    const filterInput = document.getElementById('filterMeeting');
+    if (filterInput) filterInput.value = '';
+
+    // 7. Lưu lên Firebase và Render lại ngay lập tức
+    saveDataToCloud();
+    renderMeetings();
+    closeModal('meetingModal');
+    
+    alert('Lưu biên bản họp thành công!');
+}
 
     function deleteMeeting(i) {
         if (confirm('Xóa biên bản này?')) {
