@@ -492,7 +492,7 @@
         </div>
     </section>
 
-    <!-- 5. CHUYÊN ĐỀ CHUYÊN MÔN -->
+    <!-- 5. CHUYÊN ĐỀ CHUYÊN MÔN (ĐÃ TÍCH HỢP NGÀY, THỨ, LỚP, TIẾT) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -801,7 +801,7 @@
     </section>
 </div>
 
-<!-- ALL MODALS -->
+<!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN (BỔ SUNG THỨ, NGÀY, LỚP, TIẾT) -->
 <div class="modal" id="topicModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn (STEM/STEAM...)</h3>
@@ -811,6 +811,7 @@
             <select id="inputTopicTeacher" class="form-control"></select>
         </div>
 
+        <!-- BỔ SUNG: THỨ VÀ NGÀY THÁNG -->
         <div class="form-row">
             <div class="form-group">
                 <label>2. Thứ thực hiện</label>
@@ -829,6 +830,7 @@
             </div>
         </div>
 
+        <!-- BỔ SUNG: LỚP DẠY VÀ TIẾT HỌC -->
         <div class="form-row">
             <div class="form-group">
                 <label>4. Lớp thực hiện (Cụ thể)</label>
@@ -868,9 +870,9 @@
             </select>
         </div>
         
-        <div class="form-group"><label>10. TÀI LIỆU CHUYÊN ĐỀ (Tải từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
+        <div class="form-group"><label>10. TÀI LIỆU CHUYÊN ĐỀ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
         
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
@@ -879,30 +881,14 @@
     </div>
 </div>
 
-<div class="modal" id="meetingModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
-        <input type="hidden" id="editMeetingIndex">
-        <div class="form-group"><label>1. Thời Gian Họp / Tuần / Học Kỳ</label><input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 Ngày 15/10/2026 (Tuần 8)"></div>
-        <div class="form-group"><label>2. Thành Phần Tham Dự</label><input type="text" id="inputMeetingMembers" class="form-control" placeholder="Ví dụ: Tất cả thành viên tổ"></div>
-        <div class="form-group"><label>3. Nội Dung Chính / Trích Yếu</label><textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="Nội dung cuộc họp..."></textarea></div>
-        <div class="form-group"><label>4. FILE BIÊN BẢN (Tải từ máy)</label><input type="file" id="inputMeetingFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Dán Link Google Drive / Docs</label><input type="text" id="inputMeetingLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản</button>
-        </div>
-    </div>
-</div>
-
+<!-- CÁC MODAL KHÁC -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-calendar-check me-2"></i> Chấm Công / Ghi Nhận Giáo Viên</h3>
         <input type="hidden" id="editAttIndex">
         <div class="form-group"><label>1. Chọn Giáo Viên</label><select id="inputAttTeacher" class="form-control"></select></div>
         <div class="form-group"><label>2. Ngày Ghi Nhận</label><input type="date" id="inputAttDate" class="form-control"></div>
-        <div class="form-group"><label>3. Nội Dung Chấm / Vi Phạm</label>
+        <div class="form-group"><label>3. Nội Dung Chấm / Ghi Nhận Vi Phạm</label>
             <select id="inputAttType" class="form-control">
                 <option value="Nộp hồ sơ chậm">1. Nộp hồ sơ chậm</option>
                 <option value="Đi trễ">2. Đi trễ</option>
@@ -911,7 +897,7 @@
                 <option value="Khác">5. Khác (Ghi chú cụ thể bên dưới)</option>
             </select>
         </div>
-        <div class="form-group"><label>4. Ghi Chú Cụ Thể</label><textarea id="inputAttNote" class="form-control" rows="3" placeholder="Lý do, chi tiết vi phạm..."></textarea></div>
+        <div class="form-group"><label>4. Ghi Chú Cụ Thể</label><textarea id="inputAttNote" class="form-control" rows="3" placeholder="Ví dụ: Nộp KHBD tuần 12 trễ 2 ngày..."></textarea></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveAttendance()">Lưu Chấm Công</button>
@@ -934,6 +920,23 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="meetingModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
+        <input type="hidden" id="editMeetingIndex">
+        <div class="form-group"><label>1. Thời Gian Họp / Tuần / Học Kỳ</label><input type="text" id="inputMeetingTime" class="form-control"></div>
+        <div class="form-group"><label>2. Thành Phần Tham Dự</label><input type="text" id="inputMeetingMembers" class="form-control"></div>
+        <div class="form-group"><label>3. Nội Dung Chính</label><textarea id="inputMeetingContent" class="form-control" rows="4"></textarea></div>
+        <div class="form-group"><label>4. FILE BIÊN BẢN (Tải từ máy)</label><input type="file" id="inputMeetingFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Dán Link Google Drive</label><input type="text" id="inputMeetingLink" class="form-control"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản</button>
         </div>
     </div>
 </div>
@@ -1779,7 +1782,6 @@
         }
     }
 
-    /* MỤC 6: BIÊN BẢN HỌP TỔ CHUYÊN MÔN (ĐÃ KHẮC PHỤC TRIỆT ĐỂ LỖI BÀI THỨ 3) */
     function renderMeetings() {
         const filterVal = (document.getElementById('filterMeeting')?.value || '').toLowerCase();
         const tbody = document.getElementById('meetingTableBody');
@@ -1822,10 +1824,10 @@
     }
 
     function openMeetingModal(i = null) {
-        document.getElementById('editMeetingIndex').value = (i !== null && i !== undefined) ? i : '';
+        document.getElementById('editMeetingIndex').value = i !== null ? i : '';
         document.getElementById('inputMeetingFile').value = '';
 
-        if (i !== null && i !== undefined && appData.meetingMinutesData && appData.meetingMinutesData[i]) {
+        if (i !== null && appData.meetingMinutesData) {
             document.getElementById('inputMeetingTime').value = appData.meetingMinutesData[i].time;
             document.getElementById('inputMeetingMembers').value = appData.meetingMinutesData[i].members;
             document.getElementById('inputMeetingContent').value = appData.meetingMinutesData[i].content;
@@ -1861,22 +1863,14 @@
 
         const meetingObj = { 
             time, members, content, link: finalLink,
-            author: (idx !== '' && appData.meetingMinutesData[idx]) ? appData.meetingMinutesData[idx].author : currentUser,
-            allowedEditors: (idx !== '' && appData.meetingMinutesData[idx]) ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
+            author: idx !== '' ? appData.meetingMinutesData[idx].author : currentUser,
+            allowedEditors: idx !== '' ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
         };
 
-        if (idx !== '' && !isNaN(idx) && appData.meetingMinutesData[parseInt(idx)]) {
-            appData.meetingMinutesData[parseInt(idx)] = meetingObj;
-        } else {
-            appData.meetingMinutesData.push(meetingObj);
-        }
-
-        // XÓA TỪ KHÓA LỌC ĐỂ BÀI MỚI XUẤT HIỆN LẬP TỨC
-        const filterInput = document.getElementById('filterMeeting');
-        if (filterInput) filterInput.value = '';
+        if (idx !== '') appData.meetingMinutesData[idx] = meetingObj;
+        else appData.meetingMinutesData.push(meetingObj);
 
         saveDataToCloud();
-        renderMeetings();
         closeModal('meetingModal');
     }
 
