@@ -287,7 +287,7 @@
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
             padding: 0.8rem; border-radius: 10px; color: white; outline: none;
         }
-        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
+        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.80rem; font-weight: 700; margin: 0.3rem 0; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
     </style>
@@ -350,11 +350,11 @@
         </div>
     </section>
 
-    <!-- MỤC HỒ SƠ TỔ CHUYÊN MÔN -->
+    <!-- THỨ TỰ 1: HỒ SƠ TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">1. Hồ Sơ Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -380,11 +380,41 @@
         </div>
     </section>
 
-    <!-- HỒ SƠ THÀNH VIÊN -->
+    <!-- THỨ TỰ 2: BIÊN BẢN HỌP TỔ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-file-pen"></i> <span id="title_minutes">2. Biên Bản Họp Tổ Chuyên Môn</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_minutes')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <input type="text" class="filter-input" id="filterMinutes" placeholder="🔍 Lọc Nội dung / Tuần..." onkeyup="renderMinutes()">
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('minutesData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openMinutesModal()"><i class="fa-solid fa-plus"></i> Thêm Biên Bản</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'minutesTableBody')"></th>
+                        <th>Nội Dung / Tiêu Đề Cuộc Họp</th>
+                        <th>Thời Gian / Tuần Họp</th>
+                        <th>Chủ Trì / Thư Ký</th>
+                        <th>File / Link Biên Bản</th>
+                        <th class="admin-col">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="minutesTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- THỨ TỰ 3: HỒ SƠ THÀNH VIÊN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">3. Hồ Sơ Thành Viên Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem;">
@@ -409,7 +439,7 @@
         </div>
     </section>
 
-    <!-- MỤC MỚI THÊM: CHẤM CÔNG GIÁO VIÊN -->
+    <!-- CHẤM CÔNG GIÁO VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -630,6 +660,26 @@
     </div>
 </div>
 
+<!-- MODAL BIÊN BẢN HỌP TỔ -->
+<div class="modal" id="minutesModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Biên Bản Họp Tổ Chuyên Môn</h3>
+        <input type="hidden" id="editMinutesIndex">
+        <div class="form-group"><label>1. Tiêu đề / Nội dung cuộc họp</label><input type="text" id="inputMinTitle" class="form-control" placeholder="Ví dụ: Họp triển khai nhiệm vụ tháng 10"></div>
+        <div class="form-group"><label>2. Thời gian / Tuần họp</label><input type="text" id="inputMinDate" class="form-control" placeholder="Ví dụ: Tuần 6 (15/10/2026)"></div>
+        <div class="form-group"><label>3. Chủ trì / Thư ký</label><input type="text" id="inputMinHost" class="form-control" placeholder="Ví dụ: Chủ trì: Thầy Can - Thư ký: Cô Duyên"></div>
+        
+        <div class="form-group"><label>4. FILE BIÊN BẢN (Lựa chọn 1: Tải File Word/PDF từ máy)</label><input type="file" id="inputMinFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputMinLink" class="form-control" placeholder="https://docs.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('minutesModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveMinutes()">Lưu Biên Bản</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL CHẤM CÔNG GIÁO VIÊN -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
@@ -798,8 +848,9 @@
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
             title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_profile: 'Hồ Sơ Tổ Chuyên Môn',
-            title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn',
+            title_profile: '1. Hồ Sơ Tổ Chuyên Môn',
+            title_minutes: '2. Biên Bản Họp Tổ Chuyên Môn',
+            title_members: '3. Hồ Sơ Thành Viên Tổ Chuyên Môn',
             title_attendance: 'Chấm Công Giáo Viên',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
@@ -807,6 +858,7 @@
             title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn'
         },
         profilesData: [],
+        minutesData: [],
         membersData: [
             { name: 'Can', role: 'Tổ trưởng / GV Sinh học', duty: 'Phụ trách chung', phone: '0912.345.678' },
             { name: 'Duyên', role: 'GV Sinh học', duty: 'Giảng dạy & BD HSG Sinh', phone: '0987.111.222' },
@@ -896,6 +948,7 @@
         renderHeader();
         renderIntro();
         renderProfiles();
+        renderMinutes();
         renderSectionTitles();
         renderMembers();
         renderAttendance();
@@ -1007,6 +1060,83 @@
         }
     }
 
+    function renderMinutes() {
+        const filterMin = (document.getElementById('filterMinutes')?.value || '').toLowerCase();
+        const tbody = document.getElementById('minutesTableBody');
+        tbody.innerHTML = '';
+        (appData.minutesData || []).forEach((item, i) => {
+            if (filterMin && !item.title.toLowerCase().includes(filterMin) && !item.date.toLowerCase().includes(filterMin)) return;
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Biên Bản</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
+                    <td><strong style="color:var(--accent-gold);">${item.title}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.date}</td>
+                    <td>${item.host}</td>
+                    <td>${fileHtml}</td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openMinutesModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteMinutes(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function openMinutesModal(i = null) {
+        document.getElementById('editMinutesIndex').value = i !== null ? i : '';
+        document.getElementById('inputMinFile').value = '';
+        if (i !== null && appData.minutesData) {
+            document.getElementById('inputMinTitle').value = appData.minutesData[i].title;
+            document.getElementById('inputMinDate').value = appData.minutesData[i].date;
+            document.getElementById('inputMinHost').value = appData.minutesData[i].host;
+            document.getElementById('inputMinLink').value = appData.minutesData[i].link;
+        } else {
+            document.getElementById('inputMinTitle').value = '';
+            document.getElementById('inputMinDate').value = '';
+            document.getElementById('inputMinHost').value = '';
+            document.getElementById('inputMinLink').value = '';
+        }
+        document.getElementById('minutesModal').style.display = 'flex';
+    }
+
+    async function saveMinutes() {
+        const idx = document.getElementById('editMinutesIndex').value;
+        const title = document.getElementById('inputMinTitle').value;
+        const date = document.getElementById('inputMinDate').value;
+        const host = document.getElementById('inputMinHost').value;
+        const fileInput = document.getElementById('inputMinFile');
+        const linkInput = document.getElementById('inputMinLink').value;
+
+        if (!title || !date) return alert('Nhập đầy đủ tiêu đề và thời gian họp!');
+
+        if (!appData.minutesData) appData.minutesData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file biên bản lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const minObj = { title, date, host, link: finalLink };
+        if (idx !== '') appData.minutesData[idx] = minObj;
+        else appData.minutesData.push(minObj);
+
+        saveDataToCloud();
+        closeModal('minutesModal');
+    }
+
+    function deleteMinutes(i) {
+        if (confirm('Xóa biên bản họp này?')) {
+            appData.minutesData.splice(i, 1);
+            saveDataToCloud();
+        }
+    }
+
     function renderAttendance() {
         const filterAtt = (document.getElementById('filterAttendance')?.value || '').toLowerCase();
         const tbody = document.getElementById('attendanceTableBody');
@@ -1091,6 +1221,7 @@
         let tbodyId = '';
         if (dataKey === 'membersData') tbodyId = 'memberTableBody';
         else if (dataKey === 'profilesData') tbodyId = 'profileTableBody';
+        else if (dataKey === 'minutesData') tbodyId = 'minutesTableBody';
         else if (dataKey === 'attendanceData') tbodyId = 'attendanceTableBody';
         else if (dataKey === 'teachingTasks') tbodyId = 'teachingTaskTableBody';
         else if (dataKey === 'hsgTasks') tbodyId = 'hsgTaskTableBody';
