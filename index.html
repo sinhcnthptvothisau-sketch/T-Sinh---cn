@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (v8) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
@@ -58,7 +58,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1150px;
             width: 100%;
             margin: 0 auto;
             display: flex;
@@ -190,7 +190,7 @@
         }
 
         .section-title {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: var(--accent-gold-bright);
             display: flex;
@@ -199,7 +199,7 @@
         }
 
         .sub-section-title {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--cyan-accent);
             display: flex;
@@ -259,14 +259,14 @@
         .table-responsive { overflow-x: auto; }
         .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; }
         .custom-table th {
-            padding: 1rem; text-align: left; font-size: 0.85rem; text-transform: uppercase;
+            padding: 0.8rem 1rem; text-align: left; font-size: 0.82rem; text-transform: uppercase;
             color: var(--text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .custom-table td { padding: 1rem; background: rgba(255, 255, 255, 0.02); font-size: 0.95rem; }
+        .custom-table td { padding: 0.8rem 1rem; background: rgba(255, 255, 255, 0.02); font-size: 0.9rem; }
         .custom-table tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .custom-table tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
 
-        .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+        .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700; display: inline-block; }
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
         .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .badge-cyan { background: rgba(56, 189, 248, 0.15); color: var(--cyan-accent); border: 1px solid rgba(56, 189, 248, 0.3); }
@@ -287,16 +287,19 @@
         }
         .modal-content {
             background: #1e1b4b; border: 1px solid var(--border-glow); padding: 2rem;
-            border-radius: 20px; width: 90%; max-width: 550px; display: flex; flex-direction: column; gap: 1rem;
+            border-radius: 20px; width: 90%; max-width: 580px; display: flex; flex-direction: column; gap: 1rem;
             max-height: 90vh; overflow-y: auto;
         }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.85rem; color: var(--text-muted); }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
         .form-control {
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.8rem; border-radius: 10px; color: white; outline: none;
+            padding: 0.7rem; border-radius: 10px; color: white; outline: none; font-size: 0.9rem;
         }
-        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.3rem 0; }
+        .form-control option { background: #1e1b4b; color: white; }
+        .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin: 0.2rem 0; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
     </style>
@@ -349,7 +352,7 @@
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-circle-info"></i> <span id="title_intro">Giới Thiệu Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-circle-info"></i> <span id="title_intro">1. Giới Thiệu Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_intro')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openIntroModal()"><i class="fa-solid fa-pen"></i> Chỉnh Sửa Giới Thiệu</button>
@@ -359,11 +362,11 @@
         </div>
     </section>
 
-    <!-- 2. MỤC HỒ SƠ THÀNH VIÊN (NHÂN SỰ ĐƯỢC CHUYỂN NẰM NGAY DƯỚI PHẦN GIỚI THIỆU) -->
+    <!-- 2. MỤC HỒ SƠ THÀNH VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)</span>
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">2. Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -389,11 +392,11 @@
         </div>
     </section>
 
-    <!-- HỒ SƠ TỔ CHUYÊN MÔN -->
+    <!-- 3. HỒ SƠ TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">3. Hồ Sơ Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -419,20 +422,20 @@
         </div>
     </section>
 
-    <!-- MỤC KẾ HOẠCH BÀI DẠY VÀ KẾ HOẠCH CÁ NHÂN GIÁO VIÊN (ĐÃ CHIA THÀNH 2 MỤC NHỎ) -->
+    <!-- 4. KẾ HOẠCH CỦA GIÁO VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-file-signature"></i> <span id="title_plans">Kế Hoạch Của Giáo Viên</span>
+                <i class="fa-solid fa-file-signature"></i> <span id="title_plans">4. Kế Hoạch Của Giáo Viên</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_plans')"><i class="fa-solid fa-pen"></i></button>
             </h2>
         </div>
 
-        <!-- MỤC NHỎ 1: KẾ HOẠCH BÀI DẠY -->
+        <!-- 4.1. KẾ HOẠCH BÀI DẠY -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-chalkboard"></i> 1. Kế Hoạch Bài Dạy (Giáo Án / Tiết Dạy)
+                    <i class="fa-solid fa-chalkboard"></i> 4.1. Kế Hoạch Bài Dạy (Giáo Án / Tiết Dạy)
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc Bài dạy / GV..." onkeyup="renderLessonPlans()">
@@ -458,11 +461,11 @@
             </div>
         </div>
 
-        <!-- MỤC NHỎ 2: KẾ HOẠCH CÁ NHÂN -->
+        <!-- 4.2. KẾ HOẠCH CÁ NHÂN -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-user-pen"></i> 2. Kế Hoạch Cá Nhân (Năm học / Tháng / Bồi dưỡng)
+                    <i class="fa-solid fa-user-pen"></i> 4.2. Kế Hoạch Cá Nhân (Năm học / Tháng / Bồi dưỡng)
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterPersonalPlan" placeholder="🔍 Lọc KH cá nhân / GV..." onkeyup="renderPersonalPlans()">
@@ -489,15 +492,15 @@
         </div>
     </section>
 
-    <!-- MỤC CHUYÊN ĐỀ CHUYÊN MÔN -->
+    <!-- 5. CHUYÊN ĐỀ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-book-open-reader"></i> <span id="title_topics">Chuyên Đề Chuyên Môn</span>
+                <i class="fa-solid fa-book-open-reader"></i> <span id="title_topics">5. Chuyên Đề Chuyên Môn (STEM/STEAM...)</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_topics')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
-                <input type="text" class="filter-input" id="filterTopic" placeholder="🔍 Lọc GV / Môn / Khối..." onkeyup="renderTopics()">
+                <input type="text" class="filter-input" id="filterTopic" placeholder="🔍 Lọc GV / Môn / Lớp..." onkeyup="renderTopics()">
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('topicsData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                 <button class="btn btn-gold btn-sm" onclick="openTopicModal()"><i class="fa-solid fa-plus"></i> Thêm Chuyên Đề</button>
             </div>
@@ -507,12 +510,13 @@
                 <thead>
                     <tr>
                         <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'topicTableBody')"></th>
-                        <th>Tên Giáo Viên</th>
-                        <th>Môn</th>
-                        <th>Khối</th>
+                        <th>Giáo Viên Báo Cáo</th>
+                        <th>Thời Gian thực hiện</th>
+                        <th>Lớp & Tiết</th>
+                        <th>Môn & Khối</th>
                         <th>Tên Chuyên Đề</th>
                         <th>Loại Chuyên Đề</th>
-                        <th>Tài Liệu / File Đính Kèm</th>
+                        <th>Tài Liệu / File</th>
                         <th>Thao Tác</th>
                     </tr>
                 </thead>
@@ -521,11 +525,11 @@
         </div>
     </section>
 
-    <!-- BIÊN BẢN HỌP TỔ CHUYÊN MÔN -->
+    <!-- 6. BIÊN BẢN HỌP TỔ CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-clipboard-list"></i> <span id="title_meetings">Biên Bản Họp Tổ (Nhóm) Chuyên Môn</span>
+                <i class="fa-solid fa-clipboard-list"></i> <span id="title_meetings">6. Biên Bản Họp Tổ (Nhóm) Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_meetings')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -551,20 +555,20 @@
         </div>
     </section>
 
-    <!-- NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
+    <!-- 7. NHIỆM VỤ VÀ PHÂN CÔNG CHUYÊN MÔN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ & Phân Công Chuyên Môn</span>
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">7. Nhiệm Vụ & Phân Công Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
         </div>
 
-        <!-- DẠY LỚP & CHỦ NHIỆM -->
+        <!-- 7.1. DẠY LỚP & CHỦ NHIỆM -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-chalkboard-user"></i> Dạy Lớp & Chủ Nhiệm
+                    <i class="fa-solid fa-chalkboard-user"></i> 7.1. Dạy Lớp & Chủ Nhiệm
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterTeach" placeholder="🔍 Lọc Giáo viên / Lớp..." onkeyup="renderTasks()">
@@ -589,11 +593,11 @@
             </div>
         </div>
 
-        <!-- BỒI DƯỠNG HSG -->
+        <!-- 7.2. BỒI DƯỠNG HSG -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
+                    <i class="fa-solid fa-graduation-cap"></i> 7.2. Bồi Dưỡng Học Sinh Giỏi
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
@@ -618,11 +622,11 @@
             </div>
         </div>
 
-        <!-- KIỂM TRA ĐÁNH GIÁ (CÓ CẢ TỔ & CẢ 3 KHỐI) -->
+        <!-- 7.3. KIỂM TRA ĐÁNH GIÁ -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-file-pen"></i> Kiểm Tra Đánh Giá
+                    <i class="fa-solid fa-file-pen"></i> 7.3. Kiểm Tra Đánh Giá
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterEval" placeholder="🔍 Lọc GV / Môn / Đề..." onkeyup="renderTasks()">
@@ -648,11 +652,11 @@
             </div>
         </div>
 
-        <!-- ĐĂNG KÝ THI ĐỦA -->
+        <!-- 7.4. ĐĂNG KÝ THI ĐỦA -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-trophy"></i> Đăng Ký Phong Trào Thi Đua
+                    <i class="fa-solid fa-trophy"></i> 7.4. Đăng Ký Phong Trào Thi Đua
                 </div>
                 <div style="display:flex; gap:0.5rem;">
                     <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('competitionTasks')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
@@ -677,21 +681,21 @@
         </div>
     </section>
 
-    <!-- MỤC CHẤM CÔNG GIÁO VIÊN (TỔ TRƯỜNG PHỤ TRÁCH - CÓ XUẤT CSV/PRINT PDF) -->
+    <!-- 8. MỤC CHẤM CÔNG GIÁO VIÊN -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-calendar-check"></i> <span id="title_attendance">Chấm Công Giáo Viên (Tổ Trưởng Chấm)</span>
+                <i class="fa-solid fa-calendar-check"></i> <span id="title_attendance">8. Chấm Công Giáo Viên (Tổ Trưởng Chấm)</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                 <button class="btn btn-download btn-sm" onclick="exportAttendanceCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
                 <button class="btn btn-outline btn-sm" onclick="printAttendanceReport()"><i class="fa-solid fa-print"></i> In / Xuất PDF</button>
+                <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('attendanceData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                 <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> + Chấm Công GV</button>
             </div>
         </div>
 
-        <!-- THỐNG KÊ NHANH -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
             <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.8rem; border-radius: 14px; text-align: center;">
                 <div style="font-size: 1.5rem; font-weight: 800; color: #f87171;" id="statTotalViolations">0</div>
@@ -747,11 +751,11 @@
         </div>
     </section>
 
-    <!-- HÌNH ẢNH HOẠT ĐỘNG -->
+    <!-- 9. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-images"></i> <span id="title_gallery">Hình Ảnh Hoạt Động</span>
+                <i class="fa-solid fa-images"></i> <span id="title_gallery">9. Hình Ảnh Hoạt Động</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_gallery')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openImageModal()"><i class="fa-solid fa-upload"></i> Thêm Hình Ảnh</button>
@@ -759,11 +763,11 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- TÀI NGUYÊN SỐ -->
+    <!-- 10. TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-open"></i> <span id="title_resources">Tài Nguyên Số</span>
+                <i class="fa-solid fa-folder-open"></i> <span id="title_resources">10. Tài Nguyên Số</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_resources')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openResourceModal()"><i class="fa-solid fa-plus"></i> Thêm Tài Nguyên</button>
@@ -771,11 +775,11 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- VĂN BẢN LƯU TRỮ -->
+    <!-- 11. VĂN BẢN LƯU TRỮ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">Văn Bản Lưu Trữ</span>
+                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">11. Văn Bản Lưu Trữ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_docs')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openDocModal()"><i class="fa-solid fa-plus"></i> Thêm Văn Bản</button>
@@ -797,19 +801,108 @@
     </section>
 </div>
 
-<!-- MODAL CHẤM CÔNG GIÁO VIÊN -->
+<!-- MODALS -->
+<div class="modal" id="topicModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn (STEM/STEAM...)</h3>
+        <input type="hidden" id="editTopicIndex">
+        
+        <div class="form-group"><label>1. Tên Giáo Viên Phụ Trách / Báo Cáo</label>
+            <select id="inputTopicTeacher" class="form-control"></select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>2. Thứ thực hiện</label>
+                <select id="inputTopicDayOfWeek" class="form-control">
+                    <option value="Thứ Hai">Thứ Hai</option>
+                    <option value="Thứ Ba">Thứ Ba</option>
+                    <option value="Thứ Tư">Thứ Tư</option>
+                    <option value="Thứ Năm">Thứ Năm</option>
+                    <option value="Thứ Sáu">Thứ Sáu</option>
+                    <option value="Thứ Bảy">Thứ Bảy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>3. Ngày / Tháng thực hiện</label>
+                <input type="date" id="inputTopicDate" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>4. Lớp thực hiện (Cụ thể)</label>
+                <input type="text" id="inputTopicClass" class="form-control" placeholder="Ví dụ: Lớp 10A1, 11B2...">
+            </div>
+            <div class="form-group">
+                <label>5. Tiết dạy / Tiết PPCT</label>
+                <input type="text" id="inputTopicPeriod" class="form-control" placeholder="Ví dụ: Tiết 2 (Tiết 45 PPCT)">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group"><label>6. Môn Học</label>
+                <select id="inputTopicSubject" class="form-control">
+                    <option value="Sinh học">Sinh học</option>
+                    <option value="Công nghệ">Công nghệ</option>
+                    <option value="Sinh & CN">Sinh & CN</option>
+                </select>
+            </div>
+            <div class="form-group"><label>7. Khối Lớp Áp Dụng</label>
+                <select id="inputTopicGrade" class="form-control">
+                    <option value="Khối 10">Khối 10</option>
+                    <option value="Khối 11">Khối 11</option>
+                    <option value="Khối 12">Khối 12</option>
+                    <option value="Toàn khối">Toàn khối</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group"><label>8. Tên Chuyên Đề</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Thiết kế bài học STEM - Chế tạo Kính hiển vi"></div>
+        <div class="form-group"><label>9. Loại Chuyên Đề</label>
+            <select id="inputTopicCategory" class="form-control">
+                <option value="Nghiên cứu bài học">Nghiên cứu bài học</option>
+                <option value="STEM / STEAM">STEM / STEAM</option>
+                <option value="Ứng dụng AI trong giảng dạy">Ứng dụng AI trong giảng dạy</option>
+                <option value="Chuyên đề khác">Chuyên đề khác</option>
+            </select>
+        </div>
+        
+        <div class="form-group"><label>10. TÀI LIỆU CHUYÊN ĐỀ (Tải từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="meetingModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
+        <input type="hidden" id="editMeetingIndex">
+        <div class="form-group"><label>1. Thời Gian Họp / Tuần / Học Kỳ</label><input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 Ngày 15/10/2026 (Tuần 8)"></div>
+        <div class="form-group"><label>2. Thành Phần Tham Dự</label><input type="text" id="inputMeetingMembers" class="form-control" placeholder="Ví dụ: Tất cả thành viên tổ"></div>
+        <div class="form-group"><label>3. Nội Dung Chính / Trích Yếu</label><textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="Nội dung cuộc họp..."></textarea></div>
+        <div class="form-group"><label>4. FILE BIÊN BẢN (Tải từ máy)</label><input type="file" id="inputMeetingFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Dán Link Google Drive / Docs</label><input type="text" id="inputMeetingLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-calendar-check me-2"></i> Chấm Công / Ghi Nhận Giáo Viên</h3>
         <input type="hidden" id="editAttIndex">
-        
-        <div class="form-group"><label>1. Chọn Giáo Viên</label>
-            <select id="inputAttTeacher" class="form-control"></select>
-        </div>
-        <div class="form-group"><label>2. Ngày Ghi Nhận</label>
-            <input type="date" id="inputAttDate" class="form-control">
-        </div>
-        <div class="form-group"><label>3. Nội Dung Chấm / Ghi Nhận Vi Phạm</label>
+        <div class="form-group"><label>1. Chọn Giáo Viên</label><select id="inputAttTeacher" class="form-control"></select></div>
+        <div class="form-group"><label>2. Ngày Ghi Nhận</label><input type="date" id="inputAttDate" class="form-control"></div>
+        <div class="form-group"><label>3. Nội Dung Chấm / Vi Phạm</label>
             <select id="inputAttType" class="form-control">
                 <option value="Nộp hồ sơ chậm">1. Nộp hồ sơ chậm</option>
                 <option value="Đi trễ">2. Đi trễ</option>
@@ -818,10 +911,7 @@
                 <option value="Khác">5. Khác (Ghi chú cụ thể bên dưới)</option>
             </select>
         </div>
-        <div class="form-group"><label>4. Ghi Chú Cụ Thể (Lý do, tiết học, đợt kiểm tra...)</label>
-            <textarea id="inputAttNote" class="form-control" rows="3" placeholder="Ví dụ: Nộp KHBD tuần 12 trễ 2 ngày..."></textarea>
-        </div>
-        
+        <div class="form-group"><label>4. Ghi Chú Cụ Thể</label><textarea id="inputAttNote" class="form-control" rows="3" placeholder="Lý do, chi tiết vi phạm..."></textarea></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveAttendance()">Lưu Chấm Công</button>
@@ -829,24 +919,18 @@
     </div>
 </div>
 
-<!-- MODAL KẾ HOẠCH BÀI DẠY / CÁ NHÂN -->
 <div class="modal" id="lessonPlanModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);" id="planModalTitle"><i class="fa-solid fa-file-signature me-2"></i> Kế Hoạch Bài Dạy</h3>
         <input type="hidden" id="editLessonPlanType">
         <input type="hidden" id="editLessonPlanIndex">
-        
-        <div class="form-group"><label>1. Tên Tác Giả / Giáo Viên</label>
-            <select id="inputLessonPlanTeacher" class="form-control"></select>
-        </div>
-        <div class="form-group"><label id="labelPlanCol1">2. Môn Học & Khối Lớp</label><input type="text" id="inputLessonPlanSubject" class="form-control" placeholder="Ví dụ: Sinh học 11, Công nghệ 10"></div>
-        <div class="form-group"><label id="labelPlanCol2">3. Tên Bài Dạy / Tiết PPCT</label><input type="text" id="inputLessonPlanTitle" class="form-control" placeholder="Ví dụ: Bài 12: Quang hợp ở thực vật"></div>
-        <div class="form-group"><label id="labelPlanCol3">4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLessonPlanWeek" class="form-control" placeholder="Ví dụ: Tuần 15 (Học kỳ 1)"></div>
-        
-        <div class="form-group"><label>5. FILE TÀI LIỆU (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputLessonPlanFile" class="form-control"></div>
+        <div class="form-group"><label>1. Tên Tác Giả / Giáo Viên</label><select id="inputLessonPlanTeacher" class="form-control"></select></div>
+        <div class="form-group"><label id="labelPlanCol1">2. Môn Học & Khối Lớp</label><input type="text" id="inputLessonPlanSubject" class="form-control"></div>
+        <div class="form-group"><label id="labelPlanCol2">3. Tên Bài Dạy / Tiết PPCT</label><input type="text" id="inputLessonPlanTitle" class="form-control"></div>
+        <div class="form-group"><label id="labelPlanCol3">4. Tuần Dạy / Thời Gian</label><input type="text" id="inputLessonPlanWeek" class="form-control"></div>
+        <div class="form-group"><label>5. FILE TÀI LIỆU (Tải từ máy)</label><input type="file" id="inputLessonPlanFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputLessonPlanLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
+        <div class="form-group"><label>Dán Link Google Drive / Docs</label><input type="text" id="inputLessonPlanLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch</button>
@@ -854,40 +938,11 @@
     </div>
 </div>
 
-<!-- MODAL BIÊN BẢN HỌP TỔ -->
-<div class="modal" id="meetingModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-list me-2"></i> Biên Bản Họp Tổ (Nhóm) Chuyên Môn</h3>
-        <input type="hidden" id="editMeetingIndex">
-        
-        <div class="form-group"><label>1. Thời Gian Họp / Tuần / Học Kỳ</label><input type="text" id="inputMeetingTime" class="form-control" placeholder="Ví dụ: 14h00 Ngày 15/10/2026 (Tuần 8)"></div>
-        <div class="form-group"><label>2. Thành Phần Tham Dự / Chủ Trì - Thư Ký</label>
-            <input type="text" id="inputMeetingMembers" class="form-control" placeholder="Ví dụ: Cả tổ (Vắng 0) - Chủ trì: Thầy Can, Thư ký: Cô Duyên">
-        </div>
-        <div class="form-group"><label>3. Nội Dung Chính / Trích Yếu Biên Bản</label>
-            <textarea id="inputMeetingContent" class="form-control" rows="4" placeholder="Ví dụ: Sinh hoạt chuyên môn tuần 8; Thống nhất đề kiểm tra giữa kỳ 1..."></textarea>
-        </div>
-        
-        <div class="form-group"><label>4. FILE BIÊN BẢN (Lựa chọn 1: Tải File Word/PDF Scan)</label><input type="file" id="inputMeetingFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputMeetingLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('meetingModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveMeeting()">Lưu Biên Bản</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL KIỂM TRA ĐÁNH GIÁ -->
 <div class="modal" id="evalModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-file-pen me-2"></i> Kiểm Tra Đánh Giá</h3>
         <input type="hidden" id="editEvalIndex">
-        
-        <div class="form-group"><label>1. Giáo Viên Phụ Trách / Ra Đề</label>
-            <select id="inputEvalTeacher" class="form-control"></select>
-        </div>
+        <div class="form-group"><label>1. Giáo Viên Phụ Trách</label><select id="inputEvalTeacher" class="form-control"></select></div>
         <div class="form-group"><label>2. Môn Học & Khối Lớp</label>
             <select id="inputEvalSubjectGrade" class="form-control">
                 <option value="Sinh học - Khối 10">Sinh học - Khối 10</option>
@@ -901,13 +956,11 @@
                 <option value="Toàn bộ CẢ 3 KHỐI (10, 11, 12)">Toàn bộ CẢ 3 KHỐI (10, 11, 12)</option>
             </select>
         </div>
-        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra</label><input type="text" id="inputEvalTitle" class="form-control" placeholder="Ví dụ: Ma trận & Đề kiểm tra Giữa học kỳ 1"></div>
-        <div class="form-group"><label>4. Học Kỳ / Thời Gian Thực Hiện</label><input type="text" id="inputEvalTime" class="form-control" placeholder="Ví dụ: Học kỳ 1 - Tuần 9"></div>
-        
-        <div class="form-group"><label>5. FILE ĐỀ & ĐÁP ÁN (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputEvalFile" class="form-control"></div>
+        <div class="form-group"><label>3. Tên Ma Trận / Đề Kiểm Tra</label><input type="text" id="inputEvalTitle" class="form-control"></div>
+        <div class="form-group"><label>4. Học Kỳ / Thời Gian Thực Hiện</label><input type="text" id="inputEvalTime" class="form-control"></div>
+        <div class="form-group"><label>5. FILE ĐỀ & ĐÁP ÁN (Tải từ máy)</label><input type="file" id="inputEvalFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Drive Đề thi</label><input type="text" id="inputEvalLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
+        <div class="form-group"><label>Dán Link Google Drive</label><input type="text" id="inputEvalLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('evalModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveEval()">Lưu Đề Kiểm Tra</button>
@@ -915,64 +968,16 @@
     </div>
 </div>
 
-<!-- MODAL CHUYÊN ĐỀ CHUYÊN MÔN -->
-<div class="modal" id="topicModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Chuyên Đề Chuyên Môn</h3>
-        <input type="hidden" id="editTopicIndex">
-        
-        <div class="form-group"><label>1. Tên Giáo Viên Phụ Trách / Báo Cáo</label>
-            <select id="inputTopicTeacher" class="form-control"></select>
-        </div>
-        <div class="form-group"><label>2. Môn Học</label>
-            <select id="inputTopicSubject" class="form-control">
-                <option value="Sinh học">Sinh học</option>
-                <option value="Công nghệ">Công nghệ</option>
-                <option value="Sinh & CN">Sinh & CN</option>
-            </select>
-        </div>
-        <div class="form-group"><label>3. Khối Lớp Áp Dụng</label>
-            <select id="inputTopicGrade" class="form-control">
-                <option value="Khối 10">Khối 10</option>
-                <option value="Khối 11">Khối 11</option>
-                <option value="Khối 12">Khối 12</option>
-                <option value="Toàn khối">Toàn khối</option>
-            </select>
-        </div>
-        <div class="form-group"><label>4. Tên Chuyên Đề</label><input type="text" id="inputTopicTitle" class="form-control" placeholder="Ví dụ: Thiết kế bài học STEM - Chế tạo Kính hiển vi"></div>
-        <div class="form-group"><label>5. Loại Chuyên Đề</label>
-            <select id="inputTopicCategory" class="form-control">
-                <option value="Nghiên cứu bài học">Nghiên cứu bài học</option>
-                <option value="STEM / STEAM">STEM / STEAM</option>
-                <option value="Ứng dụng AI trong giảng dạy">Ứng dụng AI trong giảng dạy</option>
-                <option value="Chuyên đề khác">Chuyên đề khác</option>
-            </select>
-        </div>
-        
-        <div class="form-group"><label>6. TÀI LIỆU CHUYÊN ĐỀ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputTopicFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / Slide</label><input type="text" id="inputTopicLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('topicModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveTopic()">Lưu Chuyên Đề</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL PHÂN QUYỀN MỤC -->
 <div class="modal" id="permissionModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Cho Giáo Viên Sửa Mục</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-user-gear me-2"></i> Phân Quyền Sửa Mục</h3>
         <input type="hidden" id="permSectionKey">
         <input type="hidden" id="permItemIndex">
         <p style="font-size:0.9rem; color:var(--text-muted);" id="permItemTitle">Mục: ...</p>
-        
         <div class="form-group" style="margin-top: 0.5rem;">
             <label>Tích chọn Giáo viên được phép Chỉnh sửa/Xóa mục này:</label>
             <div id="teacherCheckboxList" style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.8rem; background:rgba(255,255,255,0.05); padding:1rem; border-radius:12px;"></div>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('permissionModal')">Hủy</button>
             <button class="btn btn-gold" onclick="savePermissions()">Lưu Phân Quyền</button>
@@ -980,14 +985,10 @@
     </div>
 </div>
 
-<!-- MODAL GIỚI THIỆU TỔ -->
 <div class="modal" id="introModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-circle-info me-2"></i> Giới Thiệu Tổ Chuyên Môn</h3>
-        <div class="form-group">
-            <label>Nội dung giới thiệu tổ chuyên môn</label>
-            <textarea id="inputIntroText" class="form-control" rows="6"></textarea>
-        </div>
+        <div class="form-group"><label>Nội dung giới thiệu</label><textarea id="inputIntroText" class="form-control" rows="6"></textarea></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('introModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveIntroContent()">Lưu Giới Thiệu</button>
@@ -995,12 +996,11 @@
     </div>
 </div>
 
-<!-- MODAL HỒ SƠ TỔ CHUYÊN MÔN -->
 <div class="modal" id="profileModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-folder-tree me-2"></i> Hồ Sơ Tổ Chuyên Môn</h3>
         <input type="hidden" id="editProfileIndex">
-        <div class="form-group"><label>1. Tên Hồ Sơ / Kế Hoạch</label><input type="text" id="inputProfileTitle" class="form-control" placeholder="Ví dụ: Kế hoạch giáo dục tổ Sinh-CN"></div>
+        <div class="form-group"><label>1. Tên Hồ Sơ / Kế Hoạch</label><input type="text" id="inputProfileTitle" class="form-control"></div>
         <div class="form-group"><label>2. Phân loại hồ sơ</label>
             <select id="inputProfileCategory" class="form-control">
                 <option value="Kế hoạch năm học">Kế hoạch năm học</option>
@@ -1010,13 +1010,11 @@
                 <option value="Báo cáo tổng kết">Báo cáo tổng kết</option>
             </select>
         </div>
-        <div class="form-group"><label>3. Năm học / Thời gian áp dụng</label><input type="text" id="inputProfileYear" class="form-control" placeholder="Ví dụ: 2026 - 2027"></div>
-        <div class="form-group"><label>4. Ghi chú / Trạng thái</label><input type="text" id="inputProfileNote" class="form-control" placeholder="Ví dụ: Đã phê duyệt / Đang cập nhật"></div>
-        
-        <div class="form-group"><label>5. FILE HỒ SƠ (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputProfileFile" class="form-control"></div>
+        <div class="form-group"><label>3. Năm học / Thời gian áp dụng</label><input type="text" id="inputProfileYear" class="form-control"></div>
+        <div class="form-group"><label>4. Ghi chú / Trạng thái</label><input type="text" id="inputProfileNote" class="form-control"></div>
+        <div class="form-group"><label>5. FILE HỒ SƠ (Tải từ máy)</label><input type="file" id="inputProfileFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Docs</label><input type="text" id="inputProfileLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
+        <div class="form-group"><label>Dán Link Google Drive</label><input type="text" id="inputProfileLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('profileModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveProfile()">Lưu Hồ Sơ</button>
@@ -1024,7 +1022,6 @@
     </div>
 </div>
 
-<!-- MODAL THÀNH VIÊN TỔ -->
 <div class="modal" id="memberModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thành Viên Tổ</h3>
@@ -1056,10 +1053,10 @@
 <div class="modal" id="imageModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Thêm Hình Ảnh Hoạt Động</h3>
-        <div class="form-group"><label>Tên / Tên hoạt động</label><input type="text" id="inputImgCaption" class="form-control"></div>
-        <div class="form-group"><label>Chọn ảnh từ máy/điện thoại</label><input type="file" id="inputImgFile" class="form-control" accept="image/*"></div>
+        <div class="form-group"><label>Tên hoạt động</label><input type="text" id="inputImgCaption" class="form-control"></div>
+        <div class="form-group"><label>Chọn ảnh từ máy</label><input type="file" id="inputImgFile" class="form-control" accept="image/*"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Dán Đường Dẫn Link Ảnh (URL)</label><input type="text" id="inputImgUrl" class="form-control" placeholder="https://..."></div>
+        <div class="form-group"><label>Dán Link Ảnh (URL)</label><input type="text" id="inputImgUrl" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('imageModal')">Hủy</button>
             <button class="btn btn-gold" onclick="addImage()">Tải Ảnh Lên</button>
@@ -1071,18 +1068,16 @@
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Tài Nguyên Số</h3>
         <input type="hidden" id="editResIndex">
-        <div class="form-group"><label>Tên tài nguyên / Giáo án</label><input type="text" id="inputResTitle" class="form-control"></div>
+        <div class="form-group"><label>Tên tài nguyên</label><input type="text" id="inputResTitle" class="form-control"></div>
         <div class="form-group"><label>Loại tài nguyên</label><select id="inputResType" class="form-control">
             <option value="Bài giảng điện tử">Bài giảng điện tử</option>
             <option value="Chuyên đề học tập">Chuyên đề học tập</option>
             <option value="Đề thi / Ôn tập">Đề thi / Ôn tập</option>
             <option value="Sơ đồ tư duy">Sơ đồ tư duy</option>
         </select></div>
-        
-        <div class="form-group"><label>LỰA CHỌN 1: Tải File Trực Tiếp Từ Máy (Word, PDF, PPT, Excel...)</label><input type="file" id="inputResFile" class="form-control"></div>
+        <div class="form-group"><label>Tải File từ máy</label><input type="file" id="inputResFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>LỰA CHỌN 2: Dán Link Đính Kèm (Google Drive, Canva...)</label><input type="text" id="inputResLink" class="form-control" placeholder="https://drive.google.com/..."></div>
-        
+        <div class="form-group"><label>Dán Link Google Drive</label><input type="text" id="inputResLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('resourceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveResource()">Lưu Tài Nguyên</button>
@@ -1094,14 +1089,12 @@
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
         <input type="hidden" id="editDocIndex">
-        <div class="form-group"><label>Số / Ký hiệu văn bản</label><input type="text" id="inputDocCode" class="form-control"></div>
-        <div class="form-group"><label>Trích yếu văn bản</label><textarea id="inputDocSummary" class="form-control" rows="2"></textarea></div>
+        <div class="form-group"><label>Số văn bản</label><input type="text" id="inputDocCode" class="form-control"></div>
+        <div class="form-group"><label>Trích yếu</label><textarea id="inputDocSummary" class="form-control" rows="2"></textarea></div>
         <div class="form-group"><label>Ngày ban hành</label><input type="date" id="inputDocDate" class="form-control"></div>
-        
-        <div class="form-group"><label>LỰA CHỌN 1: Tải File Văn Bản Từ Máy (PDF, Word...)</label><input type="file" id="inputDocFile" class="form-control"></div>
+        <div class="form-group"><label>Tải File từ máy</label><input type="file" id="inputDocFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>LỰA CHỌN 2: Dán Link Văn Bản Đính Kèm</label><input type="text" id="inputDocLink" class="form-control" placeholder="https://..."></div>
-        
+        <div class="form-group"><label>Dán Link đính kèm</label><input type="text" id="inputDocLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('docModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveDoc()">Lưu Văn Bản</button>
@@ -1113,15 +1106,12 @@
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);">Bồi Dưỡng Học Sinh Giỏi</h3>
         <input type="hidden" id="editHsgIndex">
-        
         <div class="form-group"><label>Giáo viên bồi dưỡng</label><input type="text" id="inputHsgTeacher" class="form-control"></div>
-        <div class="form-group"><label>Môn học / Đội tuyển</label><input type="text" id="inputHsgSubject" class="form-control" placeholder="Ví dụ: Sinh học 12"></div>
-        <div class="form-group"><label>Nội dung / Kế hoạch bồi dưỡng</label><textarea id="inputHsgPlan" class="form-control" rows="2" placeholder="Ví dụ: Bồi dưỡng chuyên đề Di truyền học..."></textarea></div>
-        
-        <div class="form-group"><label>DANH SÁCH ĐỘI TUYỂN (Lựa chọn 1: Tải File Danh Sách từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
+        <div class="form-group"><label>Môn học</label><input type="text" id="inputHsgSubject" class="form-control"></div>
+        <div class="form-group"><label>Nội dung kế hoạch</label><textarea id="inputHsgPlan" class="form-control" rows="2"></textarea></div>
+        <div class="form-group"><label>Tải File Danh Sách</label><input type="file" id="inputHsgFile" class="form-control"></div>
         <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Tên học sinh</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Dán link Google Sheet hoặc gõ tên HS..."></div>
-        
+        <div class="form-group"><label>Dán Link Danh Sách</label><input type="text" id="inputHsgLink" class="form-control"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveHsg()">Lưu Phân Công</button>
@@ -1134,16 +1124,14 @@
         <h3 style="color: var(--accent-gold);" id="taskModalTitle">Nhiệm Vụ Công Việc</h3>
         <input type="hidden" id="editTaskCategory">
         <input type="hidden" id="editTaskIndex">
-        
-        <div class="form-group"><label id="labelTaskAssignee">Giáo viên phụ trách / Cá nhân</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskTitle">Lớp phân công / Phong trào</label><input type="text" id="inputTaskTitle" class="form-control"></div>
-        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể / Tên sản phẩm</label><input type="text" id="inputTaskDetail" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskAssignee">Giáo viên phụ trách</label><input type="text" id="inputTaskAssignee" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskTitle">Lớp phân công</label><input type="text" id="inputTaskTitle" class="form-control"></div>
+        <div class="form-group"><label id="labelTaskDetail">Nhiệm vụ cụ thể</label><input type="text" id="inputTaskDetail" class="form-control"></div>
         <div class="form-group"><label>Trạng thái</label><select id="inputTaskStatus" class="form-control">
             <option value="Đang thực hiện">Đang thực hiện</option>
             <option value="Hoàn thành">Hoàn thành</option>
             <option value="Đạt chỉ tiêu">Đạt chỉ tiêu</option>
         </select></div>
-        
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('taskModal')">Hủy</button>
             <button class="btn btn-gold" onclick="savePhanCong()">Lưu Phân Công</button>
@@ -1166,22 +1154,23 @@
 
     let currentUser = localStorage.getItem('currentUser') || 'GUEST';
     let phoneUnlocked = false;
+    let isConnectedToCloud = false;
 
     let appData = {
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
-            title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_profile: 'Hồ Sơ Tổ Chuyên Môn',
-            title_members: 'Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)',
-            title_plans: 'Kế Hoạch Của Giáo Viên',
-            title_topics: 'Chuyên Đề Chuyên Môn',
-            title_meetings: 'Biên Bản Họp Tổ (Nhóm) Chuyên Môn',
-            title_gallery: 'Hình Ảnh Hoạt Động',
-            title_resources: 'Tài Nguyên Số',
-            title_docs: 'Văn Bản Lưu Trữ',
-            title_tasks: 'Nhiệm Vụ & Phân Công Chuyên Môn',
-            title_attendance: 'Chấm Công Giáo Viên (Tổ Trưởng Chấm)'
+            title_intro: '1. Giới Thiệu Tổ Chuyên Môn',
+            title_members: '2. Hồ Sơ Thành Viên Tổ Chuyên Môn (Nhân Sự)',
+            title_profile: '3. Hồ Sơ Tổ Chuyên Môn',
+            title_plans: '4. Kế Hoạch Của Giáo Viên',
+            title_topics: '5. Chuyên Đề Chuyên Môn (STEM/STEAM...)',
+            title_meetings: '6. Biên Bản Họp Tổ (Nhóm) Chuyên Môn',
+            title_tasks: '7. Nhiệm Vụ & Phân Công Chuyên Môn',
+            title_attendance: '8. Chấm Công Giáo Viên (Tổ Trưởng Chấm)',
+            title_gallery: '9. Hình Ảnh Hoạt Động',
+            title_resources: '10. Tài Nguyên Số',
+            title_docs: '11. Văn Bản Lưu Trữ'
         },
         profilesData: [],
         membersData: [
@@ -1205,17 +1194,38 @@
         competitionTasks: []
     };
 
+    // ĐẢM BẢO RẰNG NẾU DỮ LIỆU TẢI CHẬM THÌ KHÔNG BỊ TRANG TRẮNG CẢM GIÁC TREO
+    const connectionTimeout = setTimeout(() => {
+        if (!isConnectedToCloud) {
+            document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-signal" style="color:var(--accent-gold);"></i> Chế độ Offline / Nội bộ`;
+            renderAll();
+            updateUserDropdown();
+        }
+    }, 3000);
+
     db.ref('to_sinh_cn_data').on('value', (snapshot) => {
+        clearTimeout(connectionTimeout);
+        isConnectedToCloud = true;
         const val = snapshot.val();
         if (val) {
-            appData = val;
+            // Nối mảng an toàn không bị trống
+            appData = Object.assign({}, appData, val);
+            ensureArraysExist();
             renderAll();
             updateUserDropdown();
             document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-cloud-check" style="color:var(--success-color);"></i> Đã kết nối`;
         } else {
             saveDataToCloud();
         }
+    }, (error) => {
+        document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-circle-exclamation" style="color:var(--danger-color);"></i> Lỗi quyền truy cập Firebase`;
+        renderAll();
     });
+
+    function ensureArraysExist() {
+        const keys = ['profilesData', 'membersData', 'lessonPlansData', 'personalPlansData', 'topicsData', 'meetingMinutesData', 'evaluationsData', 'attendanceData', 'imagesData', 'resourcesData', 'docsData', 'teachingTasks', 'hsgTasks', 'competitionTasks'];
+        keys.forEach(k => { if (!Array.isArray(appData[k])) appData[k] = []; });
+    }
 
     function saveDataToCloud() {
         document.getElementById('syncStatus').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
@@ -1357,8 +1367,7 @@
     }
 
     function saveIntroContent() {
-        const text = document.getElementById('inputIntroText').value;
-        appData.introText = text;
+        appData.introText = document.getElementById('inputIntroText').value;
         saveDataToCloud();
         closeModal('introModal');
     }
@@ -1449,13 +1458,12 @@
         const fileInput = document.getElementById('inputProfileFile');
         const linkInput = document.getElementById('inputProfileLink').value;
 
-        if (!title) return alert('Nhập tên hồ sơ / kế hoạch!');
-
+        if (!title) return alert('Nhập tên hồ sơ!');
         if (!appData.profilesData) appData.profilesData = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file hồ sơ lên Firebase Storage...');
+            alert('Đang tải file hồ sơ...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -1480,7 +1488,6 @@
         }
     }
 
-    /* MỤC NHỎ 1: KẾ HOẠCH BÀI DẠY */
     function renderLessonPlans() {
         const filterVal = (document.getElementById('filterLessonPlan')?.value || '').toLowerCase();
         const tbody = document.getElementById('lessonPlanTableBody');
@@ -1523,7 +1530,6 @@
         });
     }
 
-    /* MỤC NHỎ 2: KẾ HOẠCH CÁ NHÂN */
     function renderPersonalPlans() {
         const filterVal = (document.getElementById('filterPersonalPlan')?.value || '').toLowerCase();
         const tbody = document.getElementById('personalPlanTableBody');
@@ -1623,14 +1629,14 @@
         const fileInput = document.getElementById('inputLessonPlanFile');
         const linkInput = document.getElementById('inputLessonPlanLink').value;
 
-        if (!title || !subject) return alert('Nhập đầy đủ tên kế hoạch và phân loại!');
+        if (!title || !subject) return alert('Nhập đầy đủ thông tin!');
 
         const dataKey = type === 'BAI_DAY' ? 'lessonPlansData' : 'personalPlansData';
         if (!appData[dataKey]) appData[dataKey] = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file kế hoạch lên Firebase Storage...');
+            alert('Đang tải file kế hoạch...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -1655,17 +1661,26 @@
         }
     }
 
-    /* MỤC CHUYÊN ĐỀ CHUYÊN MÔN */
     function renderTopics() {
         const filterVal = (document.getElementById('filterTopic')?.value || '').toLowerCase();
         const tbody = document.getElementById('topicTableBody');
         tbody.innerHTML = '';
+
         (appData.topicsData || []).forEach((item, i) => {
             const itemTeacher = item.teacher || item.author || 'Chưa cập nhật';
-            if (filterVal && !itemTeacher.toLowerCase().includes(filterVal) && !(item.subject || '').toLowerCase().includes(filterVal) && !(item.grade || '').toLowerCase().includes(filterVal) && !item.title.toLowerCase().includes(filterVal)) return;
+            const dayOfWeek = item.dayOfWeek || '-';
+            const topicDate = item.topicDate || '-';
+            const topicClass = item.topicClass || '-';
+            const topicPeriod = item.topicPeriod || '-';
+
+            if (filterVal && 
+                !itemTeacher.toLowerCase().includes(filterVal) && 
+                !topicClass.toLowerCase().includes(filterVal) && 
+                !(item.subject || '').toLowerCase().includes(filterVal) && 
+                !item.title.toLowerCase().includes(filterVal)) return;
 
             let fileHtml = item.link && item.link.startsWith('http')
-                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tải Tài Liệu</a>`
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Tài Liệu</a>`
                 : (item.link || 'Chưa đính kèm');
 
             let badgeClass = 'badge-cyan';
@@ -1692,8 +1707,9 @@
                 <tr>
                     <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
                     <td><strong style="color:var(--accent-gold);">${itemTeacher}</strong></td>
-                    <td><span class="badge badge-cyan">${item.subject || 'Sinh học'}</span></td>
-                    <td style="color:var(--cyan-accent); font-weight:600;">${item.grade || 'Khối 11'}</td>
+                    <td style="font-size:0.85rem;"><span style="color:var(--cyan-accent); font-weight:700;">${dayOfWeek}</span><br>${topicDate}</td>
+                    <td style="font-size:0.85rem;"><strong style="color:#fff;">Lớp: ${topicClass}</strong><br><span style="color:var(--text-muted);">${topicPeriod}</span></td>
+                    <td><span class="badge badge-cyan">${item.subject || 'Sinh học'}</span><br><small style="color:var(--text-muted);">${item.grade || 'Khối 10'}</small></td>
                     <td><strong style="color:#fff;">${item.title}</strong></td>
                     <td><span class="badge ${badgeClass}">${item.category}</span></td>
                     <td>${fileHtml}</td>
@@ -1714,14 +1730,24 @@
         });
 
         if (i !== null && appData.topicsData) {
-            teacherSelect.value = appData.topicsData[i].teacher || appData.topicsData[i].author || '';
-            document.getElementById('inputTopicSubject').value = appData.topicsData[i].subject || 'Sinh học';
-            document.getElementById('inputTopicGrade').value = appData.topicsData[i].grade || 'Khối 11';
-            document.getElementById('inputTopicTitle').value = appData.topicsData[i].title;
-            document.getElementById('inputTopicCategory').value = appData.topicsData[i].category;
-            document.getElementById('inputTopicLink').value = appData.topicsData[i].link;
+            const data = appData.topicsData[i];
+            teacherSelect.value = data.teacher || data.author || '';
+            document.getElementById('inputTopicDayOfWeek').value = data.dayOfWeek || 'Thứ Hai';
+            document.getElementById('inputTopicDate').value = data.topicDate || '';
+            document.getElementById('inputTopicClass').value = data.topicClass || '';
+            document.getElementById('inputTopicPeriod').value = data.topicPeriod || '';
+            document.getElementById('inputTopicSubject').value = data.subject || 'Sinh học';
+            document.getElementById('inputTopicGrade').value = data.grade || 'Khối 10';
+            document.getElementById('inputTopicTitle').value = data.title;
+            document.getElementById('inputTopicCategory').value = data.category;
+            document.getElementById('inputTopicLink').value = data.link;
         } else {
             if (currentUser !== 'GUEST') teacherSelect.value = currentUser;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inputTopicDayOfWeek').value = 'Thứ Hai';
+            document.getElementById('inputTopicDate').value = today;
+            document.getElementById('inputTopicClass').value = '';
+            document.getElementById('inputTopicPeriod').value = '';
             document.getElementById('inputTopicTitle').value = '';
             document.getElementById('inputTopicLink').value = '';
         }
@@ -1731,6 +1757,10 @@
     async function saveTopic() {
         const idx = document.getElementById('editTopicIndex').value;
         const teacher = document.getElementById('inputTopicTeacher').value;
+        const dayOfWeek = document.getElementById('inputTopicDayOfWeek').value;
+        const topicDate = document.getElementById('inputTopicDate').value;
+        const topicClass = document.getElementById('inputTopicClass').value;
+        const topicPeriod = document.getElementById('inputTopicPeriod').value;
         const subject = document.getElementById('inputTopicSubject').value;
         const grade = document.getElementById('inputTopicGrade').value;
         const title = document.getElementById('inputTopicTitle').value;
@@ -1744,13 +1774,14 @@
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file chuyên đề lên Firebase Storage...');
+            alert('Đang tải file chuyên đề...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
         const topicObj = { 
-            teacher, subject, grade, title, category, link: finalLink,
+            teacher, dayOfWeek, topicDate, topicClass, topicPeriod,
+            subject, grade, title, category, link: finalLink,
             author: idx !== '' ? (appData.topicsData[idx].author || teacher) : teacher,
             allowedEditors: idx !== '' ? (appData.topicsData[idx].allowedEditors || []) : []
         };
@@ -1769,7 +1800,7 @@
         }
     }
 
-    /* MỤC BIÊN BẢN HỌP TỔ CHUYÊN MÔN */
+    /* MỤC 6: BIÊN BẢN HỌP TỔ CHUYÊN MÔN */
     function renderMeetings() {
         const filterVal = (document.getElementById('filterMeeting')?.value || '').toLowerCase();
         const tbody = document.getElementById('meetingTableBody');
@@ -1812,10 +1843,10 @@
     }
 
     function openMeetingModal(i = null) {
-        document.getElementById('editMeetingIndex').value = i !== null ? i : '';
+        document.getElementById('editMeetingIndex').value = (i !== null && i !== undefined) ? i : '';
         document.getElementById('inputMeetingFile').value = '';
 
-        if (i !== null && appData.meetingMinutesData) {
+        if (i !== null && i !== undefined && appData.meetingMinutesData && appData.meetingMinutesData[i]) {
             document.getElementById('inputMeetingTime').value = appData.meetingMinutesData[i].time;
             document.getElementById('inputMeetingMembers').value = appData.meetingMinutesData[i].members;
             document.getElementById('inputMeetingContent').value = appData.meetingMinutesData[i].content;
@@ -1838,38 +1869,45 @@
         const fileInput = document.getElementById('inputMeetingFile');
         const linkInput = document.getElementById('inputMeetingLink').value;
 
-        if (!time || !content) return alert('Nhập đầy đủ thời gian và nội dung họp!');
+        if (!time || !content) return alert('Nhập thông tin họp!');
 
         if (!appData.meetingMinutesData) appData.meetingMinutesData = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file biên bản họp lên Firebase Storage...');
+            alert('Đang tải file biên bản...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
 
         const meetingObj = { 
             time, members, content, link: finalLink,
-            author: idx !== '' ? appData.meetingMinutesData[idx].author : currentUser,
-            allowedEditors: idx !== '' ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
+            author: (idx !== '' && appData.meetingMinutesData[idx]) ? appData.meetingMinutesData[idx].author : currentUser,
+            allowedEditors: (idx !== '' && appData.meetingMinutesData[idx]) ? (appData.meetingMinutesData[idx].allowedEditors || []) : []
         };
 
-        if (idx !== '') appData.meetingMinutesData[idx] = meetingObj;
-        else appData.meetingMinutesData.push(meetingObj);
+        if (idx !== '' && !isNaN(idx) && appData.meetingMinutesData[parseInt(idx)]) {
+            appData.meetingMinutesData[parseInt(idx)] = meetingObj;
+        } else {
+            appData.meetingMinutesData.push(meetingObj);
+        }
+
+        // XÓA TỪ KHÓA LỌC ĐỂ BÀI MỚI XUẤT HIỆN LẬP TỨC
+        const filterInput = document.getElementById('filterMeeting');
+        if (filterInput) filterInput.value = '';
 
         saveDataToCloud();
+        renderMeetings();
         closeModal('meetingModal');
     }
 
     function deleteMeeting(i) {
-        if (confirm('Xóa biên bản họp này?')) {
+        if (confirm('Xóa biên bản này?')) {
             appData.meetingMinutesData.splice(i, 1);
             saveDataToCloud();
         }
     }
 
-    /* MỤC CHẤM CÔNG GIÁO VIÊN */
     function renderAttendance() {
         const monthFilter = document.getElementById('filterAttMonth').value;
         const nameFilter = (document.getElementById('filterAttTeacher').value || '').toLowerCase();
@@ -1950,7 +1988,7 @@
         const type = document.getElementById('inputAttType').value;
         const note = document.getElementById('inputAttNote').value;
 
-        if (!teacher || !date) return alert('Nhập đầy đủ thông tin!');
+        if (!teacher || !date) return alert('Nhập thông tin!');
 
         if (!appData.attendanceData) appData.attendanceData = [];
         const attObj = { teacher, date, type, note };
@@ -1963,19 +2001,18 @@
     }
 
     function deleteAttendance(i) {
-        if (confirm('Xóa ghi nhận chấm công này?')) {
+        if (confirm('Xóa chấm công này?')) {
             appData.attendanceData.splice(i, 1);
             saveDataToCloud();
         }
     }
 
-    /* XUẤT CSV CHO EXCEL (KHÔNG LỖI) */
     function exportAttendanceCSV() {
         if (!appData.attendanceData || appData.attendanceData.length === 0) {
-            return alert('Chưa có dữ liệu chấm công để xuất file Excel!');
+            return alert('Chưa có dữ liệu chấm công!');
         }
 
-        let csvContent = "\uFEFF"; // UTF-8 BOM để Excel không lỗi font Việt
+        let csvContent = "\uFEFF";
         csvContent += "STT,Ngày Ghi Nhận,Tên Giáo Viên,Nội Dung Chấm/Vi Phạm,Ghi Chú Chi Tiết\n";
 
         appData.attendanceData.forEach((item, index) => {
@@ -1992,7 +2029,6 @@
         document.body.removeChild(link);
     }
 
-    /* IN / XUẤT BÁO CÁO PDF CHUẨN KHÔNG LỖI POPUP */
     function printAttendanceReport() {
         if (!appData.attendanceData || appData.attendanceData.length === 0) {
             return alert('Chưa có dữ liệu chấm công!');
@@ -2050,14 +2086,6 @@
         html += `
                     </tbody>
                 </table>
-                <div style="margin-top: 30px; display: flex; justify-content: space-between; text-align: center;">
-                    <div></div>
-                    <div>
-                        <i>..., Ngày ..... tháng ..... năm 20...</i><br>
-                        <b>TỔ TRƯỜNG CHUYÊN MÔN</b><br><br><br><br>
-                        <b>${appData.headerData.dept}</b>
-                    </div>
-                </div>
             </body>
             </html>
         `;
@@ -2065,12 +2093,9 @@
         printWindow.document.write(html);
         printWindow.document.close();
         printWindow.focus();
-        setTimeout(() => {
-            printWindow.print();
-        }, 500);
+        setTimeout(() => { printWindow.print(); }, 500);
     }
 
-    /* MỤC KIỂM TRA ĐÁNH GIÁ */
     function openEvalModal(i = null) {
         document.getElementById('editEvalIndex').value = i !== null ? i : '';
         document.getElementById('inputEvalFile').value = '';
@@ -2107,12 +2132,11 @@
         const linkInput = document.getElementById('inputEvalLink').value;
 
         if (!title) return alert('Nhập tên ma trận / đề kiểm tra!');
-
         if (!appData.evaluationsData) appData.evaluationsData = [];
         let finalLink = linkInput || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file đề thi lên Firebase Storage...');
+            alert('Đang tải file đề thi...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -2131,13 +2155,12 @@
     }
 
     function deleteEval(i) {
-        if (confirm('Xóa đề kiểm tra này?')) {
+        if (confirm('Xóa đề này?')) {
             appData.evaluationsData.splice(i, 1);
             saveDataToCloud();
         }
     }
 
-    /* PHÂN QUYỀN MỤC DÀNH CHO TỔ TRƯỜNG */
     function openPermissionModal(sectionKey, index, itemTitle) {
         document.getElementById('permSectionKey').value = sectionKey;
         document.getElementById('permItemIndex').value = index;
@@ -2164,7 +2187,6 @@
     function savePermissions() {
         const sectionKey = document.getElementById('permSectionKey').value;
         const index = document.getElementById('permItemIndex').value;
-        
         const selectedTeachers = Array.from(document.querySelectorAll('.perm-teacher-cb:checked')).map(cb => cb.value);
         
         if (appData[sectionKey] && appData[sectionKey][index]) {
@@ -2183,6 +2205,7 @@
 
     function selectAllCheckboxes(masterCheckbox, tbodyId) {
         const tbody = document.getElementById(tbodyId);
+        if (!tbody) return;
         const checkboxes = tbody.querySelectorAll('.row-checkbox');
         checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
     }
@@ -2202,11 +2225,12 @@
         else if (dataKey === 'competitionTasks') tbodyId = 'competitionTaskTableBody';
 
         const tbody = document.getElementById(tbodyId);
-        const checkboxes = tbody.querySelectorAll('.row-checkbox:checked');
+        if (!tbody) return;
         
-        if (checkboxes.length === 0) return alert('Vui lòng tích chọn ít nhất 1 dòng để xóa!');
+        const checkboxes = tbody.querySelectorAll('.row-checkbox:checked');
+        if (checkboxes.length === 0) return alert('Tích chọn ít nhất 1 dòng để xóa!');
 
-        if (confirm(`Bạn có chắc chắn muốn xóa ${checkboxes.length} mục đã chọn không?`)) {
+        if (confirm(`Bạn có chắc muốn xóa ${checkboxes.length} mục đã chọn?`)) {
             const indexesToDelete = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
             
             indexesToDelete.forEach(idx => {
@@ -2214,7 +2238,8 @@
             });
 
             saveDataToCloud();
-            alert('Đã xóa thành công các mục đã chọn!');
+            renderAll();
+            alert('Đã xóa thành công!');
         }
     }
 
@@ -2303,7 +2328,7 @@
         (appData.hsgTasks || []).forEach((item, i) => {
             if (filterHsg && !item.teacher.toLowerCase().includes(filterHsg) && !item.subject.toLowerCase().includes(filterHsg)) return;
             let listHtml = item.listLink && item.listLink.startsWith('http') 
-                ? `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải DS Đội Tuyển</a>`
+                ? `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải DS</a>`
                 : (item.listLink || 'Chưa cập nhật DS');
 
             tbodyHsg.innerHTML += `
@@ -2389,13 +2414,13 @@
         const type = document.getElementById('inputResType').value;
         const fileInput = document.getElementById('inputResFile');
         const linkInput = document.getElementById('inputResLink').value;
-        if (!title) return alert('Nhập tên tài nguyên!');
+        if (!title) return alert('Nhập tên!');
 
         if (!appData.resourcesData) appData.resourcesData = [];
         let finalLink = linkInput || '#';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file lên Firebase Storage...');
+            alert('Đang tải file...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -2414,13 +2439,13 @@
         const date = document.getElementById('inputDocDate').value;
         const fileInput = document.getElementById('inputDocFile');
         const linkInput = document.getElementById('inputDocLink').value;
-        if (!code) return alert('Nhập số văn bản!');
+        if (!code) return alert('Nhập số!');
 
         if (!appData.docsData) appData.docsData = [];
         let finalLink = linkInput || '#';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải file lên Firebase Storage...');
+            alert('Đang tải file...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -2440,13 +2465,13 @@
         const fileInput = document.getElementById('inputHsgFile');
         const listLink = document.getElementById('inputHsgLink').value;
 
-        if (!teacher || !subject) return alert('Nhập đầy đủ!');
+        if (!teacher) return alert('Nhập tên!');
         if (!appData.hsgTasks) appData.hsgTasks = [];
 
         let finalLink = listLink || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải danh sách lên Firebase Storage...');
+            alert('Đang tải file...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
@@ -2512,7 +2537,7 @@
         if (!appData.imagesData) appData.imagesData = [];
         let finalUrl = urlInput;
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải hình ảnh lên Firebase Storage...');
+            alert('Đang tải ảnh...');
             try { finalUrl = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải ảnh: ' + e.message); }
         }
@@ -2612,7 +2637,7 @@
         const detail = document.getElementById('inputTaskDetail').value;
         const status = document.getElementById('inputTaskStatus').value;
 
-        if (!assignee || !title) return alert('Nhập đầy đủ!');
+        if (!assignee || !title) return alert('Nhập thông tin!');
         const taskObj = { assignee, title, detail, status };
 
         if (category === 'day_lop') {
