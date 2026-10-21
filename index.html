@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện đọc file -->
+    <!-- Thư viện đọc & xuất file Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
 
@@ -278,7 +278,7 @@
 
         .badge { padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .badge-warning { background: rgba(251, 191, 36, 0.15); color: var(--accent-gold); border: 1px solid rgba(251, 191, 36, 0.3); }
-        .badge-success { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
         .resource-grid, .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.25rem;
@@ -463,15 +463,16 @@
         </div>
     </section>
 
-    <!-- 5. GHI NHẬN TIẾN ĐỘ NHIỆM VỤ -->
+    <!-- 5. GHI NHẬN TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ (CẬP NHẬT CHI TIẾT & XUẤT FILE) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">Ghi Nhận Tiến Độ Nhiệm Vụ (Chấm Công)</span>
+                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">5. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                <input type="text" class="filter-input" id="filterAttendance" placeholder="🔍 Lọc Giáo viên..." onkeyup="renderAttendance()">
+                <input type="text" class="filter-input" id="filterAttendance" placeholder="🔍 Lọc Giáo viên / Lỗi..." onkeyup="renderAttendance()">
+                <button class="btn btn-download btn-sm" onclick="exportViolationExcel()"><i class="fa-solid fa-file-excel"></i> Xuất File Thống Kê</button>
                 <button class="btn btn-danger btn-sm admin-btn" onclick="deleteSelectedItems('attendanceData')"><i class="fa-solid fa-trash"></i> Xóa Đã Chọn</button>
                 <button class="btn btn-gold btn-sm admin-btn" onclick="openAttendanceModal()"><i class="fa-solid fa-plus"></i> Thêm Ghi Nhận</button>
             </div>
@@ -482,10 +483,9 @@
                     <tr>
                         <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'attendanceTableBody')"></th>
                         <th>Giáo Viên</th>
-                        <th>Ngày / Tuần Chấm</th>
-                        <th>Số Tiết Dạy</th>
-                        <th>Công Việc Thực Hiện</th>
-                        <th>Trạng Thái</th>
+                        <th>Mốc Thời Gian</th>
+                        <th>Nội Dung Ghi Nhận / Vi Phạm</th>
+                        <th>Chi Tiết / Ghi Chú</th>
                         <th class="admin-col">Thao Tác</th>
                     </tr>
                 </thead>
@@ -590,7 +590,7 @@
         </div>
     </section>
 
-    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM (MỤC MỚI THÊM) -->
+    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -734,22 +734,29 @@
     </div>
 </div>
 
-<!-- MODAL CHẤM CÔNG GIÁO VIÊN -->
+<!-- MODAL GHI NHẬN TIẾN ĐỘ & VI PHẠM (MỤC 5) -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Ghi Nhận Tiến Độ Nhiệm Vụ</h3>
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ</h3>
         <input type="hidden" id="editAttendanceIndex">
-        <div class="form-group"><label>1. Họ và tên giáo viên</label><input type="text" id="inputAttTeacher" class="form-control" placeholder="Ví dụ: Thầy Can"></div>
-        <div class="form-group"><label>2. Ngày / Tuần chấm công</label><input type="text" id="inputAttDate" class="form-control" placeholder="Ví dụ: Tuần 5 (Từ 05/10 - 10/10)"></div>
-        <div class="form-group"><label>3. Số tiết dạy thực tế</label><input type="text" id="inputAttLessons" class="form-control" placeholder="Ví dụ: 18 tiết"></div>
-        <div class="form-group"><label>4. Công việc / Nhiệm vụ thực hiện</label><textarea id="inputAttTask" class="form-control" rows="2" placeholder="Ví dụ: Dạy đủ tiết, hoàn thành giáo án, trực phòng bộ môn..."></textarea></div>
-        <div class="form-group"><label>5. Trạng thái</label>
-            <select id="inputAttStatus" class="form-control">
-                <option value="Đạt chuẩn">Đạt chuẩn</option>
-                <option value="Hoàn thành tốt">Hoàn thành tốt</option>
-                <option value="Cần bổ sung">Cần bổ sung</option>
+        <div class="form-group"><label>1. Chọn giáo viên</label>
+            <select id="inputAttTeacher" class="form-control">
+                <option value="">-- Chọn giáo viên --</option>
             </select>
         </div>
+        <div class="form-group"><label>2. Mốc thời gian</label><input type="text" id="inputAttDate" class="form-control" placeholder="Ví dụ: Tuần 6 / Ngày 15/10/2026"></div>
+        <div class="form-group"><label>3. Nội dung cần ghi nhận / Vi phạm</label>
+            <select id="inputAttType" class="form-control">
+                <option value="Hồ sơ chậm trễ">Hồ sơ chậm trễ</option>
+                <option value="Đi trễ">Đi trễ</option>
+                <option value="Gác thi">Gác thi</option>
+                <option value="Ra đề có sai sót">Ra đề có sai sót</option>
+                <option value="Vào điểm trễ">Vào điểm trễ</option>
+                <option value="Nội dung khác">Nội dung khác</option>
+            </select>
+        </div>
+        <div class="form-group"><label>4. Chi tiết / Ghi chú cụ thể</label><textarea id="inputAttNote" class="form-control" rows="3" placeholder="Nhập chi tiết thông tin ghi nhận hoặc vi phạm..."></textarea></div>
+        
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('attendanceModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveAttendance()">Lưu Ghi Nhận</button>
@@ -938,7 +945,7 @@
             title_members: 'Nhân Sự - Hồ Sơ Thành Viên',
             title_profile: 'Hồ Sơ Chuyên Môn',
             title_minutes: 'Biên Bản Họp Tổ',
-            title_attendance: 'Ghi Nhận Tiến Độ Nhiệm Vụ (Chấm Công)',
+            title_attendance: '5. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ',
             title_tasks: 'Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm',
             title_stem: 'Chuyên Đề STEM / STEAM',
             title_gallery: 'Hình Ảnh Hoạt Động',
@@ -1240,21 +1247,29 @@
         }
     }
 
+    // --- LOGIC CHO MỤC 5: GHI NHẬN TIẾN ĐỘ & VI PHẠM ---
     function renderAttendance() {
         const filterAtt = (document.getElementById('filterAttendance')?.value || '').toLowerCase();
         const tbody = document.getElementById('attendanceTableBody');
         tbody.innerHTML = '';
+        
+        // Cập nhật dropdown giáo viên cho Modal Mục 5
+        const selectTeacher = document.getElementById('inputAttTeacher');
+        selectTeacher.innerHTML = '<option value="">-- Chọn giáo viên --</option>';
+        (appData.membersData || []).forEach(m => {
+            selectTeacher.innerHTML += `<option value="${m.name}">${m.name} (${m.role})</option>`;
+        });
+
         (appData.attendanceData || []).forEach((item, i) => {
-            if (filterAtt && !item.teacher.toLowerCase().includes(filterAtt)) return;
-            const badgeClass = item.status === 'Hoàn thành tốt' ? 'badge-success' : 'badge-warning';
+            if (filterAtt && !item.teacher.toLowerCase().includes(filterAtt) && !item.type.toLowerCase().includes(filterAtt)) return;
+            
             tbody.innerHTML += `
                 <tr>
                     <td class="admin-col checkbox-cell"><input type="checkbox" class="row-checkbox" value="${i}"></td>
-                    <td><strong style="color:var(--accent-gold);">${item.teacher}</strong></td>
+                    <td><strong style="color:var(--accent-gold);"><i class="fa-solid fa-user me-1"></i> ${item.teacher}</strong></td>
                     <td style="color:var(--cyan-accent); font-weight:600;">${item.date}</td>
-                    <td>${item.lessons}</td>
-                    <td>${item.task}</td>
-                    <td><span class="badge ${badgeClass}">${item.status}</span></td>
+                    <td><span class="badge badge-danger">${item.type}</span></td>
+                    <td>${item.note || 'Không có ghi chú'}</td>
                     <td class="admin-col">
                         <button class="btn btn-edit btn-sm" onclick="openAttendanceModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteAttendance(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
@@ -1269,14 +1284,13 @@
         if (i !== null && appData.attendanceData) {
             document.getElementById('inputAttTeacher').value = appData.attendanceData[i].teacher;
             document.getElementById('inputAttDate').value = appData.attendanceData[i].date;
-            document.getElementById('inputAttLessons').value = appData.attendanceData[i].lessons;
-            document.getElementById('inputAttTask').value = appData.attendanceData[i].task;
-            document.getElementById('inputAttStatus').value = appData.attendanceData[i].status;
+            document.getElementById('inputAttType').value = appData.attendanceData[i].type;
+            document.getElementById('inputAttNote').value = appData.attendanceData[i].note;
         } else {
             document.getElementById('inputAttTeacher').value = '';
             document.getElementById('inputAttDate').value = '';
-            document.getElementById('inputAttLessons').value = '';
-            document.getElementById('inputAttTask').value = '';
+            document.getElementById('inputAttType').value = 'Hồ sơ chậm trễ';
+            document.getElementById('inputAttNote').value = '';
         }
         document.getElementById('attendanceModal').style.display = 'flex';
     }
@@ -1285,14 +1299,13 @@
         const idx = document.getElementById('editAttendanceIndex').value;
         const teacher = document.getElementById('inputAttTeacher').value;
         const date = document.getElementById('inputAttDate').value;
-        const lessons = document.getElementById('inputAttLessons').value;
-        const task = document.getElementById('inputAttTask').value;
-        const status = document.getElementById('inputAttStatus').value;
+        const type = document.getElementById('inputAttType').value;
+        const note = document.getElementById('inputAttNote').value;
 
-        if (!teacher || !date) return alert('Nhập đầy đủ tên giáo viên và ngày chấm công!');
+        if (!teacher || !date) return alert('Vui lòng chọn giáo viên và nhập mốc thời gian!');
 
         if (!appData.attendanceData) appData.attendanceData = [];
-        const attObj = { teacher, date, lessons, task, status };
+        const attObj = { teacher, date, type, note };
 
         if (idx !== '') appData.attendanceData[idx] = attObj;
         else appData.attendanceData.push(attObj);
@@ -1308,13 +1321,35 @@
         }
     }
 
-    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM (CHỈ GIÁO VIÊN TRONG TỔ CHỈNH SỬA) ---
+    // --- TÍNH NĂNG XUẤT FILE EXCEL THỐNG KÊ VI PHẠM ---
+    function exportViolationExcel() {
+        if (!appData.attendanceData || appData.attendanceData.length === 0) {
+            return alert('Chưa có dữ liệu ghi nhận tiến độ hoặc vi phạm nào để xuất file!');
+        }
+
+        // Chuẩn bị dữ liệu định dạng xuất Excel
+        const excelData = appData.attendanceData.map((item, index) => ({
+            "STT": index + 1,
+            "Họ và Tên Giáo Viên": item.teacher,
+            "Mốc Thời Gian": item.date,
+            "Nội Dung Ghi Nhận / Vi Phạm": item.type,
+            "Chi Tiết / Ghi Chú": item.note || ""
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "ThongKeViPham");
+
+        // Tạo file và tải về máy
+        XLSX.writeFile(workbook, "Thong_Ke_Tien_Do_Va_Vi_Pham_To_Sinh_CN.xlsx");
+    }
+
+    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM ---
     function renderStem() {
         const filterStem = (document.getElementById('filterStem')?.value || '').toLowerCase();
         const tbody = document.getElementById('stemTableBody');
         tbody.innerHTML = '';
         
-        // Cập nhật danh sách dropdown giáo viên trong modal STEM
         const selectTeacher = document.getElementById('inputStemTeacher');
         selectTeacher.innerHTML = '<option value="">-- Chọn tên giáo viên trong tổ --</option>';
         (appData.membersData || []).forEach(m => {
@@ -1372,7 +1407,6 @@
         if (!teacher) return alert('Vui lòng chọn tên giáo viên trong tổ!');
         if (!title || !className || !date) return alert('Vui lòng điền đầy đủ tên chuyên đề, lớp và ngày!');
 
-        // Kiểm tra xem giáo viên có thực sự thuộc tổ không
         const isMember = (appData.membersData || []).some(m => m.name === teacher);
         if (!isMember) {
             return alert('Xác thực thất bại! Chỉ giáo viên có tên trong danh sách nhân sự của tổ mới được phép đăng ký/chỉnh sửa chuyên đề.');
@@ -1382,7 +1416,6 @@
         const stemObj = { teacher, title, className, date, dayOfWeek, period };
 
         if (idx !== '') {
-            // Kiểm tra quyền sở hữu khi sửa (hoặc Tổ trưởng mở khóa master)
             const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
             if (!isAdmin && appData.stemData[idx].teacher !== teacher) {
                 const checkPass = prompt(`Chuyên đề này do giáo viên "${appData.stemData[idx].teacher}" đăng ký. Nhập đúng tên giáo viên đó hoặc mật khẩu Tổ trưởng để sửa:`);
