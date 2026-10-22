@@ -12,6 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
 
+    <!-- Thư viện tạo mã QR tự động -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -324,6 +327,9 @@
             <button class="btn btn-outline btn-sm" onclick="toggleMobileView()" id="mobileViewBtn">
                 <i class="fa-solid fa-mobile-screen-button"></i> Xem trên Điện Thoại
             </button>
+            <button class="btn btn-outline btn-sm" onclick="openQrModal()" style="color: var(--accent-gold); border-color: rgba(251,191,36,0.3);">
+                <i class="fa-solid fa-qrcode"></i> Mã QR Ứng Dụng
+            </button>
         </div>
 
         <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
@@ -503,7 +509,7 @@
             </h2>
         </div>
 
-        <!-- DẠY LỚP & CHỦ NHIỆM (ĐÃ CÓ XUẤT FILE TỔNG HỢP) -->
+        <!-- DẠY LỚP & CHỦ NHIỆM -->
         <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -562,7 +568,7 @@
             </div>
         </div>
 
-        <!-- ĐĂNG KÝ THI ĐUA (ĐÃ CÓ XUẤT FILE TỔNG HỢP) -->
+        <!-- ĐĂNG KÝ THI ĐỦA -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
@@ -671,6 +677,23 @@
             </table>
         </div>
     </section>
+</div>
+
+<!-- MODAL HIỂN THỊ MÃ QR ỨNG DỤNG -->
+<div class="modal" id="qrModal">
+    <div class="modal-content" style="text-align: center; align-items: center;">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-qrcode me-2"></i> Quét Mã QR Truy Cập App</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Dùng camera điện thoại hoặc Zalo để quét mở ứng dụng quản lý tổ chuyên môn:</p>
+        
+        <!-- Nơi hiển thị mã QR tự động -->
+        <div id="qrcodeContainer" style="background: white; padding: 15px; border-radius: 12px; display: inline-block;"></div>
+        
+        <p style="font-size: 0.8rem; color: var(--cyan-accent); margin-top: 1rem; word-break: break-all;" id="currentUrlText"></p>
+
+        <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.2rem;">
+            <button class="btn btn-outline" onclick="closeModal('qrModal')">Đóng</button>
+        </div>
+    </div>
 </div>
 
 <!-- MODAL GIỚI THIỆU TỔ -->
@@ -1002,6 +1025,25 @@
         const storageRef = storage.ref('files_to_sinh_cn/' + fileName);
         const snapshot = await storageRef.put(file);
         return await snapshot.ref.getDownloadURL();
+    }
+
+    // --- HÀM MỞ HỘP THOẠI MÃ QR ---
+    function openQrModal() {
+        document.getElementById('qrModal').style.display = 'flex';
+        const container = document.getElementById('qrcodeContainer');
+        container.innerHTML = ''; // Làm sạch mã cũ
+        
+        const currentUrl = window.location.href;
+        document.getElementById('currentUrlText').innerText = currentUrl;
+        
+        new QRCode(container, {
+            text: currentUrl,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
     }
 
     function changeTheme(themeName) {
@@ -1342,7 +1384,6 @@
         XLSX.writeFile(workbook, "Thong_Ke_Tien_Do_Va_Vi_Pham_To_Sinh_CN.xlsx");
     }
 
-    // --- XUẤT FILE TỔNG HỢP DẠY LỚP & CHỦ NHIỆM ---
     function exportTeachingExcel() {
         if (!appData.teachingTasks || appData.teachingTasks.length === 0) {
             return alert('Chưa có dữ liệu phân công dạy lớp & chủ nhiệm nào để xuất!');
@@ -1360,7 +1401,6 @@
         XLSX.writeFile(workbook, "Tong_Hop_Day_Lop_Va_Chu_Nhiem.xlsx");
     }
 
-    // --- XUẤT FILE TỔNG HỢP ĐĂNG KÝ THI ĐUA ---
     function exportCompetitionExcel() {
         if (!appData.competitionTasks || appData.competitionTasks.length === 0) {
             return alert('Chưa có dữ liệu đăng ký phong trào thi đua nào để xuất!');
@@ -1378,7 +1418,6 @@
         XLSX.writeFile(workbook, "Tong_Hop_Phong_Trao_Thi_Dua.xlsx");
     }
 
-    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM VÀ XUẤT FILE TỔNG HỢP ---
     function renderStem() {
         const filterStem = (document.getElementById('filterStem')?.value || '').toLowerCase();
         const tbody = document.getElementById('stemTableBody');
