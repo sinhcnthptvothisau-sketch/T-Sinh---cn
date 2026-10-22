@@ -463,7 +463,7 @@
         </div>
     </section>
 
-    <!-- 5. GHI NHẬN TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ (CẬP NHẬT CHI TIẾT & XUẤT FILE) -->
+    <!-- 5. GHI NHẬN TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -532,11 +532,11 @@
             </div>
         </div>
 
-        <!-- BỒI DƯỠNG HSG -->
+        <!-- BỒI DƯỠNG HSG (CẬP NHẬT TẢI / XEM NỘI DUNG ÔN TẬP QUA FILE HOẶC LINK) -->
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
             <div class="card-header-flex">
                 <div class="sub-section-title">
-                    <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi
+                    <i class="fa-solid fa-graduation-cap"></i> Bồi Dưỡng Học Sinh Giỏi & Nội Dung Ôn Tập
                 </div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
                     <input type="text" class="filter-input" id="filterHsg" placeholder="🔍 Lọc GV / Môn..." onkeyup="renderTasks()">
@@ -550,9 +550,9 @@
                         <tr>
                             <th class="admin-col checkbox-cell"><input type="checkbox" onchange="selectAllCheckboxes(this, 'hsgTaskTableBody')"></th>
                             <th>Giáo viên bồi dưỡng</th>
-                            <th>Môn</th>
-                            <th>Nội dung / Kế hoạch</th>
-                            <th>Danh sách đội tuyển</th>
+                            <th>Môn / Đội tuyển</th>
+                            <th>Nội dung / Kế hoạch ôn tập</th>
+                            <th>Tài liệu / Đội tuyển (File hoặc Link)</th>
                             <th class="admin-col">Thao tác</th>
                         </tr>
                     </thead>
@@ -590,7 +590,7 @@
         </div>
     </section>
 
-    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM -->
+    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM (CẬP NHẬT XUẤT FILE TỔNG HỢP) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
@@ -599,6 +599,7 @@
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
                 <input type="text" class="filter-input" id="filterStem" placeholder="🔍 Lọc GV / Tên đề tài..." onkeyup="renderStem()">
+                <button class="btn btn-download btn-sm" onclick="exportStemExcel()"><i class="fa-solid fa-file-excel"></i> Xuất File Tổng Hợp STEM</button>
                 <button class="btn btn-gold btn-sm" onclick="openStemModal()"><i class="fa-solid fa-plus"></i> Đăng Ký Chuyên Đề</button>
             </div>
         </div>
@@ -797,6 +798,27 @@
     </div>
 </div>
 
+<!-- MODAL BỒI DƯỠNG HSG & NỘI DUNG ÔN TẬP -->
+<div class="modal" id="hsgModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-graduation-cap me-2"></i> Bồi Dưỡng Học Sinh Giỏi & Ôn Tập</h3>
+        <input type="hidden" id="editHsgIndex">
+        
+        <div class="form-group"><label>1. Giáo viên bồi dưỡng</label><input type="text" id="inputHsgTeacher" class="form-control" placeholder="Ví dụ: Cô Duyên"></div>
+        <div class="form-group"><label>2. Môn học / Đội tuyển</label><input type="text" id="inputHsgSubject" class="form-control" placeholder="Ví dụ: Sinh học 12"></div>
+        <div class="form-group"><label>3. Nội dung / Kế hoạch ôn tập</label><textarea id="inputHsgPlan" class="form-control" rows="2" placeholder="Ví dụ: Ôn tập chuyên đề Di truyền học và Tiến hóa..."></textarea></div>
+        
+        <div class="form-group"><label>4. TÀI LIỆU ÔN TẬP / DANH SÁCH (Lựa chọn 1: Tải File từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Đề cương ôn tập</label><input type="text" id="inputHsgLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveHsg()">Lưu Phân Công</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL THÀNH VIÊN TỔ -->
 <div class="modal" id="memberModal">
     <div class="modal-content">
@@ -878,26 +900,6 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
             <button class="btn btn-outline" onclick="closeModal('docModal')">Hủy</button>
             <button class="btn btn-gold" onclick="saveDoc()">Lưu Văn Bản</button>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="hsgModal">
-    <div class="modal-content">
-        <h3 style="color: var(--accent-gold);">Bồi Dưỡng Học Sinh Giỏi</h3>
-        <input type="hidden" id="editHsgIndex">
-        
-        <div class="form-group"><label>Giáo viên bồi dưỡng</label><input type="text" id="inputHsgTeacher" class="form-control"></div>
-        <div class="form-group"><label>Môn học / Đội tuyển</label><input type="text" id="inputHsgSubject" class="form-control" placeholder="Ví dụ: Sinh học 12"></div>
-        <div class="form-group"><label>Nội dung / Kế hoạch bồi dưỡng</label><textarea id="inputHsgPlan" class="form-control" rows="2" placeholder="Ví dụ: Bồi dưỡng chuyên đề Di truyền học..."></textarea></div>
-        
-        <div class="form-group"><label>DANH SÁCH ĐỘI TUYỂN (Lựa chọn 1: Tải File Danh Sách từ máy)</label><input type="file" id="inputHsgFile" class="form-control"></div>
-        <div class="file-divider">- HOẶC -</div>
-        <div class="form-group"><label>Lựa chọn 2: Dán Link Danh Sách / Tên học sinh</label><input type="text" id="inputHsgLink" class="form-control" placeholder="Dán link Google Sheet hoặc gõ tên HS..."></div>
-        
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-            <button class="btn btn-outline" onclick="closeModal('hsgModal')">Hủy</button>
-            <button class="btn btn-gold" onclick="saveHsg()">Lưu Phân Công</button>
         </div>
     </div>
 </div>
@@ -1247,13 +1249,11 @@
         }
     }
 
-    // --- LOGIC CHO MỤC 5: GHI NHẬN TIẾN ĐỘ & VI PHẠM ---
     function renderAttendance() {
         const filterAtt = (document.getElementById('filterAttendance')?.value || '').toLowerCase();
         const tbody = document.getElementById('attendanceTableBody');
         tbody.innerHTML = '';
         
-        // Cập nhật dropdown giáo viên cho Modal Mục 5
         const selectTeacher = document.getElementById('inputAttTeacher');
         selectTeacher.innerHTML = '<option value="">-- Chọn giáo viên --</option>';
         (appData.membersData || []).forEach(m => {
@@ -1321,13 +1321,11 @@
         }
     }
 
-    // --- TÍNH NĂNG XUẤT FILE EXCEL THỐNG KÊ VI PHẠM ---
     function exportViolationExcel() {
         if (!appData.attendanceData || appData.attendanceData.length === 0) {
             return alert('Chưa có dữ liệu ghi nhận tiến độ hoặc vi phạm nào để xuất file!');
         }
 
-        // Chuẩn bị dữ liệu định dạng xuất Excel
         const excelData = appData.attendanceData.map((item, index) => ({
             "STT": index + 1,
             "Họ và Tên Giáo Viên": item.teacher,
@@ -1339,12 +1337,10 @@
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "ThongKeViPham");
-
-        // Tạo file và tải về máy
         XLSX.writeFile(workbook, "Thong_Ke_Tien_Do_Va_Vi_Pham_To_Sinh_CN.xlsx");
     }
 
-    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM ---
+    // --- LOGIC CHO PHẦN CHUYÊN ĐỀ STEM / STEAM VÀ XUẤT FILE TỔNG HỢP ---
     function renderStem() {
         const filterStem = (document.getElementById('filterStem')?.value || '').toLowerCase();
         const tbody = document.getElementById('stemTableBody');
@@ -1458,6 +1454,28 @@
         } else {
             alert('Xác thực không chính xác! Bạn không có quyền xóa chuyên đề này.');
         }
+    }
+
+    // Hàm xuất file Excel tổng hợp chuyên đề STEM đã đăng ký
+    function exportStemExcel() {
+        if (!appData.stemData || appData.stemData.length === 0) {
+            return alert('Chưa có chuyên đề STEM nào được đăng ký để xuất file tổng hợp!');
+        }
+
+        const excelData = appData.stemData.map((item, index) => ({
+            "STT": index + 1,
+            "Giáo Viên Đăng Ký": item.teacher,
+            "Tên Chuyên Đề STEM / STEAM": item.title,
+            "Lớp": item.className,
+            "Ngày Thực Hiện": item.date,
+            "Thứ": item.dayOfWeek,
+            "Tiết Học": item.period
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "TongHopStem");
+        XLSX.writeFile(workbook, "Tong_Hop_Chuyen_De_STEM_To_Sinh_CN.xlsx");
     }
 
     function renderSectionTitles() {
@@ -1604,8 +1622,8 @@
         (appData.hsgTasks || []).forEach((item, i) => {
             if (filterHsg && !item.teacher.toLowerCase().includes(filterHsg) && !item.subject.toLowerCase().includes(filterHsg)) return;
             let listHtml = item.listLink && item.listLink.startsWith('http') 
-                ? `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải DS Đội Tuyển</a>`
-                : (item.listLink || 'Chưa cập nhật DS');
+                ? `<a href="${item.listLink}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải / Xem Tài Liệu Ôn Tập</a>`
+                : (item.listLink || 'Chưa cập nhật tài liệu');
 
             tbodyHsg.innerHTML += `
                 <tr>
@@ -1699,13 +1717,13 @@
         const fileInput = document.getElementById('inputHsgFile');
         const listLink = document.getElementById('inputHsgLink').value;
 
-        if (!teacher || !subject) return alert('Nhập đầy đủ!');
+        if (!teacher || !subject) return alert('Nhập đầy đủ thông tin giáo viên và môn!');
         if (!appData.hsgTasks) appData.hsgTasks = [];
 
         let finalLink = listLink || '';
 
         if (fileInput.files && fileInput.files[0]) {
-            alert('Đang tải danh sách lên Firebase Storage...');
+            alert('Đang tải tài liệu ôn tập lên Firebase Storage...');
             try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
             catch(e) { return alert('Lỗi tải file: ' + e.message); }
         }
