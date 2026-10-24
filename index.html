@@ -59,8 +59,8 @@
             min-height: 100vh;
             padding: 2rem 1rem;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             transition: background 0.5s ease;
         }
 
@@ -312,6 +312,21 @@
         .file-divider { text-align: center; color: var(--accent-gold); font-size: 0.80rem; font-weight: 700; margin: 0.3rem 0; }
         .checkbox-cell { width: 40px; text-align: center; }
         .checkbox-cell input { width: 18px; height: 18px; cursor: pointer; }
+
+        /* Footer Bản Quyền */
+        .app-footer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .app-footer span {
+            color: var(--accent-gold-bright);
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -653,43 +668,77 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 9. VĂN BẢN LƯU TRỮ -->
+    <!-- 10. VĂN BẢN LƯU TRỮ (CHIA THÀNH 2 MỤC NHỎ: CẤP BỘ - SỞ VÀ CẤP TRƯỜNG) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">Văn Bản Lưu Trữ</span>
+                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">10. Văn Bản Lưu Trữ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_docs')"><i class="fa-solid fa-pen"></i></button>
             </h2>
-            <button class="btn btn-gold admin-btn" onclick="openDocModal()"><i class="fa-solid fa-plus"></i> Thêm Văn Bản</button>
         </div>
-        <div class="table-responsive">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Số / Ký Hiệu</th>
-                        <th>Trích Yếu Văn Bản</th>
-                        <th>Ngày Ban Hành</th>
-                        <th>Truy Cập / Tải File</th>
-                        <th class="admin-col">Thao Tác Quản Trị</th>
-                    </tr>
-                </thead>
-                <tbody id="docTableBody"></tbody>
-            </table>
+
+        <!-- CẤP BỘ - SỞ -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-building-columns"></i> Cấp Bộ - Sở (GD&ĐT)
+                </div>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openDocModal('bo_so')"><i class="fa-solid fa-plus"></i> Thêm Văn Bản Bộ/Sở</button>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Số / Ký Hiệu</th>
+                            <th>Trích Yếu Văn Bản</th>
+                            <th>Ngày Ban Hành</th>
+                            <th>Truy Cập / Tải File</th>
+                            <th class="admin-col">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="docBoSoTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CẤP TRƯỜNG -->
+        <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+            <div class="card-header-flex">
+                <div class="sub-section-title">
+                    <i class="fa-solid fa-school"></i> Cấp Trường & Tổ Chuyên Môn
+                </div>
+                <button class="btn btn-gold btn-sm admin-btn" onclick="openDocModal('truong')"><i class="fa-solid fa-plus"></i> Thêm Văn Bản Trường</button>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Số / Ký Hiệu</th>
+                            <th>Trích Yếu Văn Bản</th>
+                            <th>Ngày Ban Hành</th>
+                            <th>Truy Cập / Tải File</th>
+                            <th class="admin-col">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="docTruongTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </section>
 </div>
+
+<!-- FOOTER BẢN QUYỀN -->
+<footer class="app-footer">
+    <p>Hệ thống Quản lý Tổ Chuyên Môn Sinh & Công nghệ &copy; 2026 | Được phát triển bởi <span>thầy Trương Trung Can</span></p>
+</footer>
 
 <!-- MODAL HIỂN THỊ MÃ QR ỨNG DỤNG -->
 <div class="modal" id="qrModal">
     <div class="modal-content" style="text-align: center; align-items: center;">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-qrcode me-2"></i> Quét Mã QR Truy Cập App</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Dùng camera điện thoại hoặc Zalo để quét mở ứng dụng quản lý tổ chuyên môn:</p>
-        
-        <!-- Nơi hiển thị mã QR tự động -->
         <div id="qrcodeContainer" style="background: white; padding: 15px; border-radius: 12px; display: inline-block;"></div>
-        
         <p style="font-size: 0.8rem; color: var(--cyan-accent); margin-top: 1rem; word-break: break-all;" id="currentUrlText"></p>
-
         <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.2rem;">
             <button class="btn btn-outline" onclick="closeModal('qrModal')">Đóng</button>
         </div>
@@ -910,12 +959,15 @@
     </div>
 </div>
 
+<!-- MODAL VĂN BẢN LƯU TRỮ (CẤP BỘ - SỞ & CẤP TRƯỜNG) -->
 <div class="modal" id="docModal">
     <div class="modal-content">
-        <h3 style="color: var(--accent-gold);">Văn Bản Lưu Trữ</h3>
+        <h3 style="color: var(--accent-gold);" id="docModalTitle">Văn Bản Lưu Trữ</h3>
+        <input type="hidden" id="editDocCategory">
         <input type="hidden" id="editDocIndex">
-        <div class="form-group"><label>Số / Ký hiệu văn bản</label><input type="text" id="inputDocCode" class="form-control"></div>
-        <div class="form-group"><label>Trích yếu văn bản</label><textarea id="inputDocSummary" class="form-control" rows="2"></textarea></div>
+        
+        <div class="form-group"><label>Số / Ký hiệu văn bản</label><input type="text" id="inputDocCode" class="form-control" placeholder="Ví dụ: 123/SGDĐT-GDTrH"></div>
+        <div class="form-group"><label>Trích yếu văn bản</label><textarea id="inputDocSummary" class="form-control" rows="2" placeholder="Nội dung chính của văn bản..."></textarea></div>
         <div class="form-group"><label>Ngày ban hành</label><input type="date" id="inputDocDate" class="form-control"></div>
         
         <div class="form-group"><label>LỰA CHỌN 1: Tải File Văn Bản Từ Máy (PDF, Word...)</label><input type="file" id="inputDocFile" class="form-control"></div>
@@ -977,7 +1029,7 @@
             title_stem: 'Chuyên Đề STEM / STEAM',
             title_gallery: 'Hình Ảnh Hoạt Động',
             title_resources: 'Tài Nguyên Số',
-            title_docs: 'Văn Bản Lưu Trữ'
+            title_docs: '10. Văn Bản Lưu Trữ'
         },
         profilesData: [],
         minutesData: [],
@@ -992,7 +1044,8 @@
         stemData: [],
         imagesData: [],
         resourcesData: [],
-        docsData: [],
+        docsBoSoData: [],
+        docsTruongData: [],
         teachingTasks: [],
         hsgTasks: [],
         competitionTasks: []
@@ -1027,15 +1080,12 @@
         return await snapshot.ref.getDownloadURL();
     }
 
-    // --- HÀM MỞ HỘP THOẠI MÃ QR ---
     function openQrModal() {
         document.getElementById('qrModal').style.display = 'flex';
         const container = document.getElementById('qrcodeContainer');
-        container.innerHTML = ''; // Làm sạch mã cũ
-        
+        container.innerHTML = '';
         const currentUrl = window.location.href;
         document.getElementById('currentUrlText').innerText = currentUrl;
-        
         new QRCode(container, {
             text: currentUrl,
             width: 200,
@@ -1191,7 +1241,6 @@
         const linkInput = document.getElementById('inputProfileLink').value;
 
         if (!title) return alert('Nhập tên hồ sơ / kế hoạch!');
-
         if (!appData.profilesData) appData.profilesData = [];
         let finalLink = linkInput || '';
 
@@ -1268,7 +1317,6 @@
         const linkInput = document.getElementById('inputMinLink').value;
 
         if (!title || !date) return alert('Nhập đầy đủ tiêu đề và thời gian họp!');
-
         if (!appData.minutesData) appData.minutesData = [];
         let finalLink = linkInput || '';
 
@@ -1347,7 +1395,6 @@
         const note = document.getElementById('inputAttNote').value;
 
         if (!teacher || !date) return alert('Vui lòng chọn giáo viên và nhập mốc thời gian!');
-
         if (!appData.attendanceData) appData.attendanceData = [];
         const attObj = { teacher, date, type, note };
 
@@ -1369,7 +1416,6 @@
         if (!appData.attendanceData || appData.attendanceData.length === 0) {
             return alert('Chưa có dữ liệu ghi nhận tiến độ hoặc vi phạm nào để xuất file!');
         }
-
         const excelData = appData.attendanceData.map((item, index) => ({
             "STT": index + 1,
             "Họ và Tên Giáo Viên": item.teacher,
@@ -1377,7 +1423,6 @@
             "Nội Dung Ghi Nhận / Vi Phạm": item.type,
             "Chi Tiết / Ghi Chú": item.note || ""
         }));
-
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "ThongKeViPham");
@@ -1537,7 +1582,6 @@
         if (!appData.stemData || appData.stemData.length === 0) {
             return alert('Chưa có chuyên đề STEM nào được đăng ký để xuất file tổng hợp!');
         }
-
         const excelData = appData.stemData.map((item, index) => ({
             "STT": index + 1,
             "Giáo Viên Đăng Ký": item.teacher,
@@ -1547,7 +1591,6 @@
             "Thứ": item.dayOfWeek,
             "Tiết Học": item.period
         }));
-
         const worksheet = XLSX.utils.json_to_sheet(excelData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "TongHopStem");
@@ -1583,11 +1626,9 @@
 
         if (confirm(`Bạn có chắc chắn muốn xóa ${checkboxes.length} mục đã chọn không?`)) {
             const indexesToDelete = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
-            
             indexesToDelete.forEach(idx => {
                 if (appData[dataKey]) appData[dataKey].splice(idx, 1);
             });
-
             saveDataToCloud();
             alert('Đã xóa thành công các mục đã chọn!');
         }
@@ -1651,19 +1692,47 @@
         });
     }
 
+    // --- RENDER VĂN BẢN LƯU TRỮ (2 MỤC: CẤP BỘ - SỞ & CẤP TRƯỜNG) ---
     function renderDocs() {
-        const tbody = document.getElementById('docTableBody');
-        tbody.innerHTML = '';
-        (appData.docsData || []).forEach((doc, i) => {
-            tbody.innerHTML += `
+        // Cấp Bộ - Sở
+        const tbodyBoSo = document.getElementById('docBoSoTableBody');
+        tbodyBoSo.innerHTML = '';
+        (appData.docsBoSoData || []).forEach((doc, i) => {
+            let fileHtml = doc.link && doc.link.startsWith('http')
+                ? `<a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a>`
+                : (doc.link || 'Chưa đính kèm');
+
+            tbodyBoSo.innerHTML += `
                 <tr>
                     <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
                     <td>${doc.summary}</td>
                     <td>${doc.date}</td>
-                    <td><a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a></td>
+                    <td>${fileHtml}</td>
                     <td class="admin-col">
-                        <button class="btn btn-edit btn-sm" onclick="openDocModal(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteDoc(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn btn-edit btn-sm" onclick="openDocModal('bo_so', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteDoc('bo_so', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // Cấp Trường
+        const tbodyTruong = document.getElementById('docTruongTableBody');
+        tbodyTruong.innerHTML = '';
+        (appData.docsTruongData || []).forEach((doc, i) => {
+            let fileHtml = doc.link && doc.link.startsWith('http')
+                ? `<a href="${doc.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải Về File</a>`
+                : (doc.link || 'Chưa đính kèm');
+
+            tbodyTruong.innerHTML += `
+                <tr>
+                    <td><strong style="color:var(--cyan-accent);">${doc.code}</strong></td>
+                    <td>${doc.summary}</td>
+                    <td>${doc.date}</td>
+                    <td>${fileHtml}</td>
+                    <td class="admin-col">
+                        <button class="btn btn-edit btn-sm" onclick="openDocModal('truong', ${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteDoc('truong', ${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </td>
                 </tr>
             `;
@@ -1761,15 +1830,15 @@
     }
 
     async function saveDoc() {
+        const category = document.getElementById('editDocCategory').value;
         const idx = document.getElementById('editDocIndex').value;
         const code = document.getElementById('inputDocCode').value;
         const summary = document.getElementById('inputDocSummary').value;
         const date = document.getElementById('inputDocDate').value;
         const fileInput = document.getElementById('inputDocFile');
         const linkInput = document.getElementById('inputDocLink').value;
-        if (!code) return alert('Nhập số văn bản!');
 
-        if (!appData.docsData) appData.docsData = [];
+        if (!code) return alert('Nhập số/ký hiệu văn bản!');
         let finalLink = linkInput || '#';
 
         if (fileInput.files && fileInput.files[0]) {
@@ -1779,10 +1848,27 @@
         }
 
         const docObj = { code, summary, date, link: finalLink };
-        if (idx !== '') appData.docsData[idx] = docObj;
-        else appData.docsData.push(docObj);
 
-        saveDataToCloud(); closeModal('docModal');
+        if (category === 'bo_so') {
+            if (!appData.docsBoSoData) appData.docsBoSoData = [];
+            if (idx !== '') appData.docsBoSoData[idx] = docObj;
+            else appData.docsBoSoData.push(docObj);
+        } else {
+            if (!appData.docsTruongData) appData.docsTruongData = [];
+            if (idx !== '') appData.docsTruongData[idx] = docObj;
+            else appData.docsTruongData.push(docObj);
+        }
+
+        saveDataToCloud(); 
+        closeModal('docModal');
+    }
+
+    function deleteDoc(category, i) {
+        if (confirm('Bạn có chắc chắn muốn xóa văn bản này không?')) {
+            if (category === 'bo_so') appData.docsBoSoData.splice(i, 1);
+            else appData.docsTruongData.splice(i, 1);
+            saveDataToCloud();
+        }
     }
 
     async function saveHsg() {
@@ -1891,21 +1977,36 @@
     }
     function deleteResource(i) { if (confirm('Xóa?')) { appData.resourcesData.splice(i, 1); saveDataToCloud(); } }
 
-    function openDocModal(i = null) {
+    function openDocModal(category, i = null) {
+        document.getElementById('editDocCategory').value = category;
         document.getElementById('editDocIndex').value = i !== null ? i : '';
         document.getElementById('inputDocFile').value = '';
-        if (i !== null) {
-            document.getElementById('inputDocCode').value = appData.docsData[i].code;
-            document.getElementById('inputDocSummary').value = appData.docsData[i].summary;
-            document.getElementById('inputDocDate').value = appData.docsData[i].date;
-            document.getElementById('inputDocLink').value = appData.docsData[i].link;
+
+        if (category === 'bo_so') {
+            document.getElementById('docModalTitle').innerHTML = '<i class="fa-solid fa-building-columns me-2"></i> Văn Bản Cấp Bộ - Sở';
+            if (i !== null && appData.docsBoSoData) {
+                document.getElementById('inputDocCode').value = appData.docsBoSoData[i].code;
+                document.getElementById('inputDocSummary').value = appData.docsBoSoData[i].summary;
+                document.getElementById('inputDocDate').value = appData.docsBoSoData[i].date;
+                document.getElementById('inputDocLink').value = appData.docsBoSoData[i].link;
+            } else {
+                document.getElementById('inputDocCode').value = ''; document.getElementById('inputDocSummary').value = '';
+                document.getElementById('inputDocDate').value = ''; document.getElementById('inputDocLink').value = '';
+            }
         } else {
-            document.getElementById('inputDocCode').value = ''; document.getElementById('inputDocSummary').value = '';
-            document.getElementById('inputDocDate').value = ''; document.getElementById('inputDocLink').value = '';
+            document.getElementById('docModalTitle').innerHTML = '<i class="fa-solid fa-school me-2"></i> Văn Bản Cấp Trường';
+            if (i !== null && appData.docsTruongData) {
+                document.getElementById('inputDocCode').value = appData.docsTruongData[i].code;
+                document.getElementById('inputDocSummary').value = appData.docsTruongData[i].summary;
+                document.getElementById('inputDocDate').value = appData.docsTruongData[i].date;
+                document.getElementById('inputDocLink').value = appData.docsTruongData[i].link;
+            } else {
+                document.getElementById('inputDocCode').value = ''; document.getElementById('inputDocSummary').value = '';
+                document.getElementById('inputDocDate').value = ''; document.getElementById('inputDocLink').value = '';
+            }
         }
         document.getElementById('docModal').style.display = 'flex';
     }
-    function deleteDoc(i) { if (confirm('Xóa?')) { appData.docsData.splice(i, 1); saveDataToCloud(); } }
 
     function openHsgModal(i = null) {
         document.getElementById('editHsgIndex').value = i !== null ? i : '';
