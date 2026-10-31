@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- KHAI BÁO ICON HIỂN THỊ MÀN HÌNH CHÍNH ĐIỆN THOẠI / MÁY TÍNH -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/2991/2991108.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/2991/2991108.png">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/2991/2991108.png">
+
     <!-- Thư viện đọc & xuất file Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.21/mammoth.browser.min.js"></script>
@@ -19,9 +24,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-    <!-- Khai báo Icon hiển thị trên màn hình chính Điện thoại/Máy tính -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/2991/2991108.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/2991/2991108.png">
+
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #151030 35%, #1d1841 70%, #0b132b 100%);
@@ -387,7 +390,7 @@
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-circle-info"></i> <span id="title_intro">Giới Thiệu Tổ Chuyên Môn</span>
+                <i class="fa-solid fa-circle-info"></i> <span id="title_intro">1. Giới Thiệu Tổ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_intro')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openIntroModal()"><i class="fa-solid fa-pen"></i> Chỉnh Sửa Giới Thiệu</button>
@@ -401,7 +404,7 @@
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-users-gear"></i> <span id="title_members">Nhân Sự - Hồ Sơ Thành Viên</span>
+                <i class="fa-solid fa-users-gear"></i> <span id="title_members">2. Nhân Sự - Hồ Sơ Thành Viên</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_members')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem;">
@@ -426,11 +429,40 @@
         </div>
     </section>
 
-    <!-- 3. HỒ SƠ CHUYÊN MÔN -->
+    <!-- 3. KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN (BỔ SUNG MỚI) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">Hồ Sơ Chuyên Môn</span>
+                <i class="fa-solid fa-book-open-reader"></i> <span id="title_lesson_plans">3. Kế Hoạch Bài Dạy Của Giáo Viên</span>
+                <button class="edit-title-btn" onclick="editSectionTitle('title_lesson_plans')"><i class="fa-solid fa-pen"></i></button>
+            </h2>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <input type="text" class="filter-input" id="filterLessonPlan" placeholder="🔍 Lọc GV / Tên bài / Lớp..." onkeyup="renderLessonPlans()">
+                <button class="btn btn-gold btn-sm" onclick="openLessonPlanModal()"><i class="fa-solid fa-plus"></i> Đăng Ký Bài Dạy</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Giáo Viên</th>
+                        <th>Khối / Lớp</th>
+                        <th>Tên Môn / Bài Dạy</th>
+                        <th>Tuần / Tiết PPCT</th>
+                        <th>File / Link Kế Hoạch Bài Dạy</th>
+                        <th>Thao Tác (GV)</th>
+                    </tr>
+                </thead>
+                <tbody id="lessonPlanTableBody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 4. HỒ SƠ CHUYÊN MÔN -->
+    <section class="card-box">
+        <div class="card-header-flex">
+            <h2 class="section-title">
+                <i class="fa-solid fa-folder-tree"></i> <span id="title_profile">4. Hồ Sơ Chuyên Môn</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_profile')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -456,11 +488,11 @@
         </div>
     </section>
 
-    <!-- 4. BIÊN BẢN HỌP TỔ -->
+    <!-- 5. BIÊN BẢN HỌP TỔ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-file-pen"></i> <span id="title_minutes">Biên Bản Họp Tổ</span>
+                <i class="fa-solid fa-file-pen"></i> <span id="title_minutes">5. Biên Bản Họp Tổ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_minutes')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
@@ -486,11 +518,11 @@
         </div>
     </section>
 
-    <!-- 5. GHI NHẬN TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ -->
+    <!-- 6. GHI NHẬN TIẾN ĐỘ THỰC HIỆN NHIỆM VỤ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">5. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ</span>
+                <i class="fa-solid fa-clipboard-user"></i> <span id="title_attendance">6. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_attendance')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
@@ -517,11 +549,11 @@
         </div>
     </section>
 
-    <!-- 6. NHIỆM VỤ CHUYÊN MÔN VÀ KIÊM NHIỆM -->
+    <!-- 7. NHIỆM VỤ CHUYÊN MÔN VÀ KIÊM NHIỆM -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm</span>
+                <i class="fa-solid fa-list-check"></i> <span id="title_tasks">7. Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_tasks')"><i class="fa-solid fa-pen"></i></button>
             </h2>
         </div>
@@ -615,11 +647,11 @@
         </div>
     </section>
 
-    <!-- 6.1. CHUYÊN ĐỀ STEM / STEAM -->
+    <!-- 8. CHUYÊN ĐỀ STEM / STEAM -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-atom"></i> <span id="title_stem">Chuyên Đề STEM / STEAM</span>
+                <i class="fa-solid fa-atom"></i> <span id="title_stem">8. Chuyên Đề STEM / STEAM</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_stem')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
@@ -646,11 +678,11 @@
         </div>
     </section>
 
-    <!-- 7. HÌNH ẢNH HOẠT ĐỘNG -->
+    <!-- 9. HÌNH ẢNH HOẠT ĐỘNG -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-images"></i> <span id="title_gallery">Hình Ảnh Hoạt Động</span>
+                <i class="fa-solid fa-images"></i> <span id="title_gallery">9. Hình Ảnh Hoạt Động</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_gallery')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openImageModal()"><i class="fa-solid fa-upload"></i> Thêm Hình Ảnh</button>
@@ -658,11 +690,11 @@
         <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- 8. TÀI NGUYÊN SỐ -->
+    <!-- 10. TÀI NGUYÊN SỐ -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-folder-open"></i> <span id="title_resources">Tài Nguyên Số</span>
+                <i class="fa-solid fa-folder-open"></i> <span id="title_resources">10. Tài Nguyên Số</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_resources')"><i class="fa-solid fa-pen"></i></button>
             </h2>
             <button class="btn btn-gold admin-btn" onclick="openResourceModal()"><i class="fa-solid fa-plus"></i> Thêm Tài Nguyên</button>
@@ -670,11 +702,11 @@
         <div class="resource-grid" id="resourceGrid"></div>
     </section>
 
-    <!-- 10. VĂN BẢN LƯU TRỮ (CHIA THÀNH 2 MỤC NHỎ: CẤP BỘ - SỞ VÀ CẤP TRƯỜNG) -->
+    <!-- 11. VĂN BẢN LƯU TRỮ (CẤP BỘ - SỞ VÀ CẤP TRƯỜNG) -->
     <section class="card-box">
         <div class="card-header-flex">
             <h2 class="section-title">
-                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">10. Văn Bản Lưu Trữ</span>
+                <i class="fa-solid fa-box-archive"></i> <span id="title_docs">11. Văn Bản Lưu Trữ</span>
                 <button class="edit-title-btn" onclick="editSectionTitle('title_docs')"><i class="fa-solid fa-pen"></i></button>
             </h2>
         </div>
@@ -733,6 +765,32 @@
 <footer class="app-footer">
     <p>Hệ thống Quản lý Tổ Chuyên Môn Sinh & Công nghệ &copy; 2026 | Được phát triển bởi <span>thầy Trương Trung Can</span></p>
 </footer>
+
+<!-- MODAL KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN (MODAL BỔ SUNG MỚI) -->
+<div class="modal" id="lessonPlanModal">
+    <div class="modal-content">
+        <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-book-open-reader me-2"></i> Kế Hoạch Bài Dạy (Giáo Án)</h3>
+        <input type="hidden" id="editLessonPlanIndex">
+        
+        <div class="form-group"><label>1. Chọn Giáo Viên</label>
+            <select id="inputLpTeacher" class="form-control">
+                <option value="">-- Chọn tên giáo viên --</option>
+            </select>
+        </div>
+        <div class="form-group"><label>2. Môn Học & Khối Lớp</label><input type="text" id="inputLpSubjectClass" class="form-control" placeholder="Ví dụ: Sinh học 10A1, Công nghệ 11A2..."></div>
+        <div class="form-group"><label>3. Tên Bài Dạy / Chuyên Đề</label><input type="text" id="inputLpTitle" class="form-control" placeholder="Ví dụ: Bài 5: Các nguyên tố hóa học và nước..."></div>
+        <div class="form-group"><label>4. Tuần & Tiết PPCT</label><input type="text" id="inputLpWeekPeriod" class="form-control" placeholder="Ví dụ: Tuần 4 - Tiết 7,8"></div>
+        
+        <div class="form-group"><label>5. FILE GIÁO ÁN (Lựa chọn 1: Tải File Word/PDF/PPT từ máy)</label><input type="file" id="inputLpFile" class="form-control"></div>
+        <div class="file-divider">- HOẶC -</div>
+        <div class="form-group"><label>Lựa chọn 2: Dán Link Google Drive / Canva / OneDrive</label><input type="text" id="inputLpLink" class="form-control" placeholder="https://drive.google.com/..."></div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn btn-outline" onclick="closeModal('lessonPlanModal')">Hủy</button>
+            <button class="btn btn-gold" onclick="saveLessonPlan()">Lưu Kế Hoạch Bài Dạy</button>
+        </div>
+    </div>
+</div>
 
 <!-- MODAL HIỂN THỊ MÃ QR ỨNG DỤNG -->
 <div class="modal" id="qrModal">
@@ -811,7 +869,7 @@
     </div>
 </div>
 
-<!-- MODAL GHI NHẬN TIẾN ĐỘ & VI PHẠM (MỤC 5) -->
+<!-- MODAL GHI NHẬN TIẾN ĐỘ & VI PHẠM -->
 <div class="modal" id="attendanceModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);"><i class="fa-solid fa-clipboard-user me-2"></i> Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ</h3>
@@ -961,7 +1019,7 @@
     </div>
 </div>
 
-<!-- MODAL VĂN BẢN LƯU TRỮ (CẤP BỘ - SỞ & CẤP TRƯỜNG) -->
+<!-- MODAL VĂN BẢN LƯU TRỮ -->
 <div class="modal" id="docModal">
     <div class="modal-content">
         <h3 style="color: var(--accent-gold);" id="docModalTitle">Văn Bản Lưu Trữ</h3>
@@ -1022,17 +1080,19 @@
         headerData: { school: 'TRƯỜNG THPT VÕ THỊ SÁU', dept: 'TỔ SINH - CN', year: 'NĂM HỌC 2026 - 2027' },
         introText: 'Tổ Sinh học - Công nghệ trường THPT Võ Thị Sáu là tập thể đoàn kết, sáng tạo và tích cực đổi mới phương pháp giảng dạy. Với đội ngũ giáo viên giàu kinh nghiệm, chuyên môn vững vàng, tổ luôn hoàn thành xuất sắc các nhiệm vụ giáo dục, bồi dưỡng học sinh giỏi và ứng dụng công nghệ thông tin trong quản lý giảng dạy.',
         sectionTitles: {
-            title_intro: 'Giới Thiệu Tổ Chuyên Môn',
-            title_members: 'Nhân Sự - Hồ Sơ Thành Viên',
-            title_profile: 'Hồ Sơ Chuyên Môn',
-            title_minutes: 'Biên Bản Họp Tổ',
-            title_attendance: '5. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ',
-            title_tasks: 'Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm',
-            title_stem: 'Chuyên Đề STEM / STEAM',
-            title_gallery: 'Hình Ảnh Hoạt Động',
-            title_resources: 'Tài Nguyên Số',
-            title_docs: '10. Văn Bản Lưu Trữ'
+            title_intro: '1. Giới Thiệu Tổ Chuyên Môn',
+            title_members: '2. Nhân Sự - Hồ Sơ Thành Viên',
+            title_lesson_plans: '3. Kế Hoạch Bài Dạy Của Giáo Viên',
+            title_profile: '4. Hồ Sơ Chuyên Môn',
+            title_minutes: '5. Biên Bản Họp Tổ',
+            title_attendance: '6. Ghi Nhận Tiến Độ & Vi Phạm Nhiệm Vụ',
+            title_tasks: '7. Nhiệm Vụ Chuyên Môn Và Kiêm Nhiệm',
+            title_stem: '8. Chuyên Đề STEM / STEAM',
+            title_gallery: '9. Hình Ảnh Hoạt Động',
+            title_resources: '10. Tài Nguyên Số',
+            title_docs: '11. Văn Bản Lưu Trữ'
         },
+        lessonPlansData: [],
         profilesData: [],
         minutesData: [],
         membersData: [
@@ -1155,6 +1215,7 @@
         renderHeader();
         renderIntro();
         renderMembers();
+        renderLessonPlans();
         renderProfiles();
         renderMinutes();
         renderAttendance();
@@ -1188,6 +1249,133 @@
         appData.introText = text;
         saveDataToCloud();
         closeModal('introModal');
+    }
+
+    // --- MỤC 3: KẾ HOẠCH BÀI DẠY CỦA GIÁO VIÊN ---
+    function renderLessonPlans() {
+        const filterLp = (document.getElementById('filterLessonPlan')?.value || '').toLowerCase();
+        const tbody = document.getElementById('lessonPlanTableBody');
+        tbody.innerHTML = '';
+        
+        const selectTeacher = document.getElementById('inputLpTeacher');
+        selectTeacher.innerHTML = '<option value="">-- Chọn tên giáo viên --</option>';
+        (appData.membersData || []).forEach(m => {
+            selectTeacher.innerHTML += `<option value="${m.name}">${m.name} (${m.role})</option>`;
+        });
+
+        (appData.lessonPlansData || []).forEach((item, i) => {
+            if (filterLp && !item.teacher.toLowerCase().includes(filterLp) && !item.title.toLowerCase().includes(filterLp) && !item.subjectClass.toLowerCase().includes(filterLp)) return;
+            
+            let fileHtml = item.link && item.link.startsWith('http')
+                ? `<a href="${item.link}" target="_blank" class="btn btn-download btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Tải / Xem Giáo Án</a>`
+                : (item.link || 'Chưa đính kèm');
+
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong style="color:var(--accent-gold);"><i class="fa-solid fa-user-pen me-1"></i> ${item.teacher}</strong></td>
+                    <td style="color:var(--cyan-accent); font-weight:600;">${item.subjectClass}</td>
+                    <td><strong>${item.title}</strong></td>
+                    <td><span class="badge badge-warning">${item.weekPeriod}</span></td>
+                    <td>${fileHtml}</td>
+                    <td>
+                        <button class="btn btn-edit btn-sm" onclick="verifyAndEditLessonPlan(${i})"><i class="fa-solid fa-pen"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="verifyAndDeleteLessonPlan(${i})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function openLessonPlanModal(i = null) {
+        document.getElementById('editLessonPlanIndex').value = i !== null ? i : '';
+        document.getElementById('inputLpFile').value = '';
+        if (i !== null && appData.lessonPlansData) {
+            document.getElementById('inputLpTeacher').value = appData.lessonPlansData[i].teacher;
+            document.getElementById('inputLpSubjectClass').value = appData.lessonPlansData[i].subjectClass;
+            document.getElementById('inputLpTitle').value = appData.lessonPlansData[i].title;
+            document.getElementById('inputLpWeekPeriod').value = appData.lessonPlansData[i].weekPeriod;
+            document.getElementById('inputLpLink').value = appData.lessonPlansData[i].link;
+        } else {
+            document.getElementById('inputLpTeacher').value = '';
+            document.getElementById('inputLpSubjectClass').value = '';
+            document.getElementById('inputLpTitle').value = '';
+            document.getElementById('inputLpWeekPeriod').value = '';
+            document.getElementById('inputLpLink').value = '';
+        }
+        document.getElementById('lessonPlanModal').style.display = 'flex';
+    }
+
+    async function saveLessonPlan() {
+        const idx = document.getElementById('editLessonPlanIndex').value;
+        const teacher = document.getElementById('inputLpTeacher').value;
+        const subjectClass = document.getElementById('inputLpSubjectClass').value;
+        const title = document.getElementById('inputLpTitle').value;
+        const weekPeriod = document.getElementById('inputLpWeekPeriod').value;
+        const fileInput = document.getElementById('inputLpFile');
+        const linkInput = document.getElementById('inputLpLink').value;
+
+        if (!teacher) return alert('Vui lòng chọn tên giáo viên trong tổ!');
+        if (!subjectClass || !title) return alert('Vui lòng điền môn/lớp và tên bài dạy!');
+
+        const isMember = (appData.membersData || []).some(m => m.name === teacher);
+        if (!isMember) {
+            return alert('Xác thực thất bại! Chỉ giáo viên thuộc tổ mới có quyền lưu bài dạy.');
+        }
+
+        if (!appData.lessonPlansData) appData.lessonPlansData = [];
+        let finalLink = linkInput || '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            alert('Đang tải file kế hoạch bài dạy lên Firebase Storage...');
+            try { finalLink = await uploadFileToFirebase(fileInput.files[0]); }
+            catch(e) { return alert('Lỗi tải file: ' + e.message); }
+        }
+
+        const lpObj = { teacher, subjectClass, title, weekPeriod, link: finalLink };
+
+        if (idx !== '') {
+            const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+            if (!isAdmin && appData.lessonPlansData[idx].teacher !== teacher) {
+                const checkPass = prompt(`Bài dạy này do giáo viên "${appData.lessonPlansData[idx].teacher}" đăng ký. Nhập tên đúng hoặc mật khẩu Tổ trưởng để sửa:`);
+                if (checkPass !== teacher && checkPass !== ADMIN_PASSWORD) {
+                    return alert('Bạn không có quyền sửa bài dạy của giáo viên khác!');
+                }
+            }
+            appData.lessonPlansData[idx] = lpObj;
+        } else {
+            appData.lessonPlansData.push(lpObj);
+        }
+
+        saveDataToCloud();
+        closeModal('lessonPlanModal');
+        alert('Lưu kế hoạch bài dạy thành công!');
+    }
+
+    function verifyAndEditLessonPlan(i) {
+        const item = appData.lessonPlansData[i];
+        const teacherName = prompt(`Xác thực quyền: Nhập tên giáo viên "${item.teacher}" (hoặc mật khẩu Tổ trưởng) để sửa:`);
+        const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+        
+        if (isAdmin || teacherName === item.teacher || teacherName === ADMIN_PASSWORD) {
+            openLessonPlanModal(i);
+        } else {
+            alert('Xác thực không chính xác!');
+        }
+    }
+
+    function verifyAndDeleteLessonPlan(i) {
+        const item = appData.lessonPlansData[i];
+        const teacherName = prompt(`Xác thực quyền: Nhập tên giáo viên "${item.teacher}" (hoặc mật khẩu Tổ trưởng) để xóa:`);
+        const isAdmin = document.getElementById('appContainer').classList.contains('admin-active');
+
+        if (isAdmin || teacherName === item.teacher || teacherName === ADMIN_PASSWORD) {
+            if (confirm('Xóa kế hoạch bài dạy này?')) {
+                appData.lessonPlansData.splice(i, 1);
+                saveDataToCloud();
+            }
+        } else {
+            alert('Xác thực không chính xác!');
+        }
     }
 
     function renderProfiles() {
@@ -1694,9 +1882,7 @@
         });
     }
 
-    // --- RENDER VĂN BẢN LƯU TRỮ (2 MỤC: CẤP BỘ - SỞ & CẤP TRƯỜNG) ---
     function renderDocs() {
-        // Cấp Bộ - Sở
         const tbodyBoSo = document.getElementById('docBoSoTableBody');
         tbodyBoSo.innerHTML = '';
         (appData.docsBoSoData || []).forEach((doc, i) => {
@@ -1718,7 +1904,6 @@
             `;
         });
 
-        // Cấp Trường
         const tbodyTruong = document.getElementById('docTruongTableBody');
         tbodyTruong.innerHTML = '';
         (appData.docsTruongData || []).forEach((doc, i) => {
